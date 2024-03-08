@@ -1,13 +1,120 @@
-<!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <title>AppDocente</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="GEO - APP Docente" content="yes" />
+    <meta name="GEO - APP Docente" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>GEO - APP DOCENTE</title>
+    <meta name="description" content="GEO - APP Docente">
+    <meta name="keywords" content="GEO, APP, DOCENTE, GESTION, EDUCATIVA" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/192x192.png">
+    <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
-  <app-root></app-root>
+  <div id="toast-12" class="toast-box toast-center">
+    <div class="in">
+        <div class="text">
+            Auto close in 2 seconds
+        </div>
+    </div>
+</div>
+    <!-- App Capsule -->
+    <app-root></app-root>
+    <!-- App Capsule  -->
+
+    <div class="offcanvas offcanvas-top action-sheet inset android-add-to-home" tabindex="-1"
+            id="android-add-to-home-screen">
+      <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Instalar en el Inicio</h5>
+          <a href="#" class="close-button" data-bs-dismiss="offcanvas">
+              <ion-icon name="close" role="img" class="md hydrated" aria-label="close"></ion-icon>
+          </a>
+      </div>
+      <div class="offcanvas-body">
+          <div class="action-sheet-content text-center">
+              <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w48">
+              </div>
+              <h4>Geo Docente</h4>
+              <div>
+                "Instala la <strong>APP Geo Docente</strong> en la pantalla de inicio de tu Android".
+              </div>
+              <div>
+                  Toca <ion-icon name="ellipsis-vertical" role="img" class="md hydrated" aria-label="ellipsis vertical"></ion-icon> y agrega a la pantalla de inicio.
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="offcanvas offcanvas-bottom action-sheet inset ios-add-to-home" tabindex="-1"
+  id="ios-add-to-home-screen">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Instalar en el Inicio</h5>
+        <a href="#" class="close-button" data-bs-dismiss="offcanvas">
+            <ion-icon name="close" role="img" class="md hydrated" aria-label="close"></ion-icon>
+        </a>
+    </div>
+    <div class="offcanvas-body">
+        <div class="action-sheet-content text-center">
+            <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w48">
+            </div>
+            <h4>Geo Docente</h4>
+            <div>
+              "Instala la <strong>APP Geo Docente</strong> en la pantalla de inicio de tu IPhone".
+            </div>
+            <div>
+              Toca <ion-icon name="share-outline" role="img" class="md hydrated" aria-label="share outline"></ion-icon> y agrega a la pantalla de inicio.
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- welcome notification
+    <div id="notification-welcome" class="notification-box">
+        <div class="notification-dialog android-style">
+            <div class="notification-header">
+                <div class="in">
+                    <img src="assets/img/icon/72x72.png" alt="image" class="imaged w24">
+                    <strong>Mobilekit</strong>
+                    <span>just now</span>
+                </div>
+                <a href="#" class="close-button">
+                    <ion-icon name="close"></ion-icon>
+                </a>
+            </div>
+            <div class="notification-content">
+                <div class="in">
+                    <h3 class="subtitle">Welcome to Mobilekit</h3>
+                    <div class="text">
+                        Mobilekit is a PWA ready Mobile UI Kit Template.
+                        Great way to start your mobile websites and pwa projects.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- * welcome notification -->
+
+    <!-- ============== Js Files ==============  -->
+    <!-- Bootstrap -->
+    <script src="assets/js/lib/bootstrap.min.js"></script>
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <!-- ProgressBar js -->
+    <script src="assets/js/plugins/progressbar-js/progressbar.min.js"></script>
+    <!-- Base Js File -->
+    <script src="assets/js/base.js"></script>
+
+    <script>
+        // Trigger welcome notification after 5 seconds
+            AddtoHome(3000,"once");
+    </script>
+
 </body>
+
 </html>

@@ -1,0 +1,50 @@
+.card-text.truncated {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .dropdown-menu {
+    scrollbar-width: thin;
+    overflow-y: auto;
+    box-sizing: border-box;
+    max-height: 200px;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+
+  .card-body {
+    text-align: center; /* Centrar contenido en el card-body */
+  }
+
+  .custom-icon {
+    font-size: 36px; /* Tamaño del icono ajustado según tus necesidades */
+  }
+
+  .custom-text {
+    font-size: 36px; /* Tamaño del texto ajustado según tus necesidades */
+    margin-left: 0.5rem; /* Espacio a la izquierda del texto para separarlo del icono */
+  }
+
+  @media (max-width: 768px) {
+    .custom-text {
+      font-size: 20px; /* Ajusta el tamaño de la fuente para pantallas más pequeñas */
+    }
+
+    .custom-icon {
+      font-size: 20px; /* Tamaño del icono ajustado según tus necesidades */
+    }
+  }

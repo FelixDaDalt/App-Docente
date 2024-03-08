@@ -1,0 +1,14 @@
+.mensajeria-nuevo-chat-button {
+  width: 60px;
+  height: 60px;
+  background-color: #2E2481;
+  color: #FFF;
+  border-radius: 50px;
+  border-color: #2E2481;
+  text-align: center;
+  font-size: 30px;
+  z-index: 100;
+  position: fixed;
+  bottom: 10vh; /* 5% de la altura del viewport desde abajo */
+  right: 3vw; /* 3% del ancho del viewport desde la derecha */
+}

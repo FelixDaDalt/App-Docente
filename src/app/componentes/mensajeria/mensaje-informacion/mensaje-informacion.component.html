@@ -1,0 +1,69 @@
+<div class="modal fade dialogbox show" id="DialogBasic" tabindex="-1" role="dialog" aria-modal="true" style="display: block;">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-icon">
+          <ion-icon name="information-circle-outline" role="img" class="md hydrated" aria-label="bluetooth outline"></ion-icon>
+        </div>
+          <div class="modal-body" style="text-align: center;">
+            <ul class="listview image-listview text flush transparent pt-1" style="margin: 0 auto; display: inline-block; text-align: center; align-content: center;">
+              <li>
+                <div>
+                  <div class="in pt-2">
+                      <div class="comment-header text-center d-flex justify-content-center">
+                          <h4 class="title text-center">Destinatario</h4>
+                      </div>
+                      <div class="text">
+                          {{mensaje?.usuario_destino}}
+                      </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <div class="in pt-2">
+                      <div class="comment-header text-center d-flex justify-content-center">
+                          <h4 class="title text-center">Enviado</h4>
+                      </div>
+                      <div class="text">
+                          {{mensaje?.fecha}} - {{mensaje?.hora}}
+                      </div>
+                  </div>
+                </div>
+              </li>
+              <li  *ngIf="mensaje?.leido===1">
+                <div>
+                  <div class="in pt-2">
+                      <div class="comment-header text-center d-flex justify-content-center">
+                          <h4 class="title text-center">Leido</h4>
+                      </div>
+                      <div class="text">
+                          {{mensaje?.fecha_leido}} - {{mensaje?.hora_leido}}
+                      </div>
+                  </div>
+                </div>
+              </li>
+              <li  *ngIf="mensaje?.leido===0">
+                <div class="item text-center d-flex justify-content-center">
+                  <div class="in pt-2">
+                      <div class="comment-header text-center d-flex justify-content-center">
+                          <h4 class="title text-center">No ha sido Leido</h4>
+                      </div>
+                      <div class="text mx-2">
+                        <button type="button" class="btn btn-icon btn-sm btn-outline-danger me-1 mb-1">
+                          <ion-icon name="trash-outline" role="img" class="md hydrated" aria-label="trash outline" (click)="eliminarMensaje()"></ion-icon>
+                      </button>
+                      </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+              <div class="modal-footer">
+                  <div class="btn-inline">
+                      <a class="btn btn-text-secondary" (click)="activeModal.close()">CERRAR</a>
+                  </div>
+              </div>
+
+  </div>
+</div>

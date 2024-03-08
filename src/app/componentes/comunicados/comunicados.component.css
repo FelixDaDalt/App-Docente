@@ -1,0 +1,34 @@
+/* Agrega este código a tu hoja de estilos CSS o SCSS */
+.fecha {
+    font-size: 10px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+
+
+/* Configuración para el contenedor de botones */
+.btn-container {
+  display: flex;      /* Utiliza Flexbox para organizar los elementos internos */
+  flex-wrap: wrap;    /* Permite que los elementos se envuelvan a la siguiente línea si no hay suficiente espacio horizontal */
+}
+
+/* Estilos comunes para todos los botones */
+.btn {
+  margin-right: 2px;   /* Márgen a la derecha de cada botón para crear un espacio entre ellos */
+  margin-bottom: 2px;  /* Márgen en la parte inferior de cada botón para crear un espacio entre filas */
+}
+
+/* Estilos específicos para pantallas de ancho máximo de 330px */
+@media (max-width: 330px) {
+  .btn {
+    margin-right: 0;    /* Elimina el margen derecho para ajustar al ancho completo del contenedor */
+    margin-bottom: 10px; /* Aumenta el margen inferior para crear un espacio más grande entre los botones */
+    width: 100%;        /* Hace que los botones ocupen el ancho completo del contenedor */
+  }
+
+  .titulo {
+    font-size: 14px;
+    font-weight: bold;
+  }
+}

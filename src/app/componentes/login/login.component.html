@@ -1,0 +1,80 @@
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+    <div class="row d-flex"  *ngIf="seleccionInstitucion == false && seleccionRol==false">
+        <div class="col-lg-6">
+            <div class="pb-1">
+                <div class="row px-3 justify-content-center mt-1 mb-1">
+                    <img src="assets/img/logos/geo.png" class="image">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card2 card border-0 px-4 py-5">
+                <div class="row px-3 form-outline mb-4">
+                    <input type="text" class="form-control form-control-lg" name="email" id="email"
+                    placeholder="Ingrese su email"
+                    required #email/>
+                </div>
+                <div class="row px-3 mb-4 form-outline">
+                  <input type="password"  class="form-control form-control-lg" name="password" id="password"
+                  placeholder="Ingrese su contraseña"
+                  required #password/>
+                </div>
+                <div class="row px-3 mb-4 form-outline">
+                    <a href="#" class="ml-auto mb-0 text-sm">Recuperar Contraseña</a>
+                </div>
+                <div class="row mb-4 px-3" *ngIf="!(appSpinner.spinnerCargando | async)">
+                    <button id="spinner" class="btn btn-primary btn-lg"
+                  style="padding-left: 2.5rem; padding-right: 2.5rem;"
+                  (click)="login(email,password)">Ingresar</button>
+                </div>
+                <app-spinner #appSpinner></app-spinner>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-form mt-1" *ngIf="usuario">
+        <div class="section">
+            <img src="./assets/img/logos/geo.png" alt="imagen del logo de la plataforma" class="form-image">
+        </div>
+        <div class="section mt-1">
+            <h1>{{usuario.name}}</h1>
+            <h4>Bienvenido</h4>
+        </div>
+            <div class="row d-flex" *ngIf="seleccionInstitucion == true">
+            <app-institucion-seleccion></app-institucion-seleccion>
+            </div>
+
+            <div class="row d-flex" *ngIf="seleccionRol == true">
+            <app-rol-seleccion ></app-rol-seleccion>
+            </div>
+    </div>
+
+    <!--<div class="bg-primary py-4 text-white fixed-bottom">
+        <div class="row px-3">
+             <div class="col-lg-6 col-md-12 text-lg-start text-md-center text-center">
+              <div class="text-white mb-3 mb-md-0">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>GEO</span></strong>. Todos los derechos reservados
+                </div>
+              </div>
+             </div>
+             <div class="col-lg-6 col-md-12 text-lg-end text-md-center text-center">
+
+                <a href="https://www.facebook.com/gestiongeo" class="text-white me-4" target="_blank">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/geo.educacion/" class="text-white me-4" target="_blank">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a href="redes@geoeducacion.com.ar" class="text-white me-4" target="_blank">
+                  <i class="bi bi-envelope"></i>
+                </a>
+                <a href="https://ar.linkedin.com/company/geo-educaci%C3%B3n" class="text-white" target="_blank">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+
+             </div>
+        </div>
+    </div>-->
+  </div>

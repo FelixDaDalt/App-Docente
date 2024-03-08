@@ -1,0 +1,47 @@
+<div id="appCapsule">
+
+  <app-titulo>
+    <p titulo>Familiares sin leer: {{cantidad?cantidad:0}}</p>
+  </app-titulo>
+
+  <div class="section inset mt-2">
+
+    <div class="accordion" id="accordionExample2" *ngIf="detalleFamiliar.length>0; else nada">
+      <div *ngFor="let familiar of detalleFamiliar; let i = index"
+      [ngClass]="{'accordion-item': true, 'accordion-item-noleido': familiar.leido === 0 }">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#accordion' + i">
+                  <span class="fecha">
+                    {{familiar?.fecha}}
+                </span>
+                <span class="titulo">
+                  {{familiar?.alumno}}
+                </span>
+          </button>
+        </h2>
+        <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(familiar)">
+          <div class="accordion-body">
+            <h4 class="subtitle">Hora: {{familiar?.hora}}</h4>
+            <h4 class="subtitle">Curso: {{familiar?.cursos}}</h4>
+            <h4 class="subtitle">Descripción: {{familiar?.descripcion}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #nada>
+      <div class="accordion" id="accordionExample2">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#accordion'">
+              Nada para mostrar
+            </button>
+          </h2>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

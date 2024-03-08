@@ -1,0 +1,51 @@
+<div id="appCapsule">
+
+  <app-titulo>
+    <p titulo>Documentacion sin leer: {{cantidad?cantidad:0}}</p>
+  </app-titulo>
+
+    <div class="section inset mt-2">
+
+      <div class="accordion" id="accordionExample2" *ngIf="detallesDocumentacion.length>0; else nada">
+        <div *ngFor="let documentacion of detallesDocumentacion; let i = index"
+        [ngClass]="{'accordion-item': true, 'accordion-item-noleido': documentacion.leido === 0 }">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#accordion' + i">
+                  <span class="fecha">
+                      {{documentacion?.fecha}}
+                  </span>
+                  <span class="titulo">
+                    {{documentacion?.alumno}}
+                  </span>
+            </button>
+          </h2>
+          <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(documentacion)">
+            <div class="accordion-body">
+              <h4 class="subtitle">Titulo: {{documentacion?.titulo}}</h4>
+              <h4 class="subtitle">Descripción: {{documentacion?.descripcion}}</h4>
+              <button  type="button" class="btn btn-outline-secondary btn-sm rounded me-1"
+              (click)="descargarAdjunto(documentacion.archivo_url)">
+                <ion-icon name="cloud-download"></ion-icon>
+                {{obtenerNombreArchivo(documentacion.archivo_url)}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #nada>
+        <div class="accordion" id="accordionExample2">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      [attr.data-bs-target]="'#accordion'">
+                Nada para mostrar
+              </button>
+            </h2>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+</div>
+

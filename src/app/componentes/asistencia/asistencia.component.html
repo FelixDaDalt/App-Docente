@@ -1,0 +1,123 @@
+
+<div id="appCapsule">
+  <!-- INICIO selector de MAERIA -->
+  <app-titulo>
+    <p titulo>Asistencia</p>
+  </app-titulo>
+  <!--  -->
+  <div class="section mt-1 mb-1">
+    <div class="form-group boxed">
+        <div class="input-wrapper">
+            <select class="form-control form-select" id="city5" [(ngModel)]="asistenciaSeleccionada" (change)="comprobarEdicion()">
+                <option *ngFor="let asistencia of asistencias" [ngValue]="asistencia">{{asistencia.materia}} - {{asistencia.curso?asistencia.curso:'Grupal'}}</option>
+            </select>
+        </div>
+    </div>
+  </div>
+
+  <div class="section mt-1 mb-1">
+      <div class="form-group boxed">
+          <div class="input-wrapper">
+            <input type="date" class="form-control" name="fecha" [max]="fechaMax" [(ngModel)]="fecha" (change)="obtenerAsistencias()">
+          </div>
+      </div>
+  </div>
+  <div class="section">
+    <app-asistencia-informacion [asistencia]="asistenciaSeleccionada"></app-asistencia-informacion>
+  </div>
+  <!-- Tabla de parte -->
+  <app-spinner #appSpinner></app-spinner>
+  <div class="section inset" *ngIf="!(appSpinner.spinnerCargando | async)">
+    <div class="section full mb-2">
+        <div class="section-title"></div>
+          <div class="content-header mb-05">
+          </div>
+          <div class="wide-block p-0">
+              <div class="table-responsive text-center">
+                  <table class="table table-striped">
+                      <thead>
+                          <tr>
+                              <th scope="col">Alumno</th>
+                              <th scope="col">P</th>
+                              <th scope="col">A</th>
+                              <th scope="col">T</th>
+                              <th scope="col">Info</th>
+                              <th scope="col" *ngIf="usuario?.Rol_selected?.comedor == 1">Comedor</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngIf="asistenciaSeleccionada?.editable==0 || (asistenciaSeleccionada?.editable==1 && asistenciaSeleccionada.mensaje!='')" class="alertaasistencia">
+                          <td [attr.colspan]="(usuario?.Rol_selected?.comedor == 1) ? 6 : 5" class="texto">
+                            {{asistenciaSeleccionada.mensaje}}
+                          </td>
+                        </tr>
+                          <tr *ngFor="let alumno of asistenciaSeleccionada?.alumnos; let i = index">
+                              <td>{{alumno.apellido}},{{alumno.nombre}} {{asistenciaSeleccionada.curso?'':'- ('+alumno.curso+')'}}</td>
+                              <td>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="grupo{{i}}" id="checkboxInlineDefault1_{{i}}" [(ngModel)]="alumno.estado" [value]="'P'" [disabled]="checkDeshabilitados">
+                                    <label class="form-check-label" for="checkboxInlineDefault1_{{i}}"></label>
+                                </div>
+                            </td>
+                            <td>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="grupo{{i}}" id="checkboxInlineDefault1a_{{i}}" [(ngModel)]="alumno.estado" [value]="'A'" [disabled]="checkDeshabilitados">
+                                <label class="form-check-label" for="checkboxInlineDefault1a_{{i}}"></label>
+                            </div>
+                            </td>
+                            <td>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="grupo{{i}}" id="checkboxInlineDefault1b_{{i}}" [(ngModel)]="alumno.estado" [value]="'T'" [disabled]="checkDeshabilitados">
+                                <label class="form-check-label" for="checkboxInlineDefault1b_{{i}}"></label>
+                            </div>
+                            </td>
+
+                            <th scope="row">
+                              <button  *ngIf="alumno.estado !='P'" type="button" class="btn btn-icon btn-sm btn-danger me-0 mb-0" data-bs-toggle="offcanvas" [attr.data-bs-target]="'#actionSheetContent' + i"><ion-icon name="information-circle-outline" role="img" class="md hydrated" aria-label="information circle outline"></ion-icon></button>
+                                  <!-- Content Action Sheet -->
+                                  <div class="offcanvas offcanvas-bottom action-sheet" tabindex="-1" [attr.id]="'actionSheetContent' + i">
+                                      <div class="offcanvas-header">
+                                          <h5 class="offcanvas-title">Ausente por</h5>
+                                      </div>
+                                      <div class="offcanvas-body">
+                                          <div class="action-sheet-content">
+                                            <div class="form-group boxed">
+                                              <div class="input-wrapper">
+                                                  <textarea rows="3" class="form-control" id="observacion" name="observacion" [(ngModel)]="alumno.observacion" [readOnly]="alumno.justificacion==1"
+                                                      autocomplete="off"></textarea>
+
+                                              </div>
+                                          </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- * Content Action Sheet -->
+                            </th>
+                            <td *ngIf="usuario?.Rol_selected?.comedor == 1">
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="checkbox" name="grupo{{i}}" id="checkboxInlineComedor_{{i}}" [(ngModel)]="alumno.estado_comedor" [disabled]="checkDeshabilitados">
+                                  <label class="form-check-label" for="checkboxInlineComedor_{{i}}"></label>
+                              </div>
+                            </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+            <div class="section mt-2">
+                <div class="text-center dropdown">
+                  <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="editar()" *ngIf="asistenciaSeleccionada?.editable==1 && asistenciaSeleccionada?.id_parte!=0 && checkDeshabilitados==true">
+                    editar
+                </button>
+                    <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="aceptar()" *ngIf="asistenciaSeleccionada?.editable==1 && !checkDeshabilitados">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+
+    </div>
+  </div>
+  </div>
+
+

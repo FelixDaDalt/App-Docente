@@ -1,0 +1,51 @@
+<div id="appCapsule">
+
+  <app-titulo>
+    <p titulo>Entrevistas sin leer: {{cantidad?cantidad:0}}</p>
+  </app-titulo>
+
+  <div class="section inset mt-2">
+
+    <div class="accordion" id="accordionExample2" *ngIf="detallesEntrevistas.length>0; else nada">
+      <div *ngFor="let entrevista of detallesEntrevistas; let i = index"
+      [ngClass]="{'accordion-item': true, 'accordion-item-noleido': entrevista.leido === 0 }">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#accordion' + i">
+                  <span class="fecha">
+                    {{entrevista?.fecha}}
+                </span>
+                <span class="titulo">
+                  {{entrevista?.alumno}}
+                </span>
+          </button>
+        </h2>
+        <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(entrevista)">
+          <div class="accordion-body">
+            <h4 class="subtitle">Curso: {{entrevista?.cursos}}</h4>
+            <h4 class="subtitle">Tipo: {{entrevista?.tipo}}</h4>
+            <h4 class="subtitle">Registro: {{entrevista?.autor}}</h4>
+            <hr>
+            <h4 class="subtitle">Motivo: {{entrevista?.motivo}}</h4>
+            {{entrevista?.objetivos}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #nada>
+      <div class="accordion" id="accordionExample2">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#accordion'">
+              Nada para mostrar
+            </button>
+          </h2>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+

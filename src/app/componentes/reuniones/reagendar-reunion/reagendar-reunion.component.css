@@ -1,0 +1,18 @@
+.form-control-mensaje {
+  min-height: 120px; /* Aquí puedes ajustar la altura según tus necesidades */
+  max-height: 240px; /* Ajusta también si necesitas una altura máxima */
+  overflow-y: auto; /* Para agregar barras de desplazamiento vertical si el contenido excede la altura */
+  border-radius: 24px;
+  padding: 0 40px 0 16px;
+  border-color: #E1E1E1;
+  border: 1px solid #ced4da;
+}
+
+.dialogbox .modal-dialog .modal-content {
+  max-width: 800px !important;
+  margin: auto;
+  max-height: 560px;
+  overflow: auto;
+  border: 0;
+  border-radius: 16px;
+}

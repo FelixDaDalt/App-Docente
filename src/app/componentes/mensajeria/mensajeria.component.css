@@ -1,0 +1,13 @@
+.avatar-circle {
+  width: 40px; /* Ajusta el tamaño del círculo según tus necesidades */
+  height: 40px; /* Ajusta el tamaño del círculo según tus necesidades */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Color del texto dentro del círculo */
+  font-weight: bold; /* Ajusta el peso de la fuente según tus necesidades */
+  font-size: 16px; /* Ajusta el tamaño de la fuente según tus necesidades */
+  margin-right: 10px; /* Ajusta el margen derecho según tus necesidades */
+  background-color: #53AAC6;
+}

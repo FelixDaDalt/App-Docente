@@ -1,0 +1,19 @@
+.subtitle {
+  font-size: 11px;
+  color: #A1A1A2;
+  margin: 0;
+}
+
+.icon-box-ausente {
+  min-width: 18px;
+  max-width: 18px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1em;
+  font-size: 10px;
+  border-radius: 400px;
+  margin-right: 8px;
+}

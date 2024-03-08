@@ -1,0 +1,26 @@
+<div class="form-group boxed">
+  <label class="form-label" style="margin-left: 10px;" for="materia">Seleccionar Materia:</label>
+  <div class="input-wrapper">
+      <select class="form-control form-select" id="academico" [(ngModel)]="academicoSeleccionado">
+          <option *ngFor="let academico of academicos" [ngValue]="academico">{{academico.materia}}</option>
+      </select>
+  </div>
+</div>
+<!-- formato 2 de academico -->
+ <table class="table table-striped">
+      <thead>
+          <tr>
+              <th scope="col">FECHA</th>
+              <th scope="col">TIPO</th>
+              <th scope="col">DESCRIPCION</th>
+              <th scope="col">CALIFICACION</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let calificacion of academicoSeleccionado?.calificaciones">
+              <td class="align-middle">{{calificacion.fecha}}</td>
+              <td class="align-middle">{{calificacion.tipo}}</td>
+              <td class="align-middle">{{calificacion.descripcion}}</td>
+              <td class="align-middle">{{calificacion.calificacion}}</td>
+      </tbody>
+  </table>

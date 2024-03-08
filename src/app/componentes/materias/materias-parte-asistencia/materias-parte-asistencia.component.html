@@ -1,0 +1,28 @@
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th scope="col">Nº PARTE</th>
+          <th scope="col">FECHA</th>
+          <th scope="col">PRESENTES</th>
+          <th scope="col">AUSENTES</th>
+          <th scope="col">TARDES</th>
+          <th scope="col">RETIROS</th>
+          <th scope="col">#</th>
+      </tr>
+  </thead>
+  <app-spinner #appSpinner></app-spinner>
+  <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
+      <tr *ngFor="let parte of partes">
+          <td class="align-middle">{{parte.id}}</td>
+          <td class="align-middle">{{parte.fecha}}</td>
+          <td class="align-middle">{{parte.total_presentes}}</td>
+          <td class="align-middle">{{parte.total_ausentes}}</td>
+          <td class="align-middle">{{parte.total_tardes}}</td>
+          <td class="align-middle">{{parte.total_retiros}}</td>
+          <td class="align-middle">
+            <button type="button" class="btn btn-icon btn-sm btn-primary" (click)="verParte(parte)">
+              <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+          </button>
+      </tr>
+  </tbody>
+</table>

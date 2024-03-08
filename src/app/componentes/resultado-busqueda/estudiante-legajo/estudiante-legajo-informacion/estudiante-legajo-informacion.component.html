@@ -1,0 +1,52 @@
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td class="align-middle">NOMBRE:</td>
+          <td class="align-middle">{{alumno?.nombre}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">APELLIDO:</td>
+          <td class="align-middle">{{alumno?.apellido}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">DNI:</td>
+          <td class="align-middle">{{alumno?.dni}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">FECHA DE NACIMIENTO:</td>
+          <td class="align-middle">{{alumno?.fecha_nacimiento}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">CURSO:</td>
+          <td class="align-middle">{{alumno?.curso}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">SITUACIÓN:</td>
+          <td class="align-middle">{{alumno?.situacion}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">LIBRO Y FOLIO:</td>
+          <td class="align-middle">{{alumno?.libro_folio}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">DIRECCIÓN:</td>
+          <td class="align-middle">{{alumno?.direccion}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">TELÉFONO:</td>
+          <td class="align-middle">{{alumno?.telefono}}</td>
+      </tr>
+      <tr>
+          <td class="align-middle">RESPONSABLE:</td>
+          <td class="align-middle"><p *ngFor="let responsable of alumno?.responsables">
+            {{responsable.nombre}} ({{responsable.email}})</p>
+          </td>
+      </tr>
+  </tbody>
+</table>

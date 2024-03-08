@@ -1,0 +1,61 @@
+<div class="modal fade dialogbox show" id="DialogBasic" tabindex="-1" role="dialog" aria-modal="true" style="display: block;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <ion-icon name="information-circle-outline" role="img" class="md hydrated" aria-label="bluetooth outline"></ion-icon>
+      </div>
+      <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+        <div class="comment-header text-center d-flex justify-content-center pt-2">
+          <h4 class="title text-center">{{objeto?.tipo_categoria}}</h4>
+        </div>
+        <div class="text">
+          <ng-container>
+            <!-- Suponiendo que "objeto" es una instancia de la interfaz y deseas mostrar cada propiedad -->
+
+            <p *ngIf="objeto?.fecha" class="property">Fecha: {{ objeto.fecha }}</p>
+            <p *ngIf="objeto?.hora" class="property">Hora: {{ objeto.hora }}</p>
+            <p *ngIf="objeto?.autor" class="property">Autor: {{ objeto.autor }}</p>
+            <p *ngIf="objeto?.clase" class="property">Clase: {{ objeto.clase }}</p>
+            <p *ngIf="objeto?.registro" class="property">Registro: {{ objeto.registro }}</p>
+            <p *ngIf="objeto?.titulo" class="property">Titulo: {{ objeto.titulo }}</p>
+            <p *ngIf="objeto?.descripcion" class="property">Descripcion: {{ objeto.descripcion }}</p>
+
+
+
+            <p *ngIf="objeto?.motivo" class="property">Motivo: {{ objeto.motivo }}</p>
+            <p *ngIf="objeto?.comentarios" class="property">Comentario: {{ objeto.comentarios }}</p>
+            <p *ngIf="objeto?.objetivos" class="property">Objetivos: {{ objeto.objetivos }}</p>
+            <p *ngIf="objeto?.presentes" class="property">Presentes: {{ objeto.presentes }}</p>
+            <p *ngIf="objeto?.penalizado" class="property">Penalizado: {{ objeto.penalizado }}</p>
+            <p *ngIf="objeto?.tipo" class="property">Tipo: {{ objeto.tipo }}</p>
+            <p *ngIf="objeto?.descripcionLegajoFalta" class="property">Descripcion Falta: {{ objeto.descripcionLegajoFalta }}</p>
+            <p *ngIf="objeto?.libro" class="property">Libro: {{ objeto.libro }}</p>
+
+            <div *ngIf="objeto?.tipo_categoria == 'Uniformes'">
+              <hr>
+              <p *ngIf="objeto?.pantalon == 1" class="property">Pantalon</p>
+              <p *ngIf="objeto?.swetter == 1" class="property">Swetter</p>
+              <p *ngIf="objeto?.chomba == 1" class="property">Chomba</p>
+              <p *ngIf="objeto?.barba == 1" class="property">Barba</p>
+
+            </div>
+            <p *ngIf="objeto?.desde" class="property">Desde: {{ objeto.desde }}</p>
+            <p *ngIf="objeto?.hasta" class="property">Hasta: {{ objeto.hasta }}</p>
+
+            <button *ngIf="objeto?.archivo" type="button" class="btn btn-outline-secondary btn-sm rounded me-1"
+            (click)="descargarAdjunto(objeto.archivo)">
+              <ion-icon name="cloud-download"></ion-icon>
+              {{obtenerNombreArchivo(objeto.archivo)}}
+            </button>
+          </ng-container>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="btn-inline">
+          <a class="btn btn-text-secondary" (click)="activeModal.close()">CERRAR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

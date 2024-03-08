@@ -1,0 +1,13 @@
+.alertaasistencia {
+  background-color:#FB9393 !important;
+}
+
+.alertaasistencia .texto{
+  text-align: center;
+  color: white;
+  font-size:x-small;
+}
+
+#observacion {
+  border-color: blue;
+}

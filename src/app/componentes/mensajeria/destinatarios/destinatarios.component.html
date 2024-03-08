@@ -1,0 +1,48 @@
+
+<div class="modal fade custom-modal-lg" id="seleccionDestinatario" data-bs-backdrop="static" tabindex="-1" role="dialog">
+  <div class="modal-dialog custom-modal-lg">
+      <div class="modal-content">
+          <div class="modal-header" style="padding-bottom: 0px;">
+
+              <form class="search-form">
+                  <div class="form-group searchbox" >
+                      <input type="text" class="form-control" #termino (keyup)="filtrarDestinatarios(termino.value)">
+                      <i class="input-icon">
+                          <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline"></ion-icon>
+                      </i>
+                  </div>
+              </form>
+
+          </div>
+          <div class="modal-body">
+            <app-spinner #appSpinner></app-spinner>
+            <ul class="listview image-listview list-group" style="cursor: pointer;" *ngIf="!(appSpinner.spinnerCargando | async)">
+              <ng-container>
+                <li *ngFor="let destinatario of destinatariosFiltrados; let i= index">
+                    <div class="item"  (click)="seleccionDestinatario(destinatario)">
+                      <div class="avatar-circle">
+                        {{destinatario.apellido.substring(0, 1).toUpperCase()}}
+                        {{destinatario.nombre.substring(0, 1).toUpperCase()}}
+                      </div>
+                        <div class="in">
+                            <div>{{destinatario.apellido}},{{destinatario.nombre}}</div>
+                            <span class="text-muted">{{destinatario.curso}}</span>
+                        </div>
+                    </div>
+                    <ul *ngIf="destinatario == destinatarioSeleccionado" style="margin-left: 20px;">
+                      <li style="margin-bottom: 10px" *ngFor="let responsable of destinatariosResponsable" (click)="seleccionResponsable(responsable)" data-bs-dismiss="modal">
+                        {{responsable.nombre}}
+                      </li>
+                    </ul>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+          <div class="modal-footer">
+              <div class="btn-inline">
+                  <a href="#" class="btn btn-text-danger" data-bs-dismiss="modal">CERRAR</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

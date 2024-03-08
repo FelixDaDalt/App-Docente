@@ -1,0 +1,28 @@
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th scope="col">Clase</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Tipo de clases</th>
+          <th scope="col">Contenido</th>
+          <th scope="col">Actividades</th>
+          <th scope="col">Ausentes</th>
+      </tr>
+  </thead>
+  <app-spinner #appSpinner></app-spinner>
+  <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
+      <tr *ngFor="let libroTema of libroTemas">
+          <td class="align-middle">{{libroTema.numero_clase}}</td>
+          <td class="align-middle">{{libroTema.fecha}}</td>
+          <td class="align-middle">{{libroTema.tipo_clase}}</td>
+          <td class="align-middle">{{libroTema.contenidos}}</td>
+          <td class="align-middle">{{libroTema.actividades}}</td>
+          <td class="align-middle">
+              <button type="button" class="btn btn-icon btn-sm btn-primary" (click)="verAusentes(libroTema)"  [disabled]="libroTema.ausentes.length<=0">
+                  <ion-icon name="people-outline"></ion-icon>
+              </button>
+          </td>
+      </tr>
+      <!-- ... Repite el mismo patrón para los otros alumnos ... -->
+  </tbody>
+</table>

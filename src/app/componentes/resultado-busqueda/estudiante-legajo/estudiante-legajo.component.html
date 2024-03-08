@@ -1,0 +1,124 @@
+<div id="appCapsule" class="bg-white" [ngStyle]="{'height': (appSpinner.spinnerCargando | async) ? '100vh' : 'auto'}">
+
+
+
+  <div class="section mt-2">
+      <div class="profile-head">
+          <div class="avatar">
+              <img [src]="estudianteLegajo?.alumno?.avatar_url" alt="avatar" class="imaged w64 rounded">
+          </div>
+          <div class="in">
+              <h3 class="name">{{estudianteLegajo?.alumno?.apellido}}, {{estudianteLegajo?.alumno?.nombre}}</h3>
+              <h5 class="subtext">{{estudianteLegajo?.alumno?.curso}}</h5>
+          </div>
+      </div>
+  </div>
+
+  <app-spinner #appSpinner></app-spinner>
+
+  <div class="section full mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div class="profile-stats ps-2 pe-2">
+          <a class="item">
+              <h5 class="subtext">DNI</h5>
+              <strong>{{estudianteLegajo?.alumno?.dni}}</strong>
+          </a>
+          <a class="item">
+              <h5 class="subtext">EDAD</h5>
+              <strong>{{calcularEdad(estudianteLegajo?.alumno?.fecha_nacimiento!)}}</strong>
+          </a>
+          <a class="item">
+              <h5 class="subtext">INASISTENCIAS</h5>
+              <strong>{{estudianteLegajo?.inasistencia?.total_faltas}}</strong>
+          </a>
+          <a class="item">
+              <h5 class="subtext">MATRIZ</h5>
+              <strong>{{estudianteLegajo?.alumno?.libro_folio || 'S/I'}}</strong>
+          </a>
+      </div>
+  </div>
+
+ <!--<div class="section mt-1 mb-2">
+      <div class="profile-info">
+          <div class=" bio">
+              Opcional de para poner biografia.
+          </div>
+      </div>
+  </div>-->
+
+  <div class="section inset mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+    <strong class="pb-2">AUTORIZACION DE RETIRO</strong>
+    <div class="wide-block pt-2 pb-2" style="max-height: 200px; overflow-y: auto;">
+        <div *ngFor="let autorizado of estudianteLegajo?.alumno?.autorizaciones_retiro">
+            <h4 class="subtext">{{autorizado.apellido}}, {{autorizado.nombre}} - Dni: {{autorizado.dni}} - <i>"{{autorizado.vinculo}}"    </i> <span class="badge bg-warning" *ngIf="autorizado.temporal == 1">TEMPORAL</span></h4>
+
+        </div>
+    </div>
+</div>
+
+
+  <div class="section full mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div class="wide-block transparent p-0">
+          <ul class="nav nav-tabs lined iconed" role="tablist">
+              <li class="nav-item">
+                  <a class="nav-link active" data-bs-toggle="tab" href="#inasistencia" role="tab">
+                      <ion-icon name="grid-outline"></ion-icon>
+                      <h5 class="subtext">INASISTENCIAS</h5>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#academico" role="tab">
+                      <ion-icon name="school-outline"></ion-icon>
+                      <h5 class="subtext">ACADEMICO</h5>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#legajo" role="tab">
+                      <ion-icon name="reader-outline"></ion-icon>
+                      <h5 class="subtext">LEGAJO</h5>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#informacion" role="tab">
+                      <ion-icon name="person-outline"></ion-icon>
+                      <h5 class="subtext">INFORMACION</h5>
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>
+
+
+  <!-- tab content -->
+  <div class="section full mb-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div class="tab-content">
+
+          <!-- Inasistencias -->
+          <div class="tab-pane fade show active table-responsive" id="inasistencia" role="tabpanel">
+              <app-estudiante-legajo-inasistencia [inasistencia]="estudianteLegajo?.inasistencia"></app-estudiante-legajo-inasistencia>
+          </div>
+          <!-- * fin de inasistencia -->
+
+          <!--  Academico -->
+          <!-- formato 1 de academico -->
+          <div class="tab-pane fade table-responsive" id="academico" role="tabpanel">
+              <app-estudiante-legajo-academico [academicos]="estudianteLegajo?.academico"></app-estudiante-legajo-academico>
+          </div>
+          <!-- * Fin Academico -->
+
+          <!-- Legajo -->
+          <div class="tab-pane fade table-responsive" id="legajo" role="tabpanel">
+              <app-estudiante-legajo-legajo [legajo]="estudianteLegajo?.legajo"></app-estudiante-legajo-legajo>
+          </div>
+          <!-- * Fin de legajo -->
+
+          <!-- Informacion -->
+          <div class="tab-pane fade table-responsive" id="informacion" role="tabpanel">
+              <app-estudiante-legajo-informacion [alumno]="estudianteLegajo?.alumno"></app-estudiante-legajo-informacion>
+          </div>
+          <!-- * Fin de informacion -->
+
+      </div>
+  </div>
+  <!-- * tab content -->
+
+</div>

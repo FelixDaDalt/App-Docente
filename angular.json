@@ -21,21 +21,32 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/service-worker.js",
+              "src/manifest.json",
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*.svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
+                "output": "./svg"
+              }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/@splidejs/splide/dist/css/splide.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@splidejs/splide/dist/js/splide.js"
+            ]
           },
           "configurations": {
             "production": {
+              "serviceWorker": false,
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -83,16 +94,50 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
+              "src/service-worker.js",
+              "src/manifest.json",
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*.svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
+                "output": "./svg"
+              }
             ],
             "styles": [
               "src/styles.css"
             ],
             "scripts": []
           }
+        },
+        "ionic-cordova-serve": {
+          "builder": "@ionic/angular-toolkit:cordova-serve",
+          "options": {
+            "cordovaBuildTarget": "App-Docente:ionic-cordova-build",
+            "devServerTarget": "App-Docente:serve"
+          },
+          "configurations": {
+            "production": {
+              "cordovaBuildTarget": "App-Docente:ionic-cordova-build:production",
+              "devServerTarget": "App-Docente:serve:production"
+            }
+          }
+        },
+        "ionic-cordova-build": {
+          "builder": "@ionic/angular-toolkit:cordova-build",
+          "options": {
+            "browserTarget": "App-Docente:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "App-Docente:build:production"
+            }
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "b9a81f8e-ebf2-4d5c-adb1-b907555d1003"
   }
 }

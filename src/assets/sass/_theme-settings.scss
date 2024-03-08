@@ -1,0 +1,58 @@
+//--------------------------------------------------
+// ------ C O L O R S ------------------------------
+//--------------------------------------------------
+// Theme Colors
+$colorPrimary:         #2E2481;
+$colorSecondary:       #53AAC6;
+$colorSuccess:         #C7FB93;
+$colorDanger:          #FB9393;
+$colorWarning:         #FBC593;
+$colorInfo:            #ffffff;
+$colorvcc1:            #53AAC6;
+$colorvcc2:            #2E2481;
+// Background
+$colorBackground:      #2d24814f;
+// Line Colors
+$colorLine:            #E1E1E1;
+// Text Colors
+$colorcarletervcc:     #ffffff;
+$colorHeading:         #1c1b1b;
+$colorText:            #4F5050;
+$colorLight:           #939393;
+
+// Dark Mode Colors
+$darkModeBackground:        #ffffff;
+$darkModeContentBackground: #ffffff;
+$darkModeColorHeading:      #ffffff;
+$darkModeColorText:         #ffffff;
+$darkModeColorLight:        #586d7f;
+$darkModeColorLine:         #1B283B;
+
+//--------------------------------------------------
+// ------ FONT ------------------------------
+//--------------------------------------------------
+// Google font
+@import url('https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap');
+
+// Font Family
+$fontFamily:             'Inter', sans-serif;
+// Define font weight
+$regular :               400; // font regular
+$medium :                500; // font medium (if font does not support medium, define the semibold)
+$bold :                  700; // font bold or black
+// Typography
+$lineHeight:             1.55rem;
+$letterSpacing:          -0.015rem;
+// Sizes
+$fontSizeHeadingXLarge:  34px;
+$fontSizeHeadingLarge:   24px;
+$fontSizeHeading:        17px;
+$fontSize:               15px;
+$fontSizeSub:            13px;
+$fontSizeCaption:        11px;
+
+//--------------------------------------------------
+// ------ OTHERS -----------------------------------
+//--------------------------------------------------
+$borderRadius:           24px;
+$boxShadow :              0px 4px 4px rgba(0, 0, 0, 0.25);

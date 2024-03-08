@@ -1,0 +1,34 @@
+<div class="modal fade dialogbox show" id="DialogBasic" tabindex="-1" role="dialog" aria-modal="true" style="display: block;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <ion-icon name="information-circle-outline" role="img" class="md hydrated" aria-label="bluetooth outline"></ion-icon>
+      </div>
+      <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+        <ul class="listview image-listview text flush transparent pt-1">
+          <li *ngFor="let destinatario of destinatarios">
+            <div class="item">
+              <div class="in" style="text-align:left; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <header>{{destinatario?.curso}}</header>
+                  {{destinatario?.alumno}}
+                  <footer>{{destinatario?.mail_destinatario}}</footer>
+                </div>
+                <span class="text-muted">
+                  <ion-icon *ngIf="destinatario?.leido == 0" name="checkmark-circle-outline" style="font-size:24px" placement="left"></ion-icon>
+                  <ion-icon *ngIf="destinatario?.leido == 1" name="checkmark-done-circle-outline" style="font-size:24px; color: #34B7F1;" ngbTooltip="Leído:{{destinatario?.fecha_leido}} {{destinatario?.hora_leido}}" placement="left"></ion-icon>
+                </span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <div class="btn-inline">
+          <a class="btn btn-text-secondary" (click)="activeModal.close()">CERRAR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

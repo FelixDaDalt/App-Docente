@@ -1,0 +1,33 @@
+  /* Estilos para el modal */
+  .custom-modal-lg {
+    overflow-y: auto; /* Hacer que el modal sea desplazable verticalmente si es necesario */
+  }
+
+  /* Estilo para el cuerpo del modal que se desplazará */
+  .modal-body {
+    max-height: calc(100vh - 200px); /* Ajusta la altura máxima según sea necesario */
+    overflow-y: auto; /* Hacer que el cuerpo del modal sea desplazable */
+  }
+
+  /* Estilos para el encabezado y el pie de página que se mantendrán fijos */
+  .modal-header,
+  .modal-footer {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #ffffff; /* Puedes ajustar el color de fondo según tus preferencias */
+  }
+
+  .avatar-circle {
+    width: 36px; /* Ajusta el tamaño del círculo según tus necesidades */
+    height: 36px; /* Ajusta el tamaño del círculo según tus necesidades */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Color del texto dentro del círculo */
+    font-weight: bold; /* Ajusta el peso de la fuente según tus necesidades */
+    font-size: 14px; /* Ajusta el tamaño de la fuente según tus necesidades */
+    margin-right: 10px; /* Ajusta el margen derecho según tus necesidades */
+    background-color: #53AAC6;
+  }

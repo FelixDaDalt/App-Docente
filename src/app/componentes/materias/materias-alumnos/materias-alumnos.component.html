@@ -1,0 +1,21 @@
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th scope="col"></th>
+          <th scope="col">APELLIDO</th>
+          <th scope="col">NOMBRE</th>
+          <th scope="col">DNI</th>
+      </tr>
+  </thead>
+  <app-spinner #appSpinner></app-spinner>
+  <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
+      <tr *ngFor="let alumno of alumnos">
+          <td class="align-middle">
+            <img class="avatar-image" [src]="alumno.avatar" alt="avatar">
+          </td>
+          <td class="align-middle">{{alumno.apellido}}</td>
+          <td class="align-middle">{{alumno.nombre}}</td>
+          <td class="align-middle">{{alumno.dni}}</td>
+      </tr>
+  </tbody>
+</table>

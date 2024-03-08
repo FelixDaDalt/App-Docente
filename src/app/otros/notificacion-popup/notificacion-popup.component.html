@@ -1,0 +1,7 @@
+<div class="notificacionContainer" *ngIf="notificaciones.length>0">
+  <div *ngFor="let notificacion of notificaciones" class="notificacion" [ngClass]="obtenerClaseNotificacion(notificacion)" role="alert">
+    <strong>{{ notificacion.hora }}</strong> - {{ notificacion.mensaje }}
+    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarNotificacion(notificacion)"></button>
+  </div>
+</div>
+

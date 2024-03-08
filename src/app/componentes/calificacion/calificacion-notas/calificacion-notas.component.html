@@ -1,0 +1,83 @@
+<div id="appCapsule">
+  <app-titulo>
+    <p titulo>{{instrumentoRespuesta?.materia}}</p>
+    <p header>Instrumento: "{{instrumentoRespuesta?.descripcion}}"</p>
+  </app-titulo>
+
+  <app-spinner #appSpinner></app-spinner>
+  <!--  -->
+  <div class="section mt-2 mb-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div class="section full mb-2">
+          <div class="section-title"></div>
+          <div class="content-header mb-05"></div>
+          <div class="wide-block p-0">
+              <div class="table-responsive">
+                  <table class="table table-striped text-center">
+                      <thead>
+                          <tr>
+                              <th scope="col">Alumno</th>
+                              <th scope="col">Calificación</th>
+                              <th scope="col">Obs.</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let alumno of calificarAlumnos; let i = index">
+                              <td class="align-middle">{{alumno.alumno}}</td>
+                              <td>
+                                  <div class="form-group boxed">
+                                      <div *ngIf="instrumentoRespuesta?.id_escala==1">
+                                          <input type="number" class="form-control form-control-sm" id="nota" min="1" max="10"
+                                          (blur)="validarNota($event,i)"
+                                          [class.invalid]="alumno.nuevaNota==null" [(ngModel)]="alumno.nuevaNota">
+                                      </div>
+
+                                      <div class="input-wrapper" *ngIf="instrumentoRespuesta?.id_escala!=1">
+                                      <select class="form-control form-select" id="escala" name="escala" [(ngModel)]="alumno.nuevaNota" (change)="seleccionNota(i)">
+                                          <option [value]="null" disabled selected>Seleccionar una calificación</option>
+                                          <option *ngFor="let calificacion of calificaciones" [value]="calificacion.id">{{calificacion.indice}} - {{calificacion.estado}}</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                              </td>
+                              <td class="align-middle">
+                                  <button type="button" class="btn btn-icon btn-sm btn-primary" data-bs-toggle="offcanvas"  [attr.data-bs-target]="'#actionSheetContent_' + i" [disabled]="alumno.nuevaNota==null">
+                                      +
+                                  </button>
+                                  <!-- Content Action Sheet -->
+                                  <div class="offcanvas offcanvas-bottom action-sheet" tabindex="-1" [attr.id]="'actionSheetContent_' + i">
+                                      <div class="offcanvas-header">
+                                          <h5 class="offcanvas-title">Observación</h5>
+                                      </div>
+                                      <div class="offcanvas-body">
+                                          <div class="action-sheet-content">
+                                              <div class="form-group boxed">
+                                                  <div class="input-wrapper">
+                                                      <input type="text" class="form-control form-control-sm mx-auto" id="descripcion_{{i}}" name="descripcion_{{i}}" placeholder="" autocomplete="" [(ngModel)]="calificarAlumnos[i].nuevaObservacion">
+                                                  </div>
+                                              </div>
+                                              <button class="btn btn-primary btn-block" data-bs-dismiss="offcanvas" (click)="enviarObservacion(i)">Guardar</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <!-- * Content Action Sheet -->
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="section mt-2">
+                <div class="text-center dropdown">
+                    <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="guardar()">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+            </div>
+      </div>
+  </div>
+
+
+  </div>
+
+  <!--  -->
+

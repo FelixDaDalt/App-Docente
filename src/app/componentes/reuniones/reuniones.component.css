@@ -1,0 +1,15 @@
+.accepted {
+  color: green;
+}
+
+.denegated {
+  color:red ;
+}
+
+.view {
+  color: #007AFF;
+}
+
+.delete{
+  color:#800020;
+}

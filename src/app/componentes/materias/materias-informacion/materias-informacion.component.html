@@ -1,0 +1,30 @@
+<div class="section mt-2">
+  <div class="profile-head">
+      <div class="avatar">
+      </div>
+      <div class="in">
+          <h3 class="name">{{Informacion?.materia}}</h3>
+          <h5 class="subtext">{{Informacion?.curso}}</h5>
+          <h5 class="subtext">{{rol}}</h5>
+      </div>
+  </div>
+</div>
+
+<div class="section full mt-2">
+  <div class="profile-stats ps-2 pe-2">
+    <a class="item">
+    </a>
+      <a  class="item">
+          <h5 class="subtext">{{(rol == "PR" || rol == "MI" || rol == "MG" && Informacion?.tipo_materia=='Z')?'Dias Habiles':'Cantidad de clases'}}</h5>
+          <strong>{{Informacion?.cantidad_clases}}</strong>
+      </a>
+      <a class="item">
+        <h5 class="subtext">Cantidad de Alumnos</h5>
+        <strong>{{Informacion?.cantidad_alumnos}}</strong>
+      </a>
+      <a class="item">
+      </a>
+
+
+  </div>
+</div>

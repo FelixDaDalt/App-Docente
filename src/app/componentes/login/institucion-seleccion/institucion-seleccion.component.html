@@ -1,0 +1,14 @@
+
+        <div class="form-group boxed">
+            <div class="input-wrapper">
+                <div class="row mx-4">
+                    <label class="form-label text-center">Seleccione la institución</label>
+                    <select class="form-control form-select" [(ngModel)]="institucionSeleccionada" name="institucion" (change)="seleccionarInstitucion()">
+                        <option [ngValue]="undefined" selected disabled>Seleccione una opcion</option>
+                        <option *ngFor="let institucion of listaInstitucion" [ngValue]="institucion">{{institucion.Institucion}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+

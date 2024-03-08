@@ -1,0 +1,21 @@
+/* Agrega este código a tu hoja de estilos CSS o SCSS */
+.fecha {
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+
+/* Estilos específicos para pantallas de ancho máximo de 330px */
+@media (max-width: 330px) {
+.btn {
+  margin-right: 0;    /* Elimina el margen derecho para ajustar al ancho completo del contenedor */
+  margin-bottom: 10px; /* Aumenta el margen inferior para crear un espacio más grande entre los botones */
+  width: 100%;        /* Hace que los botones ocupen el ancho completo del contenedor */
+}
+
+.titulo {
+  font-size: 14px;
+  font-weight: bold;
+}
+}

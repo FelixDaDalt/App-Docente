@@ -1,0 +1,5 @@
+.avatar-image {
+  width: 32px; /* Ancho de la imagen */
+  height: 32px; /* Alto de la imagen */
+  border-radius: 50%; /* Hace que la imagen sea redonda */
+}

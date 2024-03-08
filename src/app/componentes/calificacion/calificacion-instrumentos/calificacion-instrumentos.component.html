@@ -1,0 +1,101 @@
+<div id="appCapsule">
+  <!-- INICIO selector de MAERIA -->
+  <app-titulo>
+    <p titulo>Listado Instrumentos</p>
+  </app-titulo>
+
+  <div class="section inset mt-2">
+    <button type="button" class="btn btn-primary btn-sm rounded me-1 mb-1 w-100"
+      (click)="nuevoInstrumento()">
+      <ion-icon name="create-outline"></ion-icon>
+      Nuevo Instrumento
+    </button>
+
+
+
+    <div class="form-group boxed">
+      <div class="input-wrapper">
+        <label class="form-label" for="tipoCalificaciones">Seleccionar Materia</label>
+        <select class="form-control form-select" id="materia" name="materia" [(ngModel)]="materiaSel"
+          (change)="obtenerInstrumentos()">
+          <option *ngFor="let materia of materias" [ngValue]="materia">{{materia.materia}} - ({{materia.curso}})</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group boxed">
+      <div class="input-wrapper">
+        <label class="form-label" for="tipoCalificaciones">Instrumentos generados</label>
+      </div>
+    </div>
+    <app-spinner #appSpinner></app-spinner>
+    <div class="accordion" id="accordionExample2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div *ngFor="let instrumento of instrumentos; let i=index" class="accordion-item">
+        <div class="comment-block">
+          <h2 class="accordion-header">
+            <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#accordion' + i">
+              <div class="btn-container">
+                <span class="fecha">
+                  {{instrumento.fecha}}
+                </span>
+                <span class="titulo">
+                  {{instrumento.descripcion}}
+                </span>
+              </div>
+            </a>
+
+          </h2>
+          <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2">
+            <div class="accordion-body">
+              <div class="item">
+                <div class="in">
+                  <div class="row">
+                    <div class="col-4">
+                        <div class="text"><strong>Escala:</strong> {{instrumento.escala}}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text"><strong>Calificacion: </strong>{{instrumento.calificacion}}</div>
+                    </div>
+                    <div class="col-4 d-flex align-items-center" (click)="continuarCalificacion(instrumento.id_operacion)">
+                      <ion-icon name="arrow-forward-circle-outline" style="font-size: 18px;"></ion-icon>
+                      <span class="ml-2">Continuar</span>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="comment-footer d-flex flex-column flex-sm-row">
+                    <div class="comment-button">
+                      <i class="bi bi-pencil"></i>
+                      Calificados:({{instrumento.cantidad_alumnos_calificados}})
+                    </div>
+                    <div class="comment-button">
+                      <i class="bi bi-pencil-fill"></i>
+                      Sin Calificar:({{instrumento.cantidad_alumnos_sin_calificar}})
+                    </div>
+                    <div class="comment-button">
+                      <i class="bi bi-chevron-bar-contract"></i>
+                      Media: ({{instrumento.media_calificados}})
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item" *ngIf="instrumentos.length==0">
+          <h2 class="accordion-header">
+            <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+              <div class="btn-container">
+                <span class="titulo">
+                  "Nada para mostrar"
+                </span>
+              </div>
+            </a>
+
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

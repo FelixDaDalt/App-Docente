@@ -1,0 +1,75 @@
+
+    <!-- App Bottom Menu -->
+    <div class="section full mt-2">
+        <!-- App Bottom Menu -->
+        <div class="appBottomMenu">
+            <a routerLink="home" class="item">
+                <div class="col">
+                    <ion-icon name="home-outline"></ion-icon>
+                    <strong>Home</strong>
+                </div>
+            </a>
+            <a routerLink="/comunicados" class="item active">
+                <div class="col">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <div *ngIf="notificacionesHome?.comunicados">
+                        <span class="badge badge-danger">{{notificacionesHome?.comunicados}}</span>
+                    </div>
+                    <strong>Comunicados</strong>
+                </div>
+            </a>
+            <a href="#" class="item">
+                <div class="col">
+                    <!-- top center -->
+                    <div class="fab-button animate bottom-center">
+                        <a href="#" class="fab" data-bs-toggle="dropdown">
+                            <ion-icon name="add-outline" class="white-icon"></ion-icon>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" routerLink="/asistencia">
+                                <ion-icon name="id-card-outline"></ion-icon>
+                                <p>Parte de asistencia</p>
+                            </a>
+                            <a class="dropdown-item" routerLink="/libro-temas" *ngIf="usuarioDatos?.Rol_selected?.rol == 'PF'">
+                                <ion-icon name="book-outline"></ion-icon>
+                                <p>Libro de temas</p>
+                            </a>
+                            <a class="dropdown-item" routerLink="/calificacion" *ngIf="usuarioDatos?.Rol_selected?.rol == 'PF'">
+                                <ion-icon name="logo-react"></ion-icon>
+                                <p>Calificación</p>
+                            </a>
+                            <a class="dropdown-item" routerLink="/comunicados-enviados">
+                                <ion-icon name="paper-plane-outline"></ion-icon>
+                                <p>Comunicados</p>
+                            </a>
+                            <a class="dropdown-item" routerLink="/reuniones">
+                              <ion-icon name="people-circle-outline"></ion-icon>
+                              <p>Reuniones</p>
+                          </a>
+                        </div>
+                    </div>
+                    <!-- * top center -->
+                </div>
+            </a>
+            <a routerLink="/mensajeria" class="item">
+                <div class="col">
+                    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                    <div *ngIf="notificacionesHome?.mensajes">
+                        <span class="badge badge-danger">{{notificacionesHome?.mensajes}}</span>
+                    </div>
+                    <strong>Mensajería</strong>
+                </div>
+            </a>
+            <a routerLink="/notificaciones" class="item">
+                <div class="col">
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    <div *ngIf="notificacionesHome?.notificaciones">
+                        <span class="badge badge-danger">{{notificacionesHome?.notificaciones}}</span>
+                    </div>
+                    <strong>Notificaciones</strong>
+                </div>
+            </a>
+        </div>
+        <!-- * App Bottom Menu -->
+    </div>
+    <!-- * App Bottom Menu -->

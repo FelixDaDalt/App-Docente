@@ -1,0 +1,18 @@
+.barra {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: calc(100% - 10px); /* Ancho mínimo igual al ancho del contenedor menos el espacio del texto */
+  height: 16px;
+  transition: width 0.5s; /* Animación suave para el cambio de ancho */
+  border-radius: 12px; /* Ajusta según sea necesario para obtener esquinas más o menos redondeadas */
+  overflow: hidden; /* Para asegurar que las esquinas redondeadas se apliquen correctamente */
+}
+
+.leyenda {
+  position: absolute;
+  color: rgb(255, 255, 255);
+  margin-left: 5px; /* Ajusta según sea necesario */
+  font-size: x-small;
+  font-weight: bold;
+}

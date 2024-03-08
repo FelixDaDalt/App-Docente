@@ -1,0 +1,15 @@
+
+        <div class="form-group boxed">
+            <div class="input-wrapper">
+                <div class="row mx-4">
+                    <label class="form-label text-center">Seleccione el Rol con el que desea operar</label>
+                    <select class="form-control form-select" [(ngModel)]="rolSeleccionado" name="rol">
+                        <option *ngFor="let rol of listaRoles" [ngValue]="rol">{{rol.descripcion}}</option>
+                    </select>
+                </div>
+                <div class="row pt-2 mx-4">
+                    <button type="submit" class="btn btn-primary btn-block" (click)="seleccionarRol()">Continuar</button>
+                </div>
+            </div>
+        </div>
+

@@ -1,0 +1,28 @@
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th scope="col">FECHA</th>
+          <th scope="col">INSTRUMENTO</th>
+          <th scope="col">CALIFICADOS</th>
+          <th scope="col">SIN CALIFICAR</th>
+          <th scope="col">MEDIA</th>
+          <th>#</th>
+      </tr>
+  </thead>
+  <app-spinner #appSpinner></app-spinner>
+  <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
+      <tr *ngFor="let instrumento of instrumentos">
+          <td class="align-middle">{{instrumento.fecha}}</td>
+          <td class="align-middle">{{instrumento.descripcion}}</td>
+          <td class="align-middle">{{instrumento.cantidad_alumnos_calificados}}</td>
+          <td class="align-middle">{{instrumento.cantidad_alumnos_sin_calificar}}</td>
+          <td class="align-middle">{{instrumento.media_calificados}}</td>
+          <td>
+            <button type="button" class="btn btn-icon btn-sm btn-primary" (click)="continuarCalificacion(instrumento.id_operacion)">
+              <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+            </button>
+          </td>
+
+      </tr>
+  </tbody>
+</table>

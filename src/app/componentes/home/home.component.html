@@ -1,0 +1,60 @@
+<div id="appCapsule">
+    <app-titulo>
+      <span titulo>{{usuario.Institucion}}</span>
+      <span header>{{usuario.Rol_selected?.descripcion}}</span>
+      <span titulo-cuerpo>{{usuario.name}}</span>
+    </app-titulo>
+
+    <!-- FIN selector de MATERIA -->
+
+        <div class="section mb-3">
+            <!-- carousel multiple NOVEDADES -->
+            <div class="carousel-multiple splide" >
+                <splide [options]="{ arrows: false }">
+                  <ng-container *ngIf="datosHome?.novedades!=undefined?datosHome.novedades.length>0:false; else sinNovedades">
+                    <splide-slide *ngFor="let novedad of datosHome?.novedades; let i = index">
+                      <div class="card text-primary badge-info mb-3" style="max-width: 18rem;">
+                        <div class="card-header text-primary">{{novedad?.encabezado}}</div>
+                        <div class="card-body">
+                          <h5 class="card-title text-primary">{{novedad?.titulo}}</h5>
+                          <p class="card-text" [ngClass]="{'truncated': expandedCardIndex !== i}">
+                            {{novedad?.descripcion}}
+                          </p>
+                          <button class="btn btn-link" (click)="toggleText(i)">
+                            {{expandedCardIndex !== i ? 'Ver más' : 'Ver menos'}}
+                          </button>
+                        </div>
+                      </div>
+                    </splide-slide>
+                  </ng-container>
+
+                  <ng-template #sinNovedades>
+                    <splide-slide>
+                      <div class="card text-primary badge-info mb-3">
+                        <div class="card-header text-primary">Sin novedades</div>
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                          <div class="align-items-center">
+                            <!-- Icono y número con estilos personalizados -->
+                            <ion-icon name="volume-mute-outline" class="custom-icon"></ion-icon>
+                            <span class="custom-text">Sin novedades</span>
+                          </div>
+                          <!-- Leyenda "alumnos" debajo y centrada -->
+                          <div class="text-center mt-2">
+                            <span class="text-muted">No existen novedades para mostrar</span>
+                          </div>
+                        </div>
+                      </div>
+                    </splide-slide>
+                  </ng-template>
+                  </splide>
+            </div>
+            <!-- * carousel multiple -->
+
+        </div>
+
+
+    </div>
+    <app-boton-whatsapp></app-boton-whatsapp>
+
+
+

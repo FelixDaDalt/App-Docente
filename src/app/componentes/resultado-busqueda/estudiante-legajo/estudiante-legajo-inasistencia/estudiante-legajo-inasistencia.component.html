@@ -1,0 +1,24 @@
+<table class="table table-striped table-auto">
+  <thead>
+      <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Parte</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Inasistencia</th>
+          <th scope="col">Detalle</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let inasistencia of inasistencia?.todas_juntas">
+          <td class="align-middle">{{inasistencia.fecha}}</td>
+          <td class="align-middle">{{inasistencia.id_parte}}</td>
+          <td class="align-middle">{{inasistencia.estado}}</td>
+          <td class="align-middle">{{
+            inasistencia.id_estado==2?'0.75':
+            inasistencia.id_estado==8?'0.00':
+            '1.00'}}</td>
+          <td class="align-middle">{{inasistencia.detalle}}</td>
+      </tr>
+      <!-- ... Repite el mismo patrón para los otros alumnos ... -->
+  </tbody>
+</table>

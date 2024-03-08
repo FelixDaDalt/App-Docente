@@ -1,0 +1,125 @@
+<div id="appCapsule">
+
+  <app-titulo>
+    <p titulo>Libro de Temas</p>
+  </app-titulo>
+
+
+    <!-- Selector de Materia  -->
+    <div class="section mt-2 mb-2">
+      <div class="form-group boxed">
+        <div class="section-title">Seleccionar Materia</div>
+          <div class="input-wrapper">
+              <select class="form-control form-select" id="materias" name="materias" (change)="obtenerRegistros()" [(ngModel)]="materiaSeleccionada">
+                  <option *ngFor="let materia of materias" [ngValue]="materia">{{materia.materia}} - {{materia.curso}}</option>
+              </select>
+          </div>
+      </div>
+    </div>
+
+    <!-- Clases Anteriores  -->
+    <div class="section inset mt-1">
+      <div class="section-title">Registros Cargados</div>
+      <app-spinner #appSpinner></app-spinner>
+      <div class="accordion" id="accordionExample2" *ngIf="!(appSpinner.spinnerCargando | async)" >
+          <div *ngFor="let registro of registros; let i=index" class="accordion-item">
+            <div class="comment-block">
+              <h2 class="accordion-header">
+                      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                          [attr.data-bs-target]="'#accordion' + i" >
+                          <div class="btn-container">
+                                          <span class="fecha">
+                                              {{registro.fecha}}
+                                          </span>
+                                          <span class="titulo">
+                                              Clase N°: {{registro.numero_clase}}
+                                          </span>
+                              </div>
+                      </a>
+
+              </h2>
+              <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2">
+                  <div class="accordion-body">
+                    <div class="item">
+                      <div class="in">
+                        <div class="text"><strong>Contenidos: </strong>{{registro.contenidos}}</div>
+                        <div class="text"><strong>Actividades: </strong>{{registro.actividades}}</div>
+                        <hr>
+                        <div class="comment-footer d-flex flex-column flex-sm-row">
+                          <div class="comment-button" (click)="verAusentes(registro)">
+                            <ion-icon name="eye-off-outline" class="custom-icon"></ion-icon>
+                            Ausentes:({{registro.ausentes.length}})
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item" *ngIf="registros.length==0">
+            <h2 class="accordion-header">
+                    <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                        <div class="btn-container">
+                                        <span class="titulo">
+                                            "Nada para mostrar"
+                                        </span>
+                            </div>
+                    </a>
+
+            </h2>
+          </div>
+      </div>
+
+      </div>
+
+
+    <!-- Formulario  -->
+    <div class="section inset mt-1">
+    <div class="section full mt-1 mb-2">
+        <div class="section-title">Nuevo registro</div>
+        <div class="wide-block pb-1 pt-2">
+            <form  #registroTema="ngForm">
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-control" #fechaRegistro>
+                    </div>
+                </div>
+
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="form-label">Tipo de clase </label>
+                        <select class="form-control form-select" name="tipoClaseRegistro" id="tipoClaseRegistro" [(ngModel)]="tipoClaseSeleccionada">
+                            <option [ngValue]="clase" *ngFor="let clase of tiposClases">{{clase.tipo}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="form-label">Contenido</label>
+                        <textarea rows="2"class="form-control" #contenidoRegistro placeholder="Escribe los contenidos aquí"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="form-label" >Actividades</label>
+                        <textarea rows="2" class="form-control" #actividadRegistro placeholder="Escribe las actividades aquí"></textarea>
+                    </div>
+                </div>
+
+
+            </form>
+            <div class="section mt-2">
+              <div class="text-center dropdown">
+                  <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="nuevoRegistro(contenidoRegistro.value,actividadRegistro.value,fechaRegistro.value, registroTema)">
+                      Registrar
+                  </button>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    </div>

@@ -1,0 +1,54 @@
+
+
+<div class="appHeader bg-primary text-light">
+  <div class="left">
+      <a (click)="volver()" class="headerButton">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+      </a>
+  </div>
+  <div class="avatar-circle">
+    {{usuarioDestino.substring(0, 2).toUpperCase()}}
+  </div>
+  <div class="pageTitle">{{usuarioDestino}}</div>
+</div>
+
+
+<div id="appCapsule" #scrollContainer class="scrollContainer">
+    <app-spinner #appSpinner></app-spinner>
+    <ng-container *ngIf="!(appSpinner.spinnerCargando| async)">
+      <ng-container *ngFor="let fecha of fechasMensajesAgrupados">
+        <div class="message-divider">
+          <span class="badge badge-secondary">{{fecha}}</span>
+        </div>
+
+        <ng-container *ngFor="let mensaje of mensajesAgrupados[fecha]">
+          <div [ngClass]="mensaje.tipo_remitente==1?'message-item user':'message-item'">
+              <div class="content">
+                  <div class="bubble">
+                      {{mensaje.ultimo_mensaje}}
+                      <div class="footer"  (click)="mostrarInformacion(mensaje)">{{calcularTiempoTranscurrido(mensaje.fecha,mensaje.hora)}}
+                        <ion-icon *ngIf="mensaje.tipo_remitente==1 &&mensaje.leido === 0" name="checkmark-circle-outline" style="color: white;  font-size: medium;"></ion-icon>
+                        <ion-icon *ngIf="mensaje.tipo_remitente==1 && mensaje.leido === 1" name="checkmark-done-circle-outline" style="color: #9be8ff; font-size: medium;"></ion-icon>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      </ng-container>
+</div>
+
+<div class="chatFooter">
+  <form>
+      <div class="form-group boxed">
+          <div class="input-wrapper">
+              <input type="text" class="form-control  " placeholder="Escribe un mensaje..." #mensaje (keyup.enter)="enviarChat(mensaje.value); mensaje.value=''">
+          </div>
+      </div>
+      <button type="button" class="btn btn-icon" (click)="enviarChat(mensaje.value); mensaje.value=''">
+          <ion-icon name="send" style="color: white;"></ion-icon>
+      </button>
+  </form>
+</div>
+
+

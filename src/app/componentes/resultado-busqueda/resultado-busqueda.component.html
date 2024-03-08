@@ -1,0 +1,28 @@
+<div id="appCapsule">
+
+  <div class="listview-title mt-2">
+      <div>
+          Resultados de la búsqueda <strong class="text-primary">{{terminoBusqueda}}</strong>
+      </div>
+  </div>
+
+  <ul class="listview image-listview media search-result mb-2">
+      <li *ngFor="let alumno of resultadoBusqueda">
+          <a (click)="verEstudiante(alumno)" class="item">
+              <div class="imageWrapper">
+                  <img src="{{alumno.avatar_url}}" alt="image" class="imaged w64">
+              </div>
+              <div class="in">
+                  <div>
+                      <h4 class="mb-05">{{alumno.apellido}}, {{alumno.nombre}}</h4>
+                      <div class="text-muted">
+                          {{alumno.curso}}
+                          <div class="mt-05"></div>
+                      </div>
+                  </div>
+              </div>
+          </a>
+      </li>
+  </ul>
+
+</div>

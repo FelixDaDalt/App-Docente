@@ -1,0 +1,351 @@
+<app-spinner #appSpinner></app-spinner>
+
+
+<!-- Faltas Leves-->
+<div class="accordion" id="faltas_leves" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#falta_leve'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Faltas Leves
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_leves}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'falta_leve'" class="accordion-collapse collapse" data-bs-parent="#faltas_leves">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let leve of legajo?.Faltas_Leves" (click)="abrirModal(leve)">
+              <div class="col-4">{{leve.fecha}}</div>
+              <div class="col-6">{{leve.clase}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Faltas Graves-->
+<div class="accordion" id="faltas_graves" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#falta_grave'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Faltas Graves
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_graves}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'falta_grave'" class="accordion-collapse collapse" data-bs-parent="#faltas_graves">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let grave of legajo?.Faltas_Graves" (click)="abrirModal(grave)">
+              <div class="col-4">{{grave.fecha}}</div>
+              <div class="col-6">{{grave.clase}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sancion-->
+<div class="accordion" id="sanciones" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#sancion'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Sanciones
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_sanciones}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'sancion'" class="accordion-collapse collapse" data-bs-parent="#sanciones">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let sancion of legajo?.Sanciones" (click)="abrirModal(sancion)">
+              <div class="col-4">{{sancion.fecha}}</div>
+              <div class="col-6">{{sancion.tipo}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Uniforme-->
+<div class="accordion" id="uniformes" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#uniforme'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Uniformes
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_uniforme}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'uniforme'" class="accordion-collapse collapse" data-bs-parent="#uniformes">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let uniforme of legajo?.Uniforme" (click)="abrirModal(uniforme)">
+              <div class="col-4">{{uniforme.fecha}}</div>
+              <div class="col-6">{{uniforme.tipo_categoria}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Familiares-->
+<div class="accordion" id="familiares" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#familiar'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Familiares
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_familiares}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'familiar'" class="accordion-collapse collapse" data-bs-parent="#familiares">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let familiar of legajo?.Familiares" (click)="abrirModal(familiar)">
+              <div class="col-4">{{familiar.fecha}}</div>
+              <div class="col-6">{{familiar.registro}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Documentos-->
+<div class="accordion" id="documentos" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#documento'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Documentos
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_documentos}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'documento'" class="accordion-collapse collapse" data-bs-parent="#documentos">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let documento of legajo?.Documentos" (click)="abrirModal(documento)">
+              <div class="col-4">{{documento.fecha}}</div>
+              <div class="col-6">{{documento.titulo}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Entrevistas-->
+<div class="accordion" id="entrevistas" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#entrevista'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Entrevistas
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_entrevistas}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'entrevista'" class="accordion-collapse collapse" data-bs-parent="#entrevistas">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let entrevista of legajo?.Entrevistas" (click)="abrirModal(entrevista)">
+              <div class="col-4">{{entrevista.fecha}}</div>
+              <div class="col-6">{{entrevista.motivo}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--OBSERVACION-->
+<div class="accordion" id="observaciones" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#observacion'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Observaciones
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_observaciones}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'observacion'" class="accordion-collapse collapse" data-bs-parent="#observaciones">
+      <div class="accordion-body">
+        <div class="row">
+          <div class="accordion-body">
+            <div class="row" *ngFor="let observacion of legajo?.Observaciones" (click)="abrirModal(observacion)">
+              <div class="col-4">{{observacion.fecha}}</div>
+              <div class="col-6">{{observacion.tipo_categoria}}</div>
+              <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+              <hr>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Derivaciones -->
+<div class="accordion" id="derivaciones" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed item" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#derivacion'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Derivaciones
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_derivaciones}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'derivacion'" class="accordion-collapse collapse" data-bs-parent="#derivaciones">
+      <div class="accordion-body">
+        <div class="row" *ngFor="let derivacion of legajo?.Derivaciones" (click)="abrirModal(derivacion)">
+          <div class="col-4">{{derivacion.fecha}}</div>
+          <div class="col-6">{{derivacion.tipo_categoria}}</div>
+          <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AVisos -->
+<div class="accordion" id="avisos" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed item" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#aviso'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Avisos
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_avisos}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'aviso'" class="accordion-collapse collapse" data-bs-parent="#avisos">
+      <div class="accordion-body">
+        <div class="row" *ngFor="let aviso of legajo?.Avisos" (click)="abrirModal(aviso)">
+          <div class="col-4">{{aviso.fecha}}</div>
+          <div class="col-6">{{aviso.motivo}}</div>
+          <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AVisos Depotivos -->
+<div class="accordion" id="avisos_d" *ngIf="!(appSpinner.spinnerCargando | async)">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <a class="accordion-button collapsed item" type="button" data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#aviso_d'">
+        <div class="btn-container">
+          <div class="in">
+            <div>
+              Avisos Deportivos
+            </div>
+            <span class="badge badge-primary">{{legajo?.cantidad_avisos_d}}</span>
+          </div>
+        </div>
+      </a>
+    </h2>
+    <div [id]="'aviso_d'" class="accordion-collapse collapse" data-bs-parent="#avisos_d">
+      <div class="accordion-body">
+        <div class="row" *ngFor="let aviso_d of legajo?.Avisos_d" (click)="abrirModal(aviso_d)">
+          <div class="col-4">{{aviso_d.fecha}}</div>
+          <div class="col-6">{{aviso_d.motivo}}</div>
+          <div class="col-2"><ion-icon name="eye-off-outline" class="custom-icon"></ion-icon></div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
