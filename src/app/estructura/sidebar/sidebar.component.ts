@@ -31,7 +31,7 @@ export class SidebarComponent {
       }
     })
 
-    this.obtenerMaterias()
+    this.suscribirseMaterias()
   }
 
   cerrarSesion(){
@@ -46,8 +46,8 @@ export class SidebarComponent {
     this.autentificacionService.establecerOpciones(false,true)
   }
 
-  private obtenerMaterias(){
-    this.homeService.obtenerMateriasAsignadas().subscribe({
+  private suscribirseMaterias(){
+    this.homeService.suscribirseMaterias().subscribe({
       next:(materias)=>{
         this.materias = materias
       }
@@ -59,5 +59,8 @@ export class SidebarComponent {
     this.router.navigate(['materia'])
   }
 
+  verUsuario(){
+    this.router.navigate(['usuario'])
+  }
 
 }

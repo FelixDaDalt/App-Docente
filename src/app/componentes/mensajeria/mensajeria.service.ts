@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, Subscription } from 'rxjs';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { mensajeria, mensajeria_historial, nuevoChat } from './mensajeria';
@@ -49,15 +49,21 @@ export class MensajeriaService {
       this.mensajeriaSubject.next(this.mensajeria)
     }
 
-    obtenerMensajeria():Observable<mensajeria[]>{
-      this.getMensajeria()
+    SubscriptionMensajeria():Observable<mensajeria[]>{
       return this.mensajeriaSubject.asObservable()
     }
 
+    obtenerMensajeria(){
+      this.getMensajeria()
+    }
+
     //Historial mensajeria
-    obtenerHistorial(id_chat:number):Observable<mensajeria_historial[]>{
-      this.getHistorial(id_chat)
+    SuscripcionHistorial():Observable<mensajeria_historial[]>{
       return this.mensajeriaHistorialSubject.asObservable()
+    }
+
+    obtenerHistorial(id_chat:number){
+      this.getHistorial(id_chat)
     }
 
     private getHistorial(id_chat:number){
@@ -97,9 +103,12 @@ export class MensajeriaService {
       this.destinatariosSubject.next(this.destinatarios)
     }
 
+    suscripcionDestinatarios(){
+      return this.destinatariosSubject.asObservable()
+    }
+
     obtenerDestinatarios(){
       this.getDestinatarios()
-      return this.destinatariosSubject.asObservable()
     }
 
     //nuevo chat

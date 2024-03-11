@@ -24,9 +24,7 @@ export class SpinnerService {
         this.activeRequests = 0;
         setTimeout(() => {
           this.spinnerSubject.next(false);
-
         }, 1);
-
       }
     }
   }

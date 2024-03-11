@@ -1,0 +1,39 @@
+.advertencia-container {
+  background-color: #f8d7da; /* Color de fondo rojo suave */
+  border: 1px solid #f5c6cb; /* Borde rojo */
+  color: #721c24; /* Color de texto oscuro */
+  padding: 15px; /* Espaciado interno */
+  margin-bottom: 20px; /* Margen inferior */
+  border-radius: 5px; /* Bordes redondeados */
+  margin-top: 20px; /* Margen superior */
+}
+.advertencia-texto {
+  font-size: 16px; /* Tamaño de fuente */
+}
+
+.advertencia-titulo {
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 10px; /* Margen inferior */
+}
+
+.solicitud-container {
+  background-color: #e2e3e5; /* Color de fondo gris suave */
+  border: 1px solid #ced4da; /* Borde gris */
+  padding: 15px; /* Espaciado interno */
+  margin-bottom: 20px; /* Margen inferior */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.solicitud-texto {
+  font-size: 16px; /* Tamaño de fuente */
+  margin-bottom: 10px; /* Margen inferior */
+}
+
+.solicitud-textarea {
+  width: 100%; /* Ancho completo */
+  min-height: 100px; /* Altura mínima */
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ced4da; /* Borde gris */
+  border-radius: 5px; /* Bordes redondeados */
+  resize: vertical; /* Permitir redimensionar verticalmente */
+}

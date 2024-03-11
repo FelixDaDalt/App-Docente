@@ -4,7 +4,8 @@ import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { Aviso, falta, inasistencia, legajoAlumno } from './legajo';
 import { BehaviorSubject, Subject, forkJoin, map } from 'rxjs';
-import { resultadoBusqueda } from '../../home/home';
+import { resultadoBusqueda } from '../home/home';
+
 
 @Injectable({
   providedIn: 'root'

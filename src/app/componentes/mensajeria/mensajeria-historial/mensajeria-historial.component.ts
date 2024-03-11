@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { MensajeriaService } from './../mensajeria.service';
-import { Component,OnDestroy, OnInit, ViewChild, ElementRef, AfterViewChecked  } from '@angular/core';
+import { Component,OnDestroy, OnInit, ViewChild, ElementRef, AfterViewChecked, HostListener  } from '@angular/core';
 import { mensajeria_historial } from '../mensajeria';
 import { destinatario } from '../destinatarios/destinatario';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { format, parseISO } from 'date-fns';
 import { MensajeInformacionComponent } from '../mensaje-informacion/mensaje-informacion.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -18,13 +18,18 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
   public scroll?: ElementRef<any>;
 
   historial:mensajeria_historial[]=[]
+  historial$?:Subscription
+  nuevoDestinatario?:destinatario | null
+  nuevoDestinatario$?:Subscription
+  enviarchat$?:Subscription
+
   mensajesAgrupados: { [fecha: string]: mensajeria_historial[] } = {};
   fechasMensajesAgrupados: string[] = [];
   usuarioDestino:string=""
   idChat?:number
-  nuevoDestinatario?:destinatario | null
 
-  private ngUnsubscribe = new Subject<void>();
+  private scrollBool=false
+
 
   constructor(private mensajeriaService:MensajeriaService,
     private route: ActivatedRoute,
@@ -32,6 +37,15 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
     private modalService:NgbModal)
     { }
 
+    @HostListener('document:mousewheel', ['$event'])
+    onDocumentMousewheelEvent(event:any) {
+      if(this.scroll){
+        if(this.scroll.nativeElement.scrollTop != this.scroll.nativeElement.scrollHeight)
+        {
+          this.scrollBool = true
+        }
+      }
+    }
 
   ngAfterViewChecked(): void {
     this.scrollBottom()
@@ -41,9 +55,9 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
 
     ngOnInit(): void {
     this.obtenerNuevoDestinatario()
+    this.suscripcionHistorial()
 
     this.route.queryParams
-    .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(params => {
       this.idChat = params['id_chat']
       if(this.idChat!=undefined)
@@ -55,19 +69,20 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
   }
 
   ngOnDestroy() {
-    this.ngUnsubscribe.next()
-    this.ngUnsubscribe.complete()
+    this.historial$?.unsubscribe()
+    this.nuevoDestinatario$?.unsubscribe()
+    this.enviarchat$?.unsubscribe()
   }
 
   private marcarLeido(idChat:number){
     this.mensajeriaService.marcarLeido(idChat)
   }
 
-
-
   private obtenerNuevoDestinatario(){
-    this.mensajeriaService.obtenerNuevoDestinatario()
-      .pipe(takeUntil(this.ngUnsubscribe))
+    if(this.nuevoDestinatario$)
+      this.nuevoDestinatario$.unsubscribe()
+
+    this.nuevoDestinatario$ = this.mensajeriaService.obtenerNuevoDestinatario()
       .subscribe({
         next:(destinatario)=>{
         this.nuevoDestinatario = destinatario
@@ -76,15 +91,20 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
     })
   }
 
-  private obtenerHistorial(id_chat:number){
-    this.mensajeriaService.obtenerHistorial(id_chat)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
+  private suscripcionHistorial(){
+    if(this.historial$)
+      this.historial$.unsubscribe()
+
+    this.historial$ = this.mensajeriaService.SuscripcionHistorial().subscribe({
       next:(mensajeriaHistorial)=>{
         this.historial = mensajeriaHistorial
         this.agruparMensajesPorFecha()
       }
     })
+  }
+
+  private obtenerHistorial(id_chat:number){
+    this.mensajeriaService.obtenerHistorial(id_chat)
   }
 
 
@@ -126,14 +146,18 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
     if(this.idChat!=undefined){
       let chat={chat:mensaje,id_chat:this.idChat}
       this.mensajeriaService.enviarChat(chat)
+      this.scrollBool = false
     }else{
       this.enviarNuevoDestinatario(mensaje)
+      this.scrollBool = false
     }
   }
 
   private enviarNuevoDestinatario(mensaje:string){
-    this.mensajeriaService.enviarChatNuevo(this.nuevoDestinatario!,mensaje)
-      .pipe(takeUntil(this.ngUnsubscribe))
+    if(this.enviarchat$)
+      this.enviarchat$.unsubscribe()
+
+    this.enviarchat$ = this.mensajeriaService.enviarChatNuevo(this.nuevoDestinatario!,mensaje)
       .subscribe({
       next:(idChat)=>{
         if(idChat != -1){
@@ -147,7 +171,7 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
 
   volver(){
     this.mensajeriaService.borrarDestinatario()
-    this.router.navigate(['/mensajeria'])
+    this.router.navigate(['mensajeria'])
   }
 
   mostrarInformacion(mensaje: any) {
@@ -159,8 +183,12 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
   }
 
   public scrollBottom() {
-    if(this.scroll)
+    if(this.scroll && !this.scrollBool){
       this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
-
+    }
   }
+
+
 }
+
+

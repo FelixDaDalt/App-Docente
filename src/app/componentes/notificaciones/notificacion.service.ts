@@ -45,7 +45,6 @@ export class NotificacionService {
   private getNotificaciones(){
     this.http.get<{ data: any }>(`${this.apiUrl}/cantidad_notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel || '' }}).subscribe({
       next:(respuesta)=>{
-        console.log(respuesta)
         this.notificaciones = respuesta.data
         this.emitirEvento(this.notificacionesSubject, this.notificaciones);
         this.emitirEvento(this.entrevistasSubject, { entrevistas: this.notificaciones.entrevistas, detalle_entrevistas: this.notificaciones.detalle_entrevistas });

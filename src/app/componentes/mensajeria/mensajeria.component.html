@@ -11,7 +11,7 @@
     <app-spinner #appSpinner></app-spinner>
     <ul class="listview image-listview " *ngIf="!(appSpinner.spinnerCargando | async)">
       <li *ngFor="let mensajeria of listaMensajeria">
-          <a [routerLink]="['/mensajeria-historial']" [queryParams]="{ id_chat: mensajeria.id_chat }">
+          <a [routerLink]="['./mensajeria-historial']" [queryParams]="{ id_chat: mensajeria.id_chat }">
           <div class="item">
             <div class="avatar-circle">
               {{mensajeria.familia.substring(0, 2).toUpperCase()}}

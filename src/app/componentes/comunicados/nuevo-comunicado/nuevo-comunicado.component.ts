@@ -182,7 +182,7 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
         .pipe(takeUntil(this.ngUnsuscribe))
         .subscribe({
           next: (respuesta) => {
-            this.route.navigate(['/comunicados-enviados']);
+            this.route.navigate(['comunicados','comunicados-enviados']);
           },
           error: (error) => {
             console.error('Error al enviar el comunicado', error);

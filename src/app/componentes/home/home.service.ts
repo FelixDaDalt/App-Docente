@@ -1,3 +1,4 @@
+import { AutentificacionService } from './../../servicios/autentificacion.service';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, catchError, forkJoin, interval, map, of } from 'rxjs';
 import { alumno, home, materias, notificacionHome, resultadoBusqueda } from './home';
@@ -22,10 +23,12 @@ export class HomeService {
   private resultadoBusqueda:resultadoBusqueda[]=[]
   private Alumnos$ = new Subject<alumno[]>()
   private Alumnos:alumno[]=[]
+  private materias$ = new BehaviorSubject<materias[] | []>([]);
 
   constructor(private http: HttpClient,
     private datosUsuarioService:DatosUsuarioService,
-    private notificacionService:NotificacionService)
+    private notificacionService:NotificacionService,
+    private autentificacionService:AutentificacionService)
     {
       this.homeDatos = new home()
       this.obtenerDatosUsuario()
@@ -37,6 +40,7 @@ export class HomeService {
         if(usuario && usuario.Institucion_selected && usuario.Rol_selected){
           this.usuarioDatos = usuario
           this.getHomeData()
+          this.getMaterias()
         }
       }
     })
@@ -46,12 +50,6 @@ export class HomeService {
     const intervalo$ = interval(10000);
 
     intervalo$.subscribe(() => {
-      const materiasRequest = this.http.get<{ data: any }>(`${this.apiUrl}/materias_asignadas/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol }}).pipe(
-        catchError(error => {
-          this.notificacionService.establecerNotificacion('error','Error en la solicitud de Materias')
-          return of({ data: [] }); // Tratar el error según tus necesidades
-        })
-      );
 
       const novedadesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/novedades/${this.usuarioDatos.ID_Institucion}`, {params: { id_nivel: this.usuarioDatos.Rol_selected?.id_nivel||'' }}).pipe(
         catchError(error => {
@@ -66,9 +64,8 @@ export class HomeService {
           return of({ data: {} }); // Tratar el error según tus necesidades
         })
       );
-      forkJoin([materiasRequest, novedadesRequest, notificacionesRequest])
-      .subscribe(([materiasResponse, novedadesResponse, notificacionesResponse]) => {
-        this.homeDatos.materias = materiasResponse.data;
+      forkJoin([novedadesRequest, notificacionesRequest])
+      .subscribe(([novedadesResponse, notificacionesResponse]) => {
         this.homeDatos.novedades = novedadesResponse.data;
         this.homeDatos.notificaciones = notificacionesResponse.data[0];
         this.emitirHomeDatos();
@@ -84,6 +81,20 @@ export class HomeService {
     })
 
   }
+
+  private getMaterias(){
+    this.http.get<{ data: any }>(`${this.apiUrl}/materias_asignadas/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol }})
+    .subscribe({
+      next:(respuesta)=>{
+        this.materias$.next(respuesta.data)
+      }
+    })
+  }
+
+  suscribirseMaterias(){
+    return this.materias$.asObservable()
+  }
+
 
 
   private emitirHomeDatos() {
@@ -125,11 +136,7 @@ export class HomeService {
     );
   }
 
-  obtenerMateriasAsignadas(): Observable<materias[] | []> {
-    return this.homeSubject.pipe(
-      map((home) => home?.materias || [])
-    );
-  }
+
 
   private searchAlumno(termino:string){
     this.http.get<{ data: any }>(`${this.apiUrl}/search_alumno/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, busqueda:termino }}).subscribe({
@@ -176,4 +183,13 @@ export class HomeService {
   obtenerAlumnos(idMateria:number, tipo_materia:string){
     this.getAlumnos(idMateria, tipo_materia)
   }
+
+  draseBaja(motivos?:string){
+     this.http.post<{ data: any }>(`${this.apiUrl}/baja_usuario/${this.usuarioDatos.ID_Usuario_Interno}`, {motivos:motivos}).subscribe({
+      next:(respuesta)=>{
+        this.autentificacionService.logout()
+      }
+    })
+  }
+
 }

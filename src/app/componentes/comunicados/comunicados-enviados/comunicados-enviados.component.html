@@ -7,7 +7,7 @@
   <app-spinner #appSpinner></app-spinner>
 
   <div class="section inset mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
-    <button type="button" class="btn btn-primary btn-sm rounded me-1 mb-1 w-100" routerLink="/nuevo-comunicado">
+    <button type="button" class="btn btn-primary btn-sm rounded me-1 mb-1 w-100" [routerLink]="'/comunicados/nuevo-comunicado'">
       <ion-icon name="paper-plane-outline" role="img" class="md hydrated"></ion-icon>
       Nuevo comunicado
     </button>

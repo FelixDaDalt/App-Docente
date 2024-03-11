@@ -79,7 +79,7 @@ export class ComunicadosComponent implements OnInit, OnDestroy{
 
   obtenerNombreArchivo(url: string): string {
     const partes = url.split('/');
-    return partes.pop() || ''; // Si el array está vacío, devuelve una cadena vacía
+    return partes.pop() || '';
   }
 
   decodeHtml(html: string): string {

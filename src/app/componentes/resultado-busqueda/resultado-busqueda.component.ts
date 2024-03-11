@@ -2,8 +2,8 @@ import { HomeService } from 'src/app/componentes/home/home.service';
 import { Component } from '@angular/core';
 import { resultadoBusqueda } from '../home/home';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EstudianteLegajoService } from './estudiante-legajo/estudiante-legajo.service';
 import { Subscription } from 'rxjs';
+import { EstudianteLegajoService } from '../estudiante-legajo/estudiante-legajo.service';
 
 @Component({
   selector: 'app-resultado-busqueda',
@@ -43,7 +43,7 @@ export class ResultadoBusquedaComponent {
   verEstudiante(alumno:resultadoBusqueda){
     this.suscriberBusqueda?.unsubscribe()
     this.legajoService.setIdEstudiante(alumno)
-    this.router.navigate(['/legajo-alumno']);
+    this.router.navigate(['legajo-alumno']);
   }
 
 }

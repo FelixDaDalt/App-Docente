@@ -34,7 +34,7 @@ export class AppComponent {
     this.autentificacionService.estaAutenticado().subscribe({
       next: (autentificado: boolean) => {
         this.login = autentificado;
-        this.router.navigate(['/home']);
+        this.router.navigate(['home']);
       }
     });
   }

@@ -1,24 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NotificacionService} from 'src/app/otros/notificacion-popup/notificacionpopup.service';
 import { notificacionPopup } from './notificacionpopup';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notificacion',
   templateUrl: './notificacion-popup.component.html',
   styleUrls: ['./notificacion-popup.component.css']
 })
-export class NotificacionPopupComponent {
+export class NotificacionPopupComponent implements OnInit, OnDestroy{
 
   notificaciones:notificacionPopup[] = []
+  notificaciones$?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-    this.notificacionService.obtenerNotificacion().subscribe({
+
+  }
+  ngOnDestroy(): void {
+    this.notificaciones$?.unsubscribe()
+  }
+
+  ngOnInit(): void {
+    if(this.notificaciones$)
+      this.notificaciones$.unsubscribe()
+
+    this.notificaciones$ = this.notificacionService.obtenerNotificacion().subscribe({
       next: (notificacion) => {
         this.notificaciones.push(notificacion)
-        setTimeout(() => this.cerrarNotificacion(notificacion), 5000); // Cerrar la notificación automáticamente después de 5 segundos
+        setTimeout(() => this.cerrarNotificacion(notificacion), 5000);
       }
     });
   }
+
+
 
   cerrarNotificacion(notificacion:notificacionPopup) {
     const index = this.notificaciones.indexOf(notificacion);

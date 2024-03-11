@@ -1,7 +1,7 @@
 import { LibroTemaService } from './libro-tema.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { libroTema, nuevo_registro, tipoClase, AlumnoAusente } from './libro-tema';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { parseJSON } from 'date-fns';
 import { HomeService } from '../home/home.service';
 import { materias } from '../home/home';
@@ -21,6 +21,8 @@ export class LibroTemaComponent implements OnInit, OnDestroy{
   materiaSeleccionada?:materias
   tipoClaseSeleccionada?:tipoClase
 
+  materiasSuscripcion?:Subscription
+
   private ngUnsuscribe  = new Subject();
 
   constructor(private libroTemaService:LibroTemaService,
@@ -35,11 +37,19 @@ export class LibroTemaComponent implements OnInit, OnDestroy{
   }
 
   private obtenerMaterias(){
-    this.homeService.obtenerMateriasAsignadas().subscribe({
+    if(this.materiasSuscripcion){
+      this.materiasSuscripcion.unsubscribe()
+    }
+
+    this.materiasSuscripcion = this.homeService.suscribirseMaterias().subscribe({
       next:(materias)=>{
-        this.materias = materias
-        this.materiaSeleccionada = this.materias[0]
-        this.obtenerRegistros()
+        if(materias.length>0){
+          this.materias = materias
+          this.materiaSeleccionada = this.materias[0]
+          this.obtenerRegistros()
+          this.materiasSuscripcion?.unsubscribe()
+        }
+
       }
     })
   }

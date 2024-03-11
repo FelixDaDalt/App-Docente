@@ -67,12 +67,13 @@ export class CalificacionComponent implements OnInit, OnDestroy{
       this.materiasSuscripcion.unsubscribe()
     }
 
-    this.materiasSuscripcion = this.homeService.obtenerMateriasAsignadas().subscribe({
+    this.materiasSuscripcion = this.homeService.suscribirseMaterias().subscribe({
       next:(materias)=>{
-        if(materias){
+        if(materias.length>0){
           this.materias = materias
           this.materiaSel = materias[0]
           this.buscarTiposCalificacionesyEscalas()
+          this.materiasSuscripcion?.unsubscribe()
         }
       }
     })
@@ -129,7 +130,7 @@ export class CalificacionComponent implements OnInit, OnDestroy{
    this.instrumentoRespuestaSuscripcion = this.calificacionService.suscripcionInstrumentoRespuesta().subscribe({
       next:(instrumento_respuesta)=>{
         if(instrumento_respuesta!=null)
-        this.route.navigate(['/calificacion-notas']);
+        this.route.navigate(['calificacion','calificacion-notas']);
       }
     })
   }

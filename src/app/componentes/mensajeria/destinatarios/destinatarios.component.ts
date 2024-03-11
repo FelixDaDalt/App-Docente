@@ -3,7 +3,7 @@ import { MensajeriaService } from '../mensajeria.service';
 import { ResponsableDestinatario, destinatario } from './destinatario';
 import { Router } from '@angular/router';
 import { mensajeria } from '../mensajeria';
-import { Subject, combineLatest } from 'rxjs';
+import { Subject, Subscription, combineLatest } from 'rxjs';
 import { takeUntil, map, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -13,9 +13,14 @@ import { takeUntil, map, startWith, debounceTime, distinctUntilChanged } from 'r
 })
 export class DestinatariosComponent implements OnInit, OnDestroy {
 
+  listaMensajeria: mensajeria[] = [];
+  listaMensajeria$?: Subscription;
+
+
   destinatarios: destinatario[] = [];
   destinatariosFiltrados: destinatario[] = [];
-  listaMensajeria: mensajeria[] = [];
+  destinatarios$?: Subscription;
+
   destinatariosResponsable?: ResponsableDestinatario[];
   destinatarioSeleccionado?: destinatario;
   private ngUnsubscribe = new Subject<void>();
@@ -24,10 +29,12 @@ export class DestinatariosComponent implements OnInit, OnDestroy {
   constructor(private mensajeriaService: MensajeriaService, private router: Router) { }
 
   ngOnInit(): void {
-    this.obtenerMensajeria();
+    this.susripcionMensajeria();
+    this.getMensajeria()
+    this.suscripcionDestinatarios();
     this.obtenerDestinatarios();
 
-    combineLatest([this.searchTerm$, this.mensajeriaService.obtenerDestinatarios()])
+    combineLatest([this.searchTerm$, this.mensajeriaService.suscripcionDestinatarios()])
       .pipe(
         takeUntil(this.ngUnsubscribe),
         debounceTime(300),
@@ -52,9 +59,11 @@ export class DestinatariosComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  private obtenerMensajeria(): void {
-    this.mensajeriaService.obtenerMensajeria()
-      .pipe(takeUntil(this.ngUnsubscribe))
+  private susripcionMensajeria(): void {
+    if(this.listaMensajeria$)
+      this.listaMensajeria$.unsubscribe()
+
+    this.listaMensajeria$ = this.mensajeriaService.SubscriptionMensajeria()
       .subscribe({
         next: (respuesta) => {
           this.listaMensajeria = respuesta;
@@ -62,8 +71,15 @@ export class DestinatariosComponent implements OnInit, OnDestroy {
       });
   }
 
-  private obtenerDestinatarios(): void {
-    this.mensajeriaService.obtenerDestinatarios()
+  private getMensajeria(){
+    this.mensajeriaService.obtenerMensajeria()
+  }
+
+  private suscripcionDestinatarios(): void {
+    if(this.destinatarios$)
+      this.destinatarios$.unsubscribe()
+
+    this.destinatarios$ = this.mensajeriaService.suscripcionDestinatarios()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (destinatarios) => {
@@ -71,6 +87,10 @@ export class DestinatariosComponent implements OnInit, OnDestroy {
           this.destinatariosFiltrados = destinatarios;
         }
       });
+  }
+
+  private obtenerDestinatarios(){
+    this.mensajeriaService.obtenerDestinatarios()
   }
 
   filtrarDestinatarios(termino: string): void {
@@ -90,7 +110,7 @@ export class DestinatariosComponent implements OnInit, OnDestroy {
       this.mensajeriaService.establecerDestinatario(this.destinatarioSeleccionado);
       const existeMensajaria = this.listaMensajeria.find(x => x.id_chat === destinatarioResponsable.id_chat);
       if (existeMensajaria) {
-        this.router.navigate(['/mensajeria-historial'], { queryParams: { id_chat: existeMensajaria.id_chat } });
+        this.router.navigate(['mensajeria','mensajeria-historial'], { queryParams: { id_chat: existeMensajaria.id_chat } });
         return;
       }
       this.nuevoChat();
@@ -98,6 +118,6 @@ export class DestinatariosComponent implements OnInit, OnDestroy {
   }
 
   nuevoChat(): void {
-    this.router.navigate(['/mensajeria-historial']);
+    this.router.navigate(['mensajeria','mensajeria-historial']);
   }
 }

@@ -3,6 +3,7 @@ import { HomeService } from '../../componentes/home/home.service';
 import { notificacionHome } from '../../componentes/home/home';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bottom',
@@ -15,7 +16,9 @@ export class BottomComponent {
   notificacionesHome?:notificacionHome
   usuarioDatos?:usuarioDatos | null
 
-  constructor(private homeService:HomeService, private datosUsuario:DatosUsuarioService){
+  constructor(private homeService:HomeService,
+     private datosUsuario:DatosUsuarioService,
+     private router:Router){
     this.obtenerNotificaciones()
     this.obtenerUsuario()
   }
@@ -36,4 +39,6 @@ export class BottomComponent {
       }
     })
   }
+
+
 }

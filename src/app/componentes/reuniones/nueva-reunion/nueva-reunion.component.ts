@@ -88,7 +88,7 @@ export class NuevaReunionComponent implements OnInit{
         .pipe(takeUntil(this.ngUnsuscribe))
         .subscribe({
           next: (respuesta) => {
-            this.route.navigate(['/reuniones']);
+            this.route.navigate(['reuniones']);
           },
           error: (error) => {
             this.notificacionService.establecerNotificacion('Error', 'Error al enviar solicitud');

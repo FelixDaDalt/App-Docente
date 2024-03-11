@@ -42,7 +42,7 @@ export class HeaderComponent {
       next:(resultado)=>{
         if(resultado.length>0){
           this.toggleSearch()
-          this.route.navigate(['/resultado', this.terminoBusqueda]);
+          this.route.navigate(['resultado', this.terminoBusqueda]);
         }
 
       }

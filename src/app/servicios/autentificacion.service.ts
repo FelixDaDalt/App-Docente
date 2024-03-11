@@ -66,7 +66,6 @@ export class AutentificacionService {
             this.establecerInstitucion(false);
             this.establecerRol(false);
             this.establecerAutentificado(true);
-            this.notificacionService.establecerNotificacion('Exito','Autentificación Exitosa')
           }
         }
       });
@@ -75,7 +74,6 @@ export class AutentificacionService {
     login(usuarioLogin: usuarioLogin) {
       this.http.post<any>(this.apiUrl, usuarioLogin).subscribe({
         next:(respuesta) => {
-          console.log(respuesta)
           if (respuesta && respuesta.access_token) {
             this.establecerToken(respuesta.access_token, respuesta.expires_in);
             let usuarioDatos: usuarioDatos = respuesta.user;

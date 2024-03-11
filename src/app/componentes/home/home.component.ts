@@ -4,6 +4,7 @@ import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { HomeService } from './home.service';
 import { Subscription} from 'rxjs';
+import { VersionService } from 'src/app/servicios/version/version.service';
 
 @Component({
   selector: 'app-home',
@@ -21,9 +22,11 @@ export class HomeComponent implements OnInit, OnDestroy{
   expandedCardIndex: number = -1
 
   constructor(private datosUsuarioService:DatosUsuarioService,
-    private homeService:HomeService){ }
+    private homeService:HomeService,
+    private version:VersionService){ }
 
   ngOnInit(): void {
+    this.version.comprobarVersion()
     this.obtenerUsuario()
     this.obtenerDatosHome()
   }

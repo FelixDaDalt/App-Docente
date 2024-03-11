@@ -1,11 +1,11 @@
 export class home{
-    materias:materias[] = []
+
     novedades:novedades[] = []
     notificaciones!:notificacionHome
 
     constructor(materias?:materias[], novedades?:novedades[]){
         this.novedades = novedades || []
-        this.materias = materias || []
+
     }
 }
 

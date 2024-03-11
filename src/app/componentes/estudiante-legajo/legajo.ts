@@ -1,4 +1,5 @@
-import { resultadoBusqueda } from "../../home/home"
+import { resultadoBusqueda } from "../home/home"
+
 
 export class legajoAlumno{
   alumno?:resultadoBusqueda

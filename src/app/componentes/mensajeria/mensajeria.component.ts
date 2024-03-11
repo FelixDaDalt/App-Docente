@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MensajeriaService } from './mensajeria.service';
 import { mensajeria } from './mensajeria';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { format, parseISO } from 'date-fns';
 
 @Component({
@@ -12,23 +12,24 @@ import { format, parseISO } from 'date-fns';
 export class MensajeriaComponent implements OnInit,OnDestroy{
 
   listaMensajeria:mensajeria[]=[]
-  private ngUnsubscribe = new Subject<void>();
+  listaMensajeria$?:Subscription
 
   constructor(private mensajeriaService:MensajeriaService){
 
   }
 
   ngOnInit(): void {
-    this.obtenerMensajeria()
+    this.suscripcionMensajeria()
   }
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next()
-    this.ngUnsubscribe.complete()
+
   }
 
-  private obtenerMensajeria(){
-    this.mensajeriaService.obtenerMensajeria()
-      .pipe(takeUntil(this.ngUnsubscribe))
+  private suscripcionMensajeria(){
+    if(this.listaMensajeria$)
+      this.listaMensajeria$.unsubscribe()
+
+    this.listaMensajeria$ = this.mensajeriaService.SubscriptionMensajeria()
       .subscribe({
       next:(respuesta)=>{
         this.listaMensajeria = respuesta

@@ -54,10 +54,8 @@ export class AsistenciaService {
   }
 
   postAsistencias(parteAsistencia:Parte_Asistencia){
-    console.log(parteAsistencia)
     this.http.post<{ data: any }>(`${this.apiUrl}/nuevo_parte_asistencia/${this.usuarioDatos.ID_Institucion}`, { ...{ id_usuario: this.usuarioDatos.ID_Usuario_Interno }, ...parteAsistencia.toJSON() }).subscribe({
       next:(respuesta)=>{
-        console.log(respuesta)
         this.getAsistencias(parteAsistencia.fecha)
       }
     })

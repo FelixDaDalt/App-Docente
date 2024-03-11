@@ -1,0 +1,104 @@
+<div id="appCapsule" class="bg-white">
+  <div class="section mt-2">
+      <div class="profile-head">
+          <div class="avatar">
+              <img src="/assets/img/sample/avatar/avatar7.jpg" alt="avatar" class="imaged w64 rounded">
+          </div>
+          <div class="in">
+              <h3 class="name">{{(usuarioDatos | async)?.name}}</h3>
+              <h5 class="subtext">{{(usuarioDatos | async)?.email}}</h5>
+          </div>
+      </div>
+  </div>
+
+  <app-spinner #appSpinner></app-spinner>
+
+  <div class="section full mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div class="profile-stats ps-2 pe-2">
+          <a class="item">
+              <h5 class="subtext">DNI</h5>
+              <strong>{{(usuarioDatos | async)?.DNI}}</strong>
+          </a>
+          <a class="item">
+            <h5 class="subtext">Institucion</h5>
+            <strong>{{(usuarioDatos | async)?.Institucion_selected?.Institucion}}</strong>
+          </a>
+          <a class="item">
+            <h5 class="subtext">Rol</h5>
+            <strong>{{(usuarioDatos | async)?.Rol_selected?.descripcion}}</strong>
+          </a>
+          <a class="item">
+            <h5 class="subtext">Creado</h5>
+            <strong>{{(usuarioDatos | async)?.created_at}}</strong>
+          </a>
+      </div>
+  </div>
+
+ <!--<div class="section mt-1 mb-2">
+      <div class="profile-info">
+          <div class=" bio">
+              Opcional de para poner biografia.
+          </div>
+      </div>
+  </div>
+
+
+
+
+  <div class="section full mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+      <div class="wide-block transparent p-0">
+          <ul class="nav nav-tabs lined iconed" role="tablist">
+              <li class="nav-item">
+                  <a class="nav-link active" data-bs-toggle="tab" href="#inasistencia" role="tab">
+                      <ion-icon name="grid-outline"></ion-icon>
+                      <h5 class="subtext">INASISTENCIAS</h5>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#academico" role="tab">
+                      <ion-icon name="school-outline"></ion-icon>
+                      <h5 class="subtext">ACADEMICO</h5>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#legajo" role="tab">
+                      <ion-icon name="reader-outline"></ion-icon>
+                      <h5 class="subtext">LEGAJO</h5>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#informacion" role="tab">
+                      <ion-icon name="person-outline"></ion-icon>
+                      <h5 class="subtext">INFORMACION</h5>
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </div>-->
+  <div class="section mt-2">
+
+    <div class="solicitud-container" *ngIf="darsebaja && !confirmarbaja">
+      <p class="solicitud-texto">Estimado <strong>{{(usuarioDatos | async)?.name}}</strong>, le pedimos que Indique los motivos que conllevan a solicitar la baja del servicio.</p>
+      <textarea class="solicitud-textarea" placeholder="Por favor, indique los motivos aquí" [(ngModel)]="motivos"></textarea>
+    </div>
+
+    <div class="advertencia-container" *ngIf="confirmarbaja">
+      <p class="advertencia-titulo">ATENCIÓN:</p>
+      <p class="advertencia-texto">Al confirmar la baja del servicio, perderá inmediatamente acceso a la aplicación y entorno web de GEO, quedando el usuario inhabilitado para acceder a todas las instituciones en las que se encuentra activo. ¿Está seguro de confirmar la baja?</p>
+    </div>
+
+
+    <div class="section mt-1">
+      <div class="text-center dropdown">
+        <button type="button" class="btn btn-danger btn-sm me-1 mb-3"
+        (click)="!darsebaja?darseBaja():!confirmarbaja?confirmarBaja():aceptarBaja()">
+        <ion-icon name="remove-circle-outline" role="img" class="md hydrated" aria-label="document text outline"></ion-icon>
+        {{!darsebaja?'Darse de baja':!confirmarbaja?'Aceptar':'Estoy Seguro'}}
+      </button>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

@@ -15,15 +15,17 @@ import { NotificacionService } from '../otros/notificacion-popup/notificacionpop
 @Injectable()
 export class RequestInterceptorInterceptor implements HttpInterceptor {
 
-  private exclusionPatterns: string[] = ['lectura_mensajeria/', 'lectura_notificacion/','enviar_chat/','login','notificaciones/','agregar_editar_calificacion_alumno/','materias_asignadas/','novedades/'];
+  private exclusionPatterns: string[] = ['lectura_mensajeria/', 'lectura_notificacion/','enviar_chat/','notificaciones/','agregar_editar_calificacion_alumno/','novedades/'];
 
   constructor(private authService: AutentificacionService,
     private spinnerService:SpinnerService,
     private notificacionService:NotificacionService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(this.shouldIntercept(request.url))
+    if(this.shouldIntercept(request.url)){
       this.spinnerService.notificarSpinner()
+    }
+
     // Verifica si la solicitud se dirige a la URL de inicio de sesión
     if (request.url !== 'https://apiteach.geoeducacion.com.ar/api/auth/login') {
       const token = this.authService.obtenerToken();
@@ -39,7 +41,6 @@ export class RequestInterceptorInterceptor implements HttpInterceptor {
       tap(
         (event) => {
           if (event.type === HttpEventType.Response) {
-            // Manejar respuesta exitosa
             if ((request.method === 'PUT' || request.method === 'POST') && this.shouldIntercept(request.url)) {
               const responseData = (event as any).body?.data;
               const messageToShow = typeof responseData === 'string' ? responseData : 'Solicitud Exitosa';

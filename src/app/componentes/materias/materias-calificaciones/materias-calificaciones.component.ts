@@ -26,12 +26,11 @@ export class MateriasCalificacionesComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    console.log('Antes de destruir Calificaciones:', this.suscripcionesActivas);
     this.suscriberMateria?.unsubscribe()
     this.suscripcionesActivas--
     this.suscriberInstrumentos?.unsubscribe()
     this.suscripcionesActivas--
-    console.log('al destruir Calificaciones:', this.suscripcionesActivas);
+
   }
 
   ngOnInit(): void {
@@ -81,6 +80,6 @@ export class MateriasCalificacionesComponent implements OnInit,OnDestroy{
 
   continuarCalificacion(id_operacion:number){
     this.calificacionService.continuarCalificacion(id_operacion,this.materia?.id!,this.materia?.tipo_materia!)
-    this.router.navigate(['/calificacion-notas'])
+    this.router.navigate(['calificacion','calificacion-notas'])
   }
 }

@@ -161,7 +161,7 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
   }
 
   comprobarEdicion(){
-    if(this.asistenciaSeleccionada.editable==0 || this.asistenciaSeleccionada.id_parte!=0){
+    if(this.asistenciaSeleccionada?.editable==0 || this.asistenciaSeleccionada?.id_parte!=0){
       this.checkDeshabilitados = true
     }else{
       this.checkDeshabilitados=false

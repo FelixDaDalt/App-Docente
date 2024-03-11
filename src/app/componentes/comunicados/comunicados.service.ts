@@ -138,12 +138,37 @@ export class ComunicadosService {
       nuevoComunicado.id_usuario = this.usuarioDatos.ID_Usuario_Interno.toString()
       nuevoComunicado.rol = this.usuarioDatos.Rol_selected?.rol
 
-      return this.postComunicado(nuevoComunicado)
+      return this.postComunicado(nuevoComunicado).pipe(
+        switchMap((respuesta: any) => {
+          if(nuevoComunicado.arr_adjuntos.length>0)
+          {
+            let adjuntos = {
+              id_institucion:this.usuarioDatos.ID_Institucion,
+              id_comunicado:respuesta,
+              adjunto:nuevoComunicado.arr_adjuntos
+            }
+            if (respuesta < 10) {
+              return this.http.post<{ data: any }>('https://pesge.com.ar/conexiones/adjuntar_documentos.php', adjuntos);
+            } else {
+              return this.http.post<{ data: any }>('https://geoeducacion.com.ar/conexiones/adjuntar_documentos.php', adjuntos);
+            }
+          }else{
+            return of(null);
+          }
+
+        })
+      );
     }
 
 
-    private postComunicado(nuevoComunicado:any) : Observable<any>{
+    private postComunicado(nuevoComunicado:any) : Observable<number>{
       return this.http.post<{ data: any }>(`${this.apiDetalleteUrl}/nuevo_comunicado/${this.usuarioDatos.ID_Institucion}`, nuevoComunicado)
+      .pipe(
+        map((respuesta: any) => {
+          const id = Number(respuesta.data.split(' - ')[0]);
+          return id;
+        })
+      )
     }
 
     private getComunicadosEnviados(){

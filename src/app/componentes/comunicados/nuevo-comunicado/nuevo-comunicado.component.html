@@ -143,9 +143,10 @@
                   </div>
                   <div class="section mt-2">
                     <div class="text-center dropdown">
-                        <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="enviar(titulo.value,mensaje.value)">
+                        <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="enviar(titulo.value,mensaje.value)" *ngIf="!(appSpinner.spinnerCargando | async)">
                             Enviar
                         </button>
+                        <app-spinner></app-spinner>
                     </div>
                 </div>
           </div>

@@ -8,7 +8,7 @@
         <div class="container" *ngIf="!(appSpinner.spinnerCargando | async)">
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
                 <div class="col">
-                    <a routerLink="/notificaciones-detalles/entrevistas">
+                    <a routerLink="/notificaciones/entrevistas">
                     <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                         <span class="badge badge-danger" *ngIf="notificaciones?.entrevistas">{{notificaciones?.entrevistas}}</span>
                         <ion-icon name="mic-outline"></ion-icon>
@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="col">
-                  <a routerLink="/notificaciones-detalles/avisos">
+                  <a routerLink="/notificaciones/avisos">
                     <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                         <span class="badge badge-danger" *ngIf="notificaciones?.avisos">{{notificaciones?.avisos}}</span>
                         <ion-icon name="notifications-outline"></ion-icon>
@@ -26,7 +26,7 @@
                     </a>
                 </div>
                 <div class="col">
-                  <a routerLink="/notificaciones-detalles/familiares">
+                  <a routerLink="/notificaciones/familiares">
                     <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                         <span class="badge badge-danger" *ngIf="notificaciones?.familiares">{{notificaciones?.familiares}}</span>
                         <ion-icon name="people-outline"></ion-icon>
@@ -35,7 +35,7 @@
                     </a>
                 </div>
                 <div class="col">
-                  <a routerLink="/notificaciones-detalles/pedagogicas">
+                  <a routerLink="/notificaciones/pedagogicas">
                     <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                         <span class="badge badge-danger" *ngIf="notificaciones?.pedagogicas">{{notificaciones?.pedagogicas}}</span>
                         <ion-icon name="eye-outline"></ion-icon>
@@ -44,7 +44,7 @@
                     </a>
                 </div>
                 <div class="col">
-                  <a routerLink="/notificaciones-detalles/sanciones">
+                  <a routerLink="/notificaciones/sanciones">
                     <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                         <span class="badge badge-danger" *ngIf="notificaciones?.sanciones">{{notificaciones?.sanciones}}</span>
                         <ion-icon name="warning-outline"></ion-icon>
@@ -53,7 +53,7 @@
                     </a>
                 </div>
                 <div class="col">
-                  <a routerLink="/notificaciones-detalles/faltas">
+                  <a routerLink="/notificaciones/faltas">
                     <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                         <span class="badge badge-danger" *ngIf="notificaciones?.faltas">{{notificaciones?.faltas}}</span>
                         <ion-icon name="warning-outline"></ion-icon>
@@ -62,7 +62,7 @@
                     </a>
                 </div>
                 <div class="col">
-                  <a routerLink="/notificaciones-detalles/documentacion">
+                  <a routerLink="/notificaciones/documentacion">
                   <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                       <span class="badge badge-danger" *ngIf="notificaciones?.documentacion">{{notificaciones?.documentacion}}</span>
                       <ion-icon name="reader-outline"></ion-icon>
@@ -71,7 +71,7 @@
                   </a>
               </div>
               <div class="col">
-                <a routerLink="/notificaciones-detalles/retiros">
+                <a routerLink="/notificaciones/retiros">
                 <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                     <span class="badge badge-danger" *ngIf="notificaciones?.avisos_retiro">{{notificaciones?.avisos_retiro}}</span>
                     <ion-icon name="time-outline"></ion-icon>
@@ -80,7 +80,7 @@
                 </a>
               </div>
               <div class="col">
-                <a routerLink="/notificaciones-detalles/reuniones">
+                <a routerLink="/notificaciones/reuniones">
                 <div class="p-3 border bg-primary card text-center iconedbox iconedbox-xxl">
                     <span class="badge badge-danger" *ngIf="notificaciones?.rta_solicitudes_reunion">{{notificaciones?.rta_solicitudes_reunion}}</span>
                     <ion-icon name="people-circle-outline"></ion-icon>
