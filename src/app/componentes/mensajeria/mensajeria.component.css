@@ -11,3 +11,7 @@
   margin-right: 10px; /* Ajusta el margen derecho según tus necesidades */
   background-color: #53AAC6;
 }
+
+.radius{
+  border-radius: 20px;
+}

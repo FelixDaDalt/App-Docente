@@ -7,11 +7,15 @@
 <!-- INICIO lista de COMUNICADOS -->
     <div class="section inset mt-2">
         <div class="pb-2">
-            <div class="btn-container">
-                  <button class="btn btn-info btn-sm" (click)="obtenerTodos()"><i class="bi bi-eye"></i>Todos</button>
-                  <button class="btn btn-success btn-sm" (click)="obtenerNoLeidos()"><i class="bi bi-eye"></i>No Leidos</button>
-                  <button class="btn btn-danger btn-sm" (click)="obtenerLeidos()"><i class="bi bi-eye"></i>Leidos</button>
+          <div class="form-group boxed">
+              <div class="input-wrapper">
+                <select class="form-control form-select" id="city5" (change)="filtro($event)">
+                  <option value="todos">Todos</option>
+                  <option value="noLeidos">No Leidos</option>
+                  <option value="leidos">Leidos</option>
+                </select>
               </div>
+          </div>
         </div>
         <app-spinner #appSpinner></app-spinner>
         <div class="accordion" id="accordionExample2" *ngIf="!(appSpinner.spinnerCargando | async)">

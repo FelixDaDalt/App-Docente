@@ -1,41 +1,43 @@
-<div id="appCapsule" class="bg-white" [ngStyle]="{'height': (appSpinner.spinnerCargando | async) ? '100vh' : 'auto'}">
+<div id="appCapsule">
 
 
 
   <app-materias-informacion [Informacion]="materia" [rol]="(usuario$ | async)?.Rol_selected?.rol"></app-materias-informacion>
 
+  <div style="background-color: white;" [ngStyle]="{'height': (appSpinner.spinnerCargando | async) ? '100vh' : 'auto'}">
   <app-spinner #appSpinner></app-spinner>
 
-  <div class="section mt-2">
-      <div class="wide-block transparent p-0">
-          <ul class="nav nav-tabs lined iconed table-responsive" role="tablist">
-              <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z') || (usuario$ | async)?.Rol_selected?.rol =='PF'">
-                  <a class="nav-link " data-bs-toggle="tab" href="#libro" role="tab">
-                      <ion-icon name="book-outline"></ion-icon>
-                      <h4 class="subtext">LIBRO DE TEMAS</h4>
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" data-bs-toggle="tab" href="#parte" role="tab">
-                      <ion-icon name="id-card-outline"></ion-icon>
-                      <h4 class="subtext">PARTES ASISTENCIA</h4>
-                  </a>
-              </li>
-              <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z' )|| (usuario$ | async)?.Rol_selected?.rol =='PF'">
-                  <a class="nav-link" data-bs-toggle="tab" href="#calificacion" role="tab" >
-                      <ion-icon name="logo-react"></ion-icon>
-                      <h4 class="subtext">CALIFICACIONES</h4>
-                  </a>
-              </li>
-              <li class="nav-item" >
-                  <a class="nav-link active" data-bs-toggle="tab" href="#alumno" role="tab">
-                      <ion-icon name="person-outline"></ion-icon>
-                      <h4 class="subtext">ALUMNOS</h4>
-                  </a>
-              </li>
-          </ul>
-      </div>
-  </div>
+ <div class="section">
+    <div class="wide-block transparent p-0">
+        <ul class="nav nav-tabs lined iconed table-responsive" role="tablist">
+            <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z') || (usuario$ | async)?.Rol_selected?.rol =='PF'">
+                <a class="nav-link" data-bs-toggle="tab" href="#libro" role="tab">
+                    <ion-icon name="book-outline"></ion-icon>
+                    <h4 class="subtext">LIBRO DE TEMAS</h4>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#parte" role="tab">
+                    <ion-icon name="id-card-outline"></ion-icon>
+                    <h4 class="subtext">PARTES ASISTENCIA</h4>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z' )|| (usuario$ | async)?.Rol_selected?.rol =='PF'">
+                <a class="nav-link" data-bs-toggle="tab" href="#calificacion" role="tab">
+                    <ion-icon name="logo-react"></ion-icon>
+                    <h4 class="subtext">CALIFICACIONES</h4>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#alumno" role="tab">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <h4 class="subtext">ALUMNOS</h4>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 
 
   <!-- tab content -->
@@ -66,5 +68,5 @@
       </div>
   </div>
   <!-- * tab content -->
-
+</div>
 </div>

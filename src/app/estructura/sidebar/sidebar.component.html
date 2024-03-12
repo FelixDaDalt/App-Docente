@@ -5,7 +5,7 @@
             <!-- profile box -->
             <div class="profileBox">
                 <div class="image-wrapper">
-                    <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="imaged rounded">
+                    <img [src]="'assets/img/sample/avatar/avatar1.jpg'" alt="image" class="imaged rounded">
                 </div>
                 <div class="in">
                     <strong>{{usuario.name}}</strong>
@@ -60,7 +60,7 @@
             <ul class="listview image-listview flush transparent no-line" *ngIf="!(appSpinner.spinnerCargando | async)">
                 <li *ngFor="let materia of materias">
                     <a (click)="verMateria(materia)" class="item">
-                        <img src="/assets/img/sample/avatar/avatar7.jpg" alt="image" class="image">
+                        <img [src]="'/assets/img/sample/avatar/avatar7.jpg'" alt="image" class="image">
                         <div class="in">
                             <div>{{materia.materia}}</div>
                         </div>
@@ -70,14 +70,14 @@
         </div>
         <!-- sidebar buttons -->
         <div class="sidebar-buttons">
-            <a class="button" (click)="verUsuario()">
+            <!--<a class="button" (click)="verUsuario()">
                 <ion-icon name="person-outline"></ion-icon>
-            </a>
-            <!--<a href="#" class="button">
-                <ion-icon name="key-outline"></ion-icon>
             </a>-->
             <a class="button" (click)="cerrarSesion()" data-bs-dismiss="offcanvas">
                 <ion-icon name="log-out-outline"></ion-icon>
+            </a>
+            <a class="button" (click)="nosotros()">
+                <ion-icon name="alert-circle-outline"></ion-icon>
             </a>
         </div>
         <!-- * sidebar buttons -->

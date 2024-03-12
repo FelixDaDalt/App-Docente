@@ -87,4 +87,24 @@ export class ComunicadosComponent implements OnInit, OnDestroy{
     txt.innerHTML = html;
     return txt.value;
   }
+
+  filtro(value:Event){
+    let valor = (value.target as HTMLSelectElement).value;
+    switch(valor)
+    {
+      case'todos':
+        this.obtenerTodos()
+        break;
+        case'noLeidos':
+        this.obtenerNoLeidos()
+        break;
+        case'leidos':
+        this.obtenerLeidos()
+        break;
+        default:
+        this.obtenerTodos()
+        break;
+    }
+
+  }
 }

@@ -9,6 +9,7 @@ import { ComunicadosRoutingModule } from './comunicados.routing';
 
 
 
+
 @NgModule({
   declarations: [
     ComunicadosComponent,

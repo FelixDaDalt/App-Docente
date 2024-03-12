@@ -9,19 +9,11 @@ const ComunicadosRoutes: Routes = [
   {
     path: '',
     component: ComunicadosComponent,
-    children:[
-      {
-        path: 'comunicados-enviados',
-        component: ComunicadosEnviadosComponent
-       },
-       {
-        path: 'nuevo-comunicado',
-        component: NuevoComunicadoComponent
-       },
-    ]
   },
-
-
+  {
+    path: 'nuevo-comunicado',
+    component: NuevoComunicadoComponent
+  },
 ];
 
 @NgModule({

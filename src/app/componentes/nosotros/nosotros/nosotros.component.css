@@ -1,0 +1,87 @@
+body, #appCapsule {
+  margin: 0;
+  padding: 0;
+}
+
+#appCapsule {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+}
+
+.blue-text{
+  color: #2E2481;
+}
+
+.centered{
+background-color: white;
+border-radius: 10px;
+padding: 10px;
+padding-top: 50px;
+padding-bottom: 50px;
+}
+
+.centered-image img {
+  width: 70vw; /* El ancho de la imagen es el 70% del ancho de la ventana */
+  height: auto; /* La altura se ajusta automáticamente para mantener la relación de aspecto */
+}
+
+/* Media query para pantallas más grandes, como las de computadora */
+@media screen and (min-width: 768px) {
+  .centered-image img {
+    width: 40vw; /* El ancho de la imagen es el 50% del alto de la ventana */
+    height: auto; /* La altura se ajusta automáticamente para mantener la relación de aspecto */
+  }
+}
+
+.text-below-image {
+  margin-top: 10px; /* Espacio superior entre la imagen y el texto */
+}
+
+.text-below-image p {
+  margin: 5px 0; /* Espacio entre los párrafos */
+  font-size: 14px; /* Tamaño de fuente */
+}
+
+.advertencia-container {
+  background-color: #f8d7da; /* Color de fondo rojo suave */
+  border: 1px solid #f5c6cb; /* Borde rojo */
+  color: #721c24; /* Color de texto oscuro */
+  padding: 15px; /* Espaciado interno */
+  margin-bottom: 15px; /* Margen inferior */
+  border-radius: 5px; /* Bordes redondeados */
+  margin-top: 15px; /* Margen superior */
+}
+.advertencia-texto {
+  font-size: 16px; /* Tamaño de fuente */
+}
+
+.advertencia-titulo {
+  font-weight: bold; /* Texto en negrita */
+  margin-bottom: 5px; /* Margen inferior */
+}
+
+.solicitud-container {
+  background-color: #e2e3e5; /* Color de fondo gris suave */
+  border: 1px solid #ced4da; /* Borde gris */
+  padding: 15px; /* Espaciado interno */
+  margin-bottom: 20px; /* Margen inferior */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.solicitud-texto {
+  font-size: 16px; /* Tamaño de fuente */
+  margin-bottom: 10px; /* Margen inferior */
+}
+
+.solicitud-textarea {
+  width: 100%; /* Ancho completo */
+  min-height: 100px; /* Altura mínima */
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ced4da; /* Borde gris */
+  border-radius: 5px; /* Bordes redondeados */
+  resize: vertical; /* Permitir redimensionar verticalmente */
+}
+

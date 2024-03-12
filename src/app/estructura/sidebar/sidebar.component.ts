@@ -63,4 +63,8 @@ export class SidebarComponent {
     this.router.navigate(['usuario'])
   }
 
+  nosotros(){
+    this.router.navigate(['nosotros'])
+  }
+
 }

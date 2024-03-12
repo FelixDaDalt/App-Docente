@@ -40,5 +40,11 @@ export class BottomComponent {
     })
   }
 
+  comunicados(){
+    this.router.navigate(['comunicados-enviados'])
+  }
 
+  reuniones(){
+    this.router.navigate(['reuniones'])
+  }
 }

@@ -1,0 +1,17 @@
+.section {
+  overflow-x: auto; /* Hace que las pestañas sean desplazables horizontalmente */
+  white-space: nowrap; /* Evita que las pestañas se envuelvan a la siguiente línea */
+}
+
+.nav-tabs {
+  display: inline-flex; /* Hace que las pestañas se alineen horizontalmente */
+}
+
+.nav-item {
+  flex: 0 0 auto; /* Evita que las pestañas crezcan y se contraigan */
+  margin-right: 10px; /* Espacio entre pestañas */
+}
+
+.nav{
+  flex-wrap: nowrap !important;
+}

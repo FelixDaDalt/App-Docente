@@ -38,14 +38,26 @@ export class MensajeriaHistorialComponent implements OnInit, OnDestroy, AfterVie
     { }
 
     @HostListener('document:mousewheel', ['$event'])
-    onDocumentMousewheelEvent(event:any) {
-      if(this.scroll){
-        if(this.scroll.nativeElement.scrollTop != this.scroll.nativeElement.scrollHeight)
-        {
-          this.scrollBool = true
+    onDocumentMousewheelEvent(event: WheelEvent) {
+      if (this.scroll) {
+        if (this.scroll.nativeElement.scrollTop !== this.scroll.nativeElement.scrollHeight) {
+          this.scrollBool = true;
         }
       }
     }
+
+    @HostListener('document:touchstart', ['$event'])
+    @HostListener('document:touchmove', ['$event'])
+    @HostListener('document:touchend', ['$event'])
+    onDocumentTouchEvent(event: TouchEvent) {
+      if (this.scroll) {
+        const touch = event.touches[0] || event.changedTouches[0];
+        if (this.scroll.nativeElement.scrollTop !== this.scroll.nativeElement.scrollHeight) {
+          this.scrollBool = true;
+        }
+      }
+    }
+
 
   ngAfterViewChecked(): void {
     this.scrollBottom()

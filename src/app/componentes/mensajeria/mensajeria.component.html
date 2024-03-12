@@ -9,7 +9,7 @@
 
   <div class="section inset mt-2">
     <app-spinner #appSpinner></app-spinner>
-    <ul class="listview image-listview " *ngIf="!(appSpinner.spinnerCargando | async)">
+    <ul class="listview image-listview radius" *ngIf="!(appSpinner.spinnerCargando | async)">
       <li *ngFor="let mensajeria of listaMensajeria">
           <a [routerLink]="['./mensajeria-historial']" [queryParams]="{ id_chat: mensajeria.id_chat }">
           <div class="item">
@@ -17,7 +17,7 @@
               {{mensajeria.familia.substring(0, 2).toUpperCase()}}
             </div>
               <div class="in text-dark">
-                <div style="height: 100%; width: 100%; display: flex; flex-direction: column;">
+                <div style="height: 100%; width: 100%; display: flex; flex-direction: column; text-align: left;">
                   <!-- Primera fila -->
                   <div style="display: flex;">
                     <!-- Primera columna -->

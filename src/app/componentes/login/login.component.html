@@ -1,15 +1,16 @@
 <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
     <div class="row d-flex"  *ngIf="seleccionInstitucion == false && seleccionRol==false">
-        <div class="col-lg-6">
+        <div class="col-12">
             <div class="pb-1">
-                <div class="row px-3 justify-content-center mt-1 mb-1">
-                    <img src="assets/img/logos/geo.png" class="image">
+              <div class="row px-3 justify-content-center mt-1 mb-1">
+                <div class="col-md-6">
+                    <img src="assets/img/logos/geo.png" class="image img-fluid">
                 </div>
+            </div>
             </div>
         </div>
 
-        <div class="col-lg-6">
-            <div class="card2 card border-0 px-4 py-5">
+        <div class="col-md-6 mx-auto">
                 <div class="row px-3 form-outline mb-4">
                     <input type="text" class="form-control form-control-lg" name="email" id="email"
                     placeholder="Ingrese su email"
@@ -20,9 +21,9 @@
                   placeholder="Ingrese su contraseña"
                   required #password/>
                 </div>
-                <div class="row px-3 mb-4 form-outline">
+                <!--<div class="row px-3 mb-4 form-outline">
                     <a href="#" class="ml-auto mb-0 text-sm">Recuperar Contraseña</a>
-                </div>
+                </div>-->
                 <div class="row mb-4 px-3" *ngIf="!(appSpinner.spinnerCargando | async)">
                     <button id="spinner" class="btn btn-primary btn-lg"
                   style="padding-left: 2.5rem; padding-right: 2.5rem;"
@@ -30,7 +31,7 @@
                 </div>
                 <app-spinner #appSpinner></app-spinner>
             </div>
-        </div>
+
     </div>
 
     <div class="login-form mt-1" *ngIf="usuario">

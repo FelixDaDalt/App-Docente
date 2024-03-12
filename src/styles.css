@@ -331,9 +331,11 @@ button:hover, button:active, button:focus {
 }
 
 .section {
+  text-align: center;
   padding: 0 16px;
 }
 .section.full {
+  text-align: center;
   padding: 0;
 }
 
@@ -1718,7 +1720,7 @@ a.badge-dark {
 }
 
 .card {
-  background: #53AAC6;
+  background: rgba(46, 36, 129, 0.8);
   border-radius: 24px;
   border: 0;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -5585,6 +5587,7 @@ textarea,
 .profile-head {
   display: flex;
   align-items: center;
+  text-align: left;
 }
 .profile-head .avatar {
   margin-right: 16px;

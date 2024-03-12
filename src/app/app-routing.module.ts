@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './componentes/login/login.component';
 import { LoginSeleccionComponent } from './componentes/login/institucion-seleccion/institucion-seleccion.component';
+import { ComunicadosEnviadosComponent } from './componentes/comunicados/comunicados-enviados/comunicados-enviados.component';
 
 
 const routes: Routes = [
@@ -9,10 +10,11 @@ const routes: Routes = [
 
   { path: 'login', component: LoginComponent }, // Ruta 'login', carga 'LoginComponent'
   { path: 'seleccion', component: LoginSeleccionComponent }, // Ruta 'login', carga 'LoginComponent'
+  { path: 'comunicados-enviados', component: ComunicadosEnviadosComponent },
 
-  { path: 'usuario',
+  /*{ path: 'usuario',
   loadChildren: () => import('./componentes/usuario/usuario.module').then(m => m.UsuarioModule)
-  },
+  },*/
   { path: 'legajo-alumno',
   loadChildren: () => import('./componentes/estudiante-legajo/estudiante-legajo.module').then(m => m.EstudianteLegajoModule)
   },
@@ -45,6 +47,9 @@ const routes: Routes = [
   },
   { path: 'mensajeria',
   loadChildren: () => import('./componentes/mensajeria/mensajeria.module').then(m => m.MensajeriaModule)
+  },
+  { path: 'nosotros',
+  loadChildren: () => import('./componentes/nosotros/nosotros.module').then(m => m.NosotrosModule)
   },
 ];
 

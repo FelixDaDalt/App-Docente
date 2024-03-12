@@ -1,0 +1,45 @@
+<div id="appCapsule" >
+
+  <div [ngClass]="{'centered': !darsebaja && !confirmarbaja}">
+    <div class="centered-image">
+      <img src="assets/img/logos/geo.png">
+      <div class="text-below-image" *ngIf="!darsebaja && !confirmarbaja">
+        <strong><p>Version: <span style="color: black;">{{version}}</span> </p></strong>
+        <p>{{copyrigth}}</p>
+        <div><a href="https://www.facebook.com/gestiongeo" target="_blank"
+            class="me-4 blue-text"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/geo.educacion/" target="_blank" class="me-4 blue-text"><i
+              class="bi bi-instagram"></i></a>
+            <a href="redes@geoeducacion.com.ar" target="_blank"
+            class="me-4 blue-text"><i  class="bi bi-envelope"></i></a><a
+            href="https://ar.linkedin.com/company/geo-educaci%C3%B3n" target="_blank"><i
+              class="bi bi-linkedin blue-text"></i></a></div>
+      </div>
+    </div>
+
+    <div class="section mt-2">
+
+      <div class="solicitud-container" *ngIf="darsebaja && !confirmarbaja">
+        <p class="solicitud-texto">Estimado <strong>{{(usuarioDatos | async)?.name}}</strong>, le pedimos que Indique los motivos que conllevan a solicitar la baja del servicio.</p>
+        <textarea class="solicitud-textarea" placeholder="Por favor, indique los motivos aquí" [(ngModel)]="motivos"></textarea>
+      </div>
+
+      <div class="advertencia-container" *ngIf="confirmarbaja">
+        <p class="advertencia-titulo">ATENCIÓN:</p>
+        <p class="advertencia-texto">Al confirmar la baja, perderá inmediatamente acceso a la aplicación y entorno web de GEO, quedando el usuario inhabilitado para acceder a todas las instituciones en las que se encuentra activo.</p>
+      </div>
+
+
+      <div class="section">
+        <div class="text-center dropdown">
+          <button type="button" class="btn btn-danger btn-sm me-1 mb-3"
+          (click)="!darsebaja?darseBaja():!confirmarbaja?confirmarBaja():aceptarBaja()">
+          <ion-icon name="remove-circle-outline" role="img" class="md hydrated" aria-label="document text outline"></ion-icon>
+          {{!darsebaja?'Baja del servicio':!confirmarbaja?'Aceptar':'Estoy De Acuerdo'}}
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

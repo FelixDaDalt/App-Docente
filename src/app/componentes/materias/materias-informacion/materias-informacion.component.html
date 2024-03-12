@@ -1,17 +1,19 @@
 <div class="section mt-2">
-  <div class="profile-head">
-      <div class="avatar">
-      </div>
-      <div class="in">
-          <h3 class="name">{{Informacion?.materia}}</h3>
-          <h5 class="subtext">{{Informacion?.curso}}</h5>
-          <h5 class="subtext">{{rol}}</h5>
-      </div>
+  <div class="card text-center">
+    <div class="card-header">
+      <h5 class="card-title">{{Informacion?.materia}}</h5>
+      <div class="card-subtitle">Curso: {{Informacion?.curso}} - Rol: ({{rol}})</div>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title"><ng-content select="[titulo-cuerpo]"></ng-content></h5>
+        <app-fecha-yhora></app-fecha-yhora>
+    </div>
   </div>
+
 </div>
 
-<div class="section full mt-2">
-  <div class="profile-stats ps-2 pe-2">
+<div class="section full mt-2" style="background-color: white; border-top-left-radius:20px; border-top-right-radius:20px">
+  <div class="profile-stats ps-2 pe-2 pb-2">
     <a class="item">
     </a>
       <a  class="item">
@@ -24,7 +26,5 @@
       </a>
       <a class="item">
       </a>
-
-
   </div>
 </div>
