@@ -22,7 +22,6 @@
         </h2>
         <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(reunion)">
           <div class="accordion-body">
-
             <h4 class="subtitle" [innerHTML]="decodeHtml(reunion.mensaje)"></h4>
             <h4 class="subtitle">Usuario: {{reunion?.respuesta_usuario}}</h4>
           </div>
