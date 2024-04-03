@@ -139,7 +139,6 @@ export class HomeService {
       (notificacionesResponse) => {
         this.homeDatos.notificaciones = notificacionesResponse.data[0];
         this.emitirHomeDatos();
-        this.notificacionService.establecerNotificacion('success', 'Notificaciones actualizadas correctamente');
       },
       (error) => {
         this.notificacionService.establecerNotificacion('error', 'Error al actualizar notificaciones');

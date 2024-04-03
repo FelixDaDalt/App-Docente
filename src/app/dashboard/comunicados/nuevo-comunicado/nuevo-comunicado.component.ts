@@ -3,7 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComunicadosService } from '../comunicados.service';
 import { comunicado_destinatario, comunicado_destinatario_alumno } from '../comunicado';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, shareReplay, takeUntil, tap } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-nuevo-comunicado',
@@ -12,7 +13,10 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NuevoComunicadoComponent implements OnInit,OnDestroy{
 
-  listaComunicadoDestinatarios:comunicado_destinatario[]=[]
+  destinatarios$:Observable<comunicado_destinatario[]>=of([])
+  listaComunicadoDestinatarios:comunicado_destinatario[] = []
+  destinatariosSuscripcion?:Subscription
+
   grupoSeleccionado!:comunicado_destinatario
 
   destinatariosSeleccionados:comunicado_destinatario[]=[]
@@ -20,33 +24,53 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
 
   acordeonAbierto = true;
 
-  private ngUnsuscribe=new Subject()
+  formulario!: FormGroup;
 
   constructor(private comunicadosService:ComunicadosService,
-    private route:Router){
+    private route:Router,
+    private fb: FormBuilder){
 
   }
 
   ngOnInit(): void {
-    this.obtenerDestinatarios()
+    this.formGroup()
+    this.destinatariosSuscripcion = this.obtenerDestinatarios().subscribe()
   }
 
   ngOnDestroy(): void {
-    this.ngUnsuscribe.next(null)
-    this.ngUnsuscribe.complete()
+    this.destinatariosSuscripcion?.unsubscribe()
+  }
+
+  private formGroup(){
+    this.formulario = this.fb.group({
+      titulo: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      arr_destinatarios: [[], Validators.required],
+      arr_adjuntos: [[]],
+      id_curso: [0],
+      id_materia: [0],
+      id_nivel: [0],
+      id_usuario: [0],
+      rol: [0],
+    });
+  }
+
+  formControls(nombre:string) {
+    return this.formulario.controls[nombre] as FormControl
   }
 
   obtenerDestinatarios(){
-    this.comunicadosService.obtenerDestinatarios()
-    .pipe(takeUntil(this.ngUnsuscribe))
-    .subscribe({
-      next:(respuesta)=>{
-        this.listaComunicadoDestinatarios = respuesta
-      }
-    })
+    return this.comunicadosService.obtenerDestinatarios().pipe(
+      tap(destinatarios => {
+        this.destinatarios$ = of(destinatarios)
+        this.listaComunicadoDestinatarios = destinatarios
+      }),
+      shareReplay(1)
+    )
   }
 
   seleccionarAlumno(alumno: comunicado_destinatario_alumno) {
+    const arrDestinatariosControl = this.formControls('arr_destinatarios');
     // Verificar si el grupo seleccionado ya está en DestinatariosSeleccionados
     const grupoEnDestinatarios = this.destinatariosSeleccionados.find(
       (grupo) => grupo.nombre_grupo === this.grupoSeleccionado.nombre_grupo
@@ -70,6 +94,7 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
       this.destinatariosSeleccionados.forEach((grupo) => {
         if (grupo.nombre_grupo === this.grupoSeleccionado.nombre_grupo) {
           grupo.destinatarios.push(alumno);
+          arrDestinatariosControl.patchValue([...arrDestinatariosControl.value, {id_destinatario:alumno.id_alumno,tipo_destinatario: 1}]);
           let i = this.grupoSeleccionado.destinatarios.findIndex(dest=>dest === alumno)
           if(i!==undefined && i!==-1)
             this.grupoSeleccionado.destinatarios.splice(i,1)
@@ -100,11 +125,19 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
         if(this.destinatariosSeleccionados[indexDestinatario].destinatarios.length === 0)
           this.destinatariosSeleccionados.splice(indexDestinatario, 1);
       }
+      const arrDestinatariosControl = this.formControls('arr_destinatarios');
+      const arrDestinatariosValue = arrDestinatariosControl.value;
+      const indexToRemove = arrDestinatariosValue.findIndex((destinatario: any) => destinatario.id_destinatario === alumno.id_alumno);
+      if (indexToRemove !== -1) {
+        arrDestinatariosValue.splice(indexToRemove, 1);
+        arrDestinatariosControl.patchValue([...arrDestinatariosValue]);
+      }
     }
   }
 
 
   seleccionarTodo() {
+    const arrDestinatariosControl = this.formControls('arr_destinatarios');
     // Verificar si el grupo seleccionado ya está en DestinatariosSeleccionados
     const grupoEnDestinatarios = this.destinatariosSeleccionados.find(
       (grupo) => grupo.nombre_grupo === this.grupoSeleccionado.nombre_grupo
@@ -115,6 +148,7 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
       const nuevoGrupo = { ...this.grupoSeleccionado };
       nuevoGrupo.destinatarios = [...this.grupoSeleccionado.destinatarios]; // Clonar la lista de destinatarios
       this.destinatariosSeleccionados.push(nuevoGrupo);
+
     }
 
     // Obtener la lista de alumnos seleccionados en el grupo actual
@@ -128,6 +162,7 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
         // Verificar si el alumno ya está en el grupo
         if (!grupoActual.destinatarios.includes(alumno)) {
           grupoActual.destinatarios.push(alumno);
+          arrDestinatariosControl.patchValue([...arrDestinatariosControl.value, {id_destinatario:alumno.id_alumno,tipo_destinatario: 1}]);
         }
       });
 
@@ -136,6 +171,24 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
     }
   }
 
+  enviar() {
+    if(!this.formulario.valid){
+      this.formulario.markAllAsTouched();
+    }else{
+    const envioSuscripcion = this.comunicadosService.enviarComunicado(this.formulario.value)
+      .subscribe({
+        next: (respuesta) => {
+          this.route.navigate(['dashboard','comunicados','comunicados-enviados']);
+         },
+        error: (error) => {
+           console.error('Error al enviar el comunicado', error);
+        },
+        complete:() => {
+          envioSuscripcion.unsubscribe()
+        },
+     });
+    }
+  }
 
   toggleRow(destinatario: any): void {
     destinatario.expanded = !destinatario.expanded;
@@ -146,12 +199,14 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
   }
 
   onFileChange(event: any): void {
+    const arrAdjuntos = this.formControls('arr_adjuntos');
     const files = event.target.files;
     if (files) {
         for (let i = 0; i < files.length; i++) {
             // Verificar si el archivo ya existe en la lista this.archivos
             if (!this.archivos.some(archivo => archivo.name === files[i].name)) {
                 this.archivos.push(files[i]);
+                arrAdjuntos.patchValue([...arrAdjuntos.value,files[i]])
             } else {
                 // Aquí puedes mostrar un mensaje de error o realizar alguna acción
                 console.log(`El archivo ${files[i].name} ya existe.`);
@@ -160,48 +215,16 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
     }
 }
 
-  enviar(titulo: string, mensaje: string) {
-    const hayDestinatarios = this.destinatariosSeleccionados.some(grupo => grupo.destinatarios.length > 0);
-    const tituloNoVacio = titulo.trim() !== '';
-    const mensajeNoVacio = mensaje.trim() !== '';
 
-    if (hayDestinatarios && tituloNoVacio && mensajeNoVacio) {
-      const nuevoComunicado = {
-        titulo:titulo,
-        descripcion: mensaje,
-        arr_destinatarios: this.destinatariosSeleccionados
-          .flatMap(grupo => grupo.destinatarios)
-          .map(alumnoEnDestinatario => ({
-            id_destinatario: alumnoEnDestinatario.id_alumno,
-            tipo_destinatario: 1
-          })),
-        arr_adjuntos: [],
-        id_curso:0,
-        id_materia:0,
-        id_nivel:0,
-        id_usuario:0,
-        rol:0
-      };
-
-      this.comunicadosService.enviarComunicado(nuevoComunicado)
-        .pipe(takeUntil(this.ngUnsuscribe))
-        .subscribe({
-          next: (respuesta) => {
-            this.route.navigate(['dashboard','comunicados','comunicados-enviados']);
-          },
-          error: (error) => {
-            console.error('Error al enviar el comunicado', error);
-          }
-        });
-
-    } else {
-      console.log("No hay seleccionados o título/mensaje vacíos");
-    }
-  }
 
   eliminarArchivo(index: number): void {
     if (index > -1) {
         this.archivos.splice(index, 1);
+        const arrAdjuntos = this.formControls('arr_adjuntos');
+        const arrAdjuntosValue = arrAdjuntos.value;
+        arrAdjuntosValue.splice(index, 1);
+        arrAdjuntos.patchValue([...arrAdjuntosValue]);
+
     }
 }
 

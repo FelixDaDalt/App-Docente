@@ -1,0 +1,3 @@
+<div *ngIf="control.errors && (control.dirty || control.touched)" class="text-danger">
+  <div style="color: red;">{{ control.errors | errorFormularios: fieldName }}</div>
+</div>

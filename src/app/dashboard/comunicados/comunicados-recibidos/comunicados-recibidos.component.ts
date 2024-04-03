@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComunicadosService } from '../comunicados.service';
 import { comunicado } from '../comunicado';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, shareReplay, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-comunicados-recibidos',
@@ -10,55 +10,43 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class ComunicadosRecibidosComponent implements OnInit, OnDestroy{
 
-  comunicados:comunicado[]=[]
-  todos=true
+  comunicados$?:Observable<comunicado[]> = of([])
   collapsedStatus: boolean[] = [];
-  private ngUnsuscribe  = new Subject();
+  comunicadoSuscripcion?:Subscription
+  filtrovalor:string = 'todos'
+
 
   constructor(private comunicadoService:ComunicadosService){
 
   }
 
   ngOnInit(): void {
-    this.obtenerTodos()
+    this.comunicadoSuscripcion = this.obtenerTodos().subscribe()
   }
 
   ngOnDestroy(): void {
-    this.ngUnsuscribe.next(null)
-    this.ngUnsuscribe.complete()
+    this.comunicadoSuscripcion?.unsubscribe()
   }
 
   obtenerNoLeidos(){
-    this.comunicadoService.obtenerNoLeidos()
-    .pipe(takeUntil(this.ngUnsuscribe))
-    .subscribe({
-      next:(comunicados)=>{
-        this.comunicados = comunicados
-        this.todos = false
-      }
-    })
+    return this.comunicadoService.obtenerNoLeidos().pipe(
+      tap(comunicados =>this.comunicados$ = of(comunicados)),
+      shareReplay(1)
+    )
   }
 
   obtenerLeidos(){
-    this.comunicadoService.obtenerLeidos()
-    .pipe(takeUntil(this.ngUnsuscribe))
-    .subscribe({
-      next:(comunicados)=>{
-        this.comunicados = comunicados
-        this.todos = false
-      }
-    })
+    return this.comunicadoService.obtenerLeidos().pipe(
+      tap(comunicados =>this.comunicados$ = of(comunicados)),
+      shareReplay(1)
+    )
   }
 
   obtenerTodos(){
-    this.comunicadoService.obtenerTodos()
-    .pipe(takeUntil(this.ngUnsuscribe))
-    .subscribe({
-      next:(comunicados)=>{
-        this.comunicados = comunicados
-        this.todos = true
-      }
-    })
+    return this.comunicadoService.obtenerTodos().pipe(
+      tap(comunicados =>this.comunicados$ = of(comunicados)),
+      shareReplay(1)
+    )
   }
 
   esImagen(url: string): boolean {
@@ -69,7 +57,24 @@ export class ComunicadosRecibidosComponent implements OnInit, OnDestroy{
 
   marcarLeido(comunicado:comunicado){
       if(comunicado.leido===0){
-        this.comunicadoService.marcarLeido(comunicado.id)
+        this.comunicadoService.marcarLeido(comunicado.id).subscribe({
+          next:(respuesta)=>{
+            switch (this.filtrovalor) {
+              case 'todo':
+                this.comunicadoSuscripcion = this.obtenerTodos().subscribe()
+                break;
+              case 'noLeidos':
+                this.comunicadoSuscripcion = this.obtenerNoLeidos().subscribe()
+                break;
+              case 'leidos':
+                this.comunicadoSuscripcion = this.obtenerLeidos().subscribe()
+                break;
+              default:
+                this.comunicadoSuscripcion = this.obtenerTodos().subscribe()
+                break;
+            }
+          }
+        })
       }
   }
 
@@ -90,19 +95,20 @@ export class ComunicadosRecibidosComponent implements OnInit, OnDestroy{
 
   filtro(value:Event){
     let valor = (value.target as HTMLSelectElement).value;
+    this.filtrovalor = valor
     switch(valor)
     {
-      case'todos':
-        this.obtenerTodos()
+        case'todos':
+        this.comunicadoSuscripcion = this.obtenerTodos().subscribe()
         break;
         case'noLeidos':
-        this.obtenerNoLeidos()
+        this.comunicadoSuscripcion = this.obtenerNoLeidos().subscribe()
         break;
         case'leidos':
-        this.obtenerLeidos()
+        this.comunicadoSuscripcion = this.obtenerLeidos().subscribe()
         break;
         default:
-        this.obtenerTodos()
+          this.comunicadoSuscripcion = this.obtenerTodos().subscribe()
         break;
     }
 

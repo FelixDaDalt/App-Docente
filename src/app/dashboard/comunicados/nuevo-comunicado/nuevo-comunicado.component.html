@@ -6,15 +6,15 @@
   </app-titulo>
     <app-spinner #appSpinner></app-spinner>
   <!-- INICIO selector de MATERIA -->
-  <form  enctype="multipart/form-data">
+  <form  enctype="multipart/form-data" [formGroup]="formulario" (ngSubmit)="enviar()">
     <div class="section inset mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
       <div class="section full">
         <div class="form-group boxed">
           <div class="section-title">Seleccionar grupo</div>
             <div class="input-wrapper">
-                <select class="form-control form-select" id="materia" name="materia" [(ngModel)]="grupoSeleccionado">
+                <select class="form-control form-select" id="materia" name="materia" [(ngModel)]="grupoSeleccionado" [ngModelOptions]="{standalone: true}">
                     <option [ngValue]="undefined" selected disabled>Seleccionar grupo</option>
-                    <option [ngValue]="grupo" *ngFor="let grupo of listaComunicadoDestinatarios">{{grupo.nombre_grupo}}</option>
+                    <option [ngValue]="grupo" *ngFor="let grupo of destinatarios$|async">{{grupo.nombre_grupo}}</option>
                 </select>
             </div>
         </div>
@@ -60,7 +60,7 @@
   </div>
 
   <!-- inicio Tabla Destinatarios seleccionados -->
-    <div class="section inset mt-2" *ngIf="destinatariosSeleccionados.length>0">
+    <div class="section inset mt-2" *ngIf="destinatariosSeleccionados.length>0; else error">
       <div class="section full">
         <div class="wide-block p-0">
           <div class="table-responsive-custom">
@@ -99,14 +99,21 @@
                     </tr>
                   </ng-container>
                 </ng-container>
-
-
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
+    <ng-template #error>
+      <div class="section inset mt-2">
+        <div class="section full">
+          <div class="wide-block p-0">
+            <app-error-formularios [control]="formControls('arr_destinatarios')" fieldName="Destinatarios"></app-error-formularios>
+          </div>
+        </div>
+      </div>
+    </ng-template>
 
  <!-- inicio COMUNICADOOOO -->
     <div class="section inset mt-2">
@@ -117,19 +124,21 @@
                       <div class="input-wrapper">
                           <label class="form-label">Titulo del comunicado</label>
                           <input type="texto" class="form-control" id="titulo" name="titulo" placeholder=""
-                              autocomplete="off" #titulo>
+                              autocomplete="off" formControlName="titulo">
 
                       </div>
+                      <app-error-formularios [control]="formControls('titulo')" fieldName="Titulo"></app-error-formularios>
                   </div>
 
                   <div class="form-group boxed">
                       <div class="input-wrapper">
                           <label class="form-label" for="message"></label>
-                          <textarea class="form-control" name="mensaje" id="mensaje" rows="6" placeholder="Escribe tu comunicado aquí" autocomplete="off" #mensaje></textarea>
+                          <textarea class="form-control" name="mensaje" id="mensaje" rows="6" placeholder="Escribe tu comunicado aquí" autocomplete="off" formControlName='descripcion'></textarea>
                           <i class="clear-input">
                               <ion-icon name="close-circle"></ion-icon>
                           </i>
                       </div>
+                      <app-error-formularios [control]="formControls('descripcion')" fieldName="Mensaje"></app-error-formularios>
                   </div>
 
                     <div class="custom-file-upload" id="fileUpload1">
@@ -152,7 +161,6 @@
                             <span>{{ archivo.name }}</span>
                             <button type="button" class="btn btn-danger btn-sm p-0" style="margin-left: 5px;" (click)="eliminarArchivo(i)">
                               <ion-icon name="remove-circle-outline" role="img" style="margin-left: 5px;"></ion-icon></button>
-
                         </li>
                     </ul>
                 </div>
@@ -162,9 +170,8 @@
 
                   <div class="section mt-2">
                     <div class="text-center dropdown">
-                        <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button"
-                        [disabled]="!grupoSeleccionado || destinatariosSeleccionados.length<=0 || !titulo.value || !mensaje.value"
-                        (click)="enviar(titulo.value,mensaje.value)" *ngIf="!(appSpinner.spinnerCargando | async)">
+                        <button type="submit" class="btn btn-primary rounded shadowed  me-1 mb-1"
+                        *ngIf="!(appSpinner.spinnerCargando | async)">
                             Enviar
                         </button>
                         <app-spinner></app-spinner>

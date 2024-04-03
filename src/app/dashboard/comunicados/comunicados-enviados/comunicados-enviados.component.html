@@ -12,7 +12,7 @@
       Nuevo comunicado
     </button>
     <div class="accordion" id="accordionExample2">
-      <div *ngFor="let comunicado of comunicadosEnviados; let i = index" class="accordion-item">
+      <div *ngFor="let comunicado of comunicadosEnviados$ | async; let i = index" class="accordion-item">
         <div class="comment-block">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"

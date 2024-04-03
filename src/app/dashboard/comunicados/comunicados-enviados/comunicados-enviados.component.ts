@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComunicadosService } from '../comunicados.service';
 import { comunicado_enviado, comunicado_enviado_Destinatario } from './comunicado-enviado';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, shareReplay, takeUntil, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ComunicadosEnviadosDestinatariosComponent } from './comunicados-enviados-destinatarios/comunicados-enviados-destinatarios.component';
 import { Router } from '@angular/router';
@@ -13,30 +13,27 @@ import { Router } from '@angular/router';
 })
 export class ComunicadosEnviadosComponent implements OnInit,OnDestroy{
 
-  comunicadosEnviados:comunicado_enviado[]=[]
-  private ngUnsuscribe= new Subject();
+  comunicadosEnviados$:Observable<comunicado_enviado[]>=of([])
+  private comunicadosEnviadosSuscripcion?:Subscription
 
   constructor(private comunicadosService:ComunicadosService,
     private modalService:NgbModal,
     private route:Router){}
 
   ngOnInit(): void {
-    this.obtenerComunicados()
+    this.comunicadosEnviadosSuscripcion = this.obtenerComunicados().subscribe()
   }
 
   ngOnDestroy(): void {
-    this.ngUnsuscribe.next(null)
-    this.ngUnsuscribe.complete()
+    this.comunicadosEnviadosSuscripcion?.unsubscribe()
   }
 
   private obtenerComunicados(){
-    this.comunicadosService.obtenerComunicadosEnviados()
-      .pipe(takeUntil(this.ngUnsuscribe))
-      .subscribe({
-      next:(comunicados)=>{
-        this.comunicadosEnviados = comunicados
-      }
-    })
+   return this.comunicadosService.obtenerComunicadosEnviados()
+      .pipe(
+        tap(comunicados => this.comunicadosEnviados$ = of(comunicados)),
+        shareReplay(1)
+      )
   }
 
   esImagen(url: string): boolean {
@@ -61,7 +58,6 @@ export class ComunicadosEnviadosComponent implements OnInit,OnDestroy{
 
   obtenerColor(porcentaje: number): string {
     // Lógica para determinar el color basado en el porcentaje
-    // Puedes personalizar esto según tus necesidades
     if (porcentaje < 25) {
       return '#dc3545';
     } else if (porcentaje < 50) {
@@ -84,7 +80,14 @@ export class ComunicadosEnviadosComponent implements OnInit,OnDestroy{
   }
 
   eliminarComunicado(idComunicado:number){
-    this.comunicadosService.borrarComunicado(idComunicado)
+    const eliminarSuscripcion = this.comunicadosService.borrarComunicado(idComunicado).subscribe({
+      next:()=>{
+        this.comunicadosEnviadosSuscripcion = this.obtenerComunicados().subscribe()
+      },
+      complete:()=>{
+        eliminarSuscripcion.unsubscribe()
+      }
+    })
   }
 
   decodeHtml(html: string): string {
