@@ -58,6 +58,7 @@ const ComunicadosRoutes: Routes = [
 
       loadChildren: () => import('../componentes/tutoriales/tutoriales.module').then(m => m.TutorialesModule)
       },
+
     ]
   }
 ];

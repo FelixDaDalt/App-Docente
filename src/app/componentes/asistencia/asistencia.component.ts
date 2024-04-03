@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsistenciaService } from './asistencia.service';
 import { Asistencia, Parte_Alumno, Parte_Asistencia} from './asistencia';
 import { formatDate } from '@angular/common';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, map, observable, of, shareReplay, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
@@ -16,9 +16,12 @@ import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 export class AsistenciaComponent implements OnInit,OnDestroy{
 
 
-  private suscripcionAsistencia?:Subscription | null
+  private suscripcionAsistencia?:Subscription
+  private suscripcionSeleccionAsistencia?:Subscription
 
-  asistencias:Asistencia[]=[]
+  asistencia$:Observable<Asistencia[]> = of([])
+
+
   asistenciaSeleccionada!:Asistencia
   fecha!:string
   fechaMax!:string
@@ -47,20 +50,33 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
         this.id = id
       }
     });
-    this.suscribirseAsistencia();
     this.inicializarFechas();
-    this.obtenerAsistencias();
-    this.inicializarComerdor();
+    this.suscripcionAsistencia = this.obtenerAsistencias().subscribe()
   }
 
   ngOnDestroy(): void {
-    if (this.suscripcionAsistencia) {
-      this.suscripcionAsistencia.unsubscribe();
-    }
+      this.suscripcionAsistencia?.unsubscribe();
+      this.suscripcionSeleccionAsistencia?.unsubscribe()
   }
 
+  //ok
+  private obtenerAsistencias(): Observable<Asistencia[]> {
+    return this.asistenciaService.obtenerAsistencias(this.fecha).pipe(
+      map(respuesta => this.inicializarEstados(respuesta)),
+      map(asistenciasEstado => this.inicializarComedor(asistenciasEstado)),
+      tap(asistencias => {
+        this.asistencia$ = of(asistencias)
+        this.seleccionarAsistencia();
+      })
+    );
+  }
 
+  //ok
+  actualizarAsistencia(){
+    this.suscripcionAsistencia = this.obtenerAsistencias().subscribe()
+  }
 
+  //ok
   private inicializarFechas() {
     if(!this.fecha){
       this.fecha = this.formatoFecha(new Date());
@@ -69,79 +85,62 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
       let fecha = this.formatoFecha(new Date());
       this.fechaMax = fecha
     }
-
   }
 
+  //ok
   private formatoFecha(date: Date): string {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
-  private suscribirseAsistencia(){
-    if (this.suscripcionAsistencia) {
-      this.suscripcionAsistencia.unsubscribe();
-    }
 
-      this.suscripcionAsistencia = this.asistenciaService.suscribirseAsistencia().subscribe({
-        next:(asistencias)=>{
-          this.asistencias = asistencias
-          this.seleccionarAsistencia();
-          this.comprobarEdicion()
-          this.inicializarEstados()
-        }
-      })
-
-
-  }
-
-
+  //ok
   private seleccionarAsistencia() {
-    if(this.id && this.id != -1){
-      let index = this.asistencias?.findIndex(x => x.id_parte == this.id)
-      if(index!== -1){
-        this.asistenciaSeleccionada = this.asistencias[index]
-        this.id = -1
-      }
-    }else{
-      if (this.asistenciaSeleccionada) {
-        this.asistenciaSeleccionada = this.asistencias?.find(x => x.id === this.asistenciaSeleccionada.id) || this.asistencias?.[0];
+    this.suscripcionSeleccionAsistencia = this.asistencia$.subscribe(asistencias => {
+      if (this.id && this.id !== -1) {
+        let index = asistencias.findIndex(x => x.id_parte == this.id);
+        if (index !== -1) {
+          this.asistenciaSeleccionada = asistencias[index];
+          this.id = -1;
+          this.comprobarEdicion(this.asistenciaSeleccionada)
+        }
       } else {
-        this.asistenciaSeleccionada = this.asistencias?.[0];
+        if (this.asistenciaSeleccionada) {
+          this.asistenciaSeleccionada = asistencias.find(x => x.id === this.asistenciaSeleccionada.id) || asistencias[0];
+          this.comprobarEdicion(this.asistenciaSeleccionada)
+        } else {
+          this.asistenciaSeleccionada = asistencias[0];
+        }
       }
-    }
+    })
   }
 
-  private inicializarEstados() {
-    if (this.asistencias) {
-      this.asistencias.forEach(asistencia=>{
-        asistencia.alumnos.forEach(alumno => {
-          if(alumno.estado_asistencia == ''){
-            if(alumno.justificacion==1)
-            {
-              alumno.estado = 'A';
-            }else{
-              alumno.estado = 'P';
-            }
-          }else{
-            alumno.estado = alumno.estado_asistencia
-          }
 
-          if(alumno.justificacion==1){
-            alumno.observacion = alumno.detalle_justificacion
-          }
-      });
-    });
-    }
-  }
+  //ok
+  private inicializarEstados(asistencias: Asistencia[]): Asistencia[] {
+  if (!asistencias) return [];
 
-  private inicializarComerdor(){
-    if (this.asistencias) {
-      this.asistencias.forEach(asistencia=>{
-        asistencia.alumnos.forEach(alumno => {
-          alumno.estado_comedor = alumno.comedor
-        })
-      })
-    }
-  }
+  return asistencias.map(asistencia => ({
+    ...asistencia,
+    alumnos: asistencia.alumnos.map(alumno => ({
+      ...alumno,
+      estado: alumno.estado_asistencia === '' ? (alumno.justificacion === 1 ? 'A' : 'P') : alumno.estado_asistencia,
+      observacion: alumno.justificacion === 1 ? alumno.detalle_justificacion : alumno.observacion
+    }))
+  }));
+}
+
+//Ok
+private inicializarComedor(asistencias: Asistencia[]): Asistencia[] {
+  if (!asistencias) return [];
+
+  return asistencias.map(asistencia => ({
+    ...asistencia,
+    alumnos: asistencia.alumnos.map(alumno => ({
+      ...alumno,
+      estado_comedor: alumno.comedor
+    }))
+  }));
+}
 
   aceptar(){
     let parteAsistencia = new Parte_Asistencia(this.asistenciaSeleccionada?.id,this.asistenciaSeleccionada?.tipo,this.fecha,this.asistenciaSeleccionada.id_parte)
@@ -152,25 +151,25 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
       let parteAlumno = new Parte_Alumno(alumno.id,alumno.estado,alumno.observacion,alumno.estado_comedor)
       parteAsistencia.arr_alumnos.push(parteAlumno)
     })
-    this.asistenciaService.postAsistencias(parteAsistencia)
-
+   const suscripcionEnvio = this.asistenciaService.agregarAsistencias(parteAsistencia).subscribe({
+      next:()=>{
+        this.actualizarAsistencia()
+      },
+      complete:()=>{
+        suscripcionEnvio.unsubscribe()
+      }
+    })
   }
 
   editar(){
     this.checkDeshabilitados=false
   }
 
-  comprobarEdicion(){
-    if(this.asistenciaSeleccionada?.editable==0 || this.asistenciaSeleccionada?.id_parte!=0){
+  private comprobarEdicion(asistencias:Asistencia){
+    if(asistencias.editable==0 || asistencias.id_parte!=0){
       this.checkDeshabilitados = true
     }else{
       this.checkDeshabilitados=false
     }
   }
-
-  obtenerAsistencias(){
-    this.asistenciaService.obtenerAsistencias(this.fecha)
-  }
-
-
 }

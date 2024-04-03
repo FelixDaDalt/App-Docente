@@ -8,8 +8,8 @@
   <div class="section mt-1 mb-1">
     <div class="form-group boxed">
         <div class="input-wrapper">
-            <select class="form-control form-select" id="city5" [(ngModel)]="asistenciaSeleccionada" (change)="comprobarEdicion()">
-                <option *ngFor="let asistencia of asistencias" [ngValue]="asistencia">{{asistencia.materia}} - {{asistencia.curso?asistencia.curso:'Grupal'}}</option>
+            <select class="form-control form-select" id="city5" [(ngModel)]="asistenciaSeleccionada" >
+                <option *ngFor="let asistencia of asistencia$ |async" [ngValue]="asistencia">{{asistencia.materia}} - {{asistencia.curso?asistencia.curso:'Grupal'}}</option>
             </select>
         </div>
     </div>
@@ -18,7 +18,7 @@
   <div class="section mt-1 mb-1">
       <div class="form-group boxed">
           <div class="input-wrapper">
-            <input type="date" class="form-control" name="fecha" [max]="fechaMax" [(ngModel)]="fecha" (change)="obtenerAsistencias()">
+            <input type="date" class="form-control" name="fecha" [max]="fechaMax" [(ngModel)]="fecha" (change)="actualizarAsistencia()">
           </div>
       </div>
   </div>

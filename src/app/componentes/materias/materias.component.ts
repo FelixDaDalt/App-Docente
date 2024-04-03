@@ -4,6 +4,7 @@ import { materias } from '../home/home';
 import { Observable, Subscription } from 'rxjs';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-materias',
@@ -17,7 +18,9 @@ export class MateriasComponent implements OnDestroy, OnInit{
   materia?:materias | null
   suscripcionesActivas = 0;
 
-  constructor(private materiaService:MateriasService, private usuarioService:DatosUsuarioService){}
+  constructor(private materiaService:MateriasService,
+    private usuarioService:DatosUsuarioService,
+    private route:Router){}
 
   ngOnInit(): void {
     this.suscripcionMateria()
@@ -39,7 +42,10 @@ export class MateriasComponent implements OnDestroy, OnInit{
 
     this.suscriberMateria = this.materiaService.suscripcionMateria().subscribe({
       next:(materia)=>{
+        if(materia)
         this.materia = materia
+        else
+        this.route.navigate(['dashboard'])
       }
     })
   }

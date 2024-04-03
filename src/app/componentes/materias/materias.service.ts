@@ -21,7 +21,4 @@ export class MateriasService {
     return this.materia$.asObservable()
   }
 
-
-
-
 }

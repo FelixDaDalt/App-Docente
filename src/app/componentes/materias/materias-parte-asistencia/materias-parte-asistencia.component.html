@@ -12,7 +12,7 @@
   </thead>
   <app-spinner #appSpinner></app-spinner>
   <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
-      <tr *ngFor="let parte of partes">
+      <tr *ngFor="let parte of partes$ | async">
           <td class="align-middle">{{parte.id}}</td>
           <td class="align-middle">{{parte.fecha}}</td>
           <td class="align-middle">{{parte.total_presentes}}</td>

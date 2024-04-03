@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsistenciaService } from '../../asistencia/asistencia.service';
 import { parte } from '../../asistencia/asistencia';
 import { MateriasService } from '../materias.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of, tap } from 'rxjs';
 import { materias } from '../../home/home';
 import { Router } from '@angular/router';
 
@@ -15,9 +15,8 @@ export class MateriasParteAsistenciaComponent implements OnInit, OnDestroy{
 
   private suscriberParte?:Subscription
   private suscriberMateria?:Subscription
-  private materia?:materias | null
-  partes:parte[]=[]
-  suscripcionesActivas=0
+  materia$?:Observable<materias | null> = of(null)
+  partes$:Observable<parte[]>=of([])
 
   constructor(private asistenciaService:AsistenciaService,
     private materiasService:MateriasService,
@@ -31,39 +30,27 @@ export class MateriasParteAsistenciaComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.suscribirsePartes()
     this.suscripcionMateria()
   }
 
-  private suscribirsePartes(){
-    if (this.suscriberParte) {
-      this.suscriberParte.unsubscribe();
-    }
-
-    this.asistenciaService.suscripcionParte().subscribe({
-      next:(partes)=>{
-        this.partes = partes
-      }
-    })
+  private obtenerPartes(materia:materias){
+    this.suscriberParte = this.asistenciaService.obtenerPartesPorMateria(materia)
+    .pipe(
+      tap(partes => this.partes$ = of(partes))
+    ).subscribe()
   }
 
-  private suscripcionMateria(){
-    if (this.suscriberMateria) {
-      this.suscriberMateria.unsubscribe();
-    }
-
-
-    this.materiasService.suscripcionMateria().subscribe({
-      next:(materia)=>{
-        this.materia = materia
-        this.obtenerPartes()
-      }
-    })
-  }
-
-  obtenerPartes(){
-    this.asistenciaService.obtenerPartes(this.materia!)
-  }
+  private suscripcionMateria() {
+  this.suscriberMateria = this.materiasService.suscripcionMateria()
+    .pipe(
+      tap(materia => {
+        this.materia$ = of(materia)
+        if(materia)
+          this.obtenerPartes(materia)
+      })
+    )
+    .subscribe();
+}
 
   verParte(parte:parte){
     this.router.navigate(['dashboard','asistencia','ver', parte.fecha,parte.id])
