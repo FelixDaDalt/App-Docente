@@ -7,6 +7,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FechaYhoraComponent } from '../otros/fecha-yhora/fecha-yhora.component';
 import { IonicModule } from '@ionic/angular';
 import { NgxSplideModule } from 'ngx-splide';
+import { HeaderComponent } from '../dashboard/estructura/header/header.component';
+import { SidebarComponent } from '../dashboard/estructura/sidebar/sidebar.component';
+import { BottomComponent } from '../dashboard/estructura/bottom/bottom.component';
+
 
 
 
@@ -15,13 +19,14 @@ import { NgxSplideModule } from 'ngx-splide';
     SpinnerComponent,
     TituloComponent,
     FechaYhoraComponent,
+
   ],
   imports: [
     CommonModule,
     FormsModule,
     NgbModule,
     IonicModule.forRoot(),
-    NgxSplideModule,
+    NgxSplideModule
   ],
   exports:[
     SpinnerComponent,
@@ -30,7 +35,8 @@ import { NgxSplideModule } from 'ngx-splide';
     FormsModule,
     NgbModule,
     IonicModule,
-    NgxSplideModule
+    NgxSplideModule,
+
   ]
 })
 export class CompartidoModule { }

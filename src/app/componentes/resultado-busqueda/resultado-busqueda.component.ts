@@ -43,7 +43,7 @@ export class ResultadoBusquedaComponent {
   verEstudiante(alumno:resultadoBusqueda){
     this.suscriberBusqueda?.unsubscribe()
     this.legajoService.setIdEstudiante(alumno)
-    this.router.navigate(['legajo-alumno']);
+    this.router.navigate(['dashboard','legajo-alumno']);
   }
 
 }

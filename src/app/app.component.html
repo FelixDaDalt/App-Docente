@@ -1,15 +1,11 @@
-<app-notificacion></app-notificacion>
 
-<ng-container *ngIf="login==true;else logueo">
-  <app-header *ngIf="!isMensajeriaComponent"></app-header>
-      <router-outlet></router-outlet>
-  <app-bottom *ngIf="!isMensajeriaComponent"></app-bottom>
-  <app-sidebar></app-sidebar>
-</ng-container>
 
-<!--LOGIN-->
-<ng-template #logueo>
-  <app-login *ngIf="login==false"></app-login>
-</ng-template>
+
+
+  <router-outlet></router-outlet>
+
+
+
+
 
 

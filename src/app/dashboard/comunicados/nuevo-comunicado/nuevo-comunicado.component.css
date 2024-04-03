@@ -1,0 +1,9 @@
+.table-responsive-custom {
+  overflow-x: auto;
+  min-width: 100%;
+  max-height: 400px;
+}
+
+input[type="file"] {
+  color: transparent;
+}

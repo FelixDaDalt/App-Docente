@@ -40,6 +40,7 @@ export class NotReunionesComponent {
   }
 
   marcarLeido(reunion:DetalleReunion){
+    console.log(reunion)
     if(reunion.leido===0){
       this.notificacionService.marcarLeido(reunion.id)
     }

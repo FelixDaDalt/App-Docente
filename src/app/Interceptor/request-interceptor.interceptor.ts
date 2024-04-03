@@ -7,9 +7,9 @@ import {
   HttpEventType
 } from '@angular/common/http';
 import { BehaviorSubject, EMPTY, Observable, Subscription, delay, finalize, fromEvent, map, startWith, switchMap, tap } from 'rxjs';
-import { AutentificacionService } from '../servicios/autentificacion.service';
 import { SpinnerService } from '../otros/spinner/spinner.service';
 import { NotificacionService } from '../otros/notificacion-popup/notificacionpopup.service';
+import { LoginService } from '../servicios/login.service';
 
 
 declare var offlineMode: any;
@@ -20,7 +20,7 @@ export class RequestInterceptorInterceptor implements HttpInterceptor {
   private isConnectedSubject: BehaviorSubject<boolean>;
   private isConnected=false
 
-  constructor(private authService: AutentificacionService,
+  constructor(private loginService: LoginService,
     private spinnerService:SpinnerService,
     private notificacionService:NotificacionService) {
 
@@ -52,7 +52,7 @@ export class RequestInterceptorInterceptor implements HttpInterceptor {
     {
           // Verifica si la solicitud se dirige a la URL de inicio de sesión
           if (request.url !== 'https://apiteach.geoeducacion.com.ar/api/auth/login') {
-            const token = this.authService.obtenerToken();
+            const token = this.loginService.obtenerToken();
             if (token) {
               request = request.clone({
                 setHeaders: {

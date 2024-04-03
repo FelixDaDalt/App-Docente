@@ -1,0 +1,37 @@
+#appCapsule {
+  position: relative;
+}
+
+app-titulo {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.carousel-container {
+  width: 100%;
+  max-width: 800px; /* Ajusta este valor según tus necesidades */
+}
+
+.carousel-multiple {
+  text-align: center;
+}
+
+.card-container {
+  display: inline-block;
+  margin-right: 10px; /* Espacio entre las tarjetas */
+  vertical-align: top; /* Alinea las tarjetas en la parte superior */
+}
+
+.card {
+  display: inline-block;
+  width: 70vw; /* Ajusta el ancho automáticamente */
+}
+
+.video-player {
+  width: 100%; /* El video ocupará todo el ancho de la tarjeta */
+  height: 60vh; /* El alto se ajustará automáticamente según el ancho */
+}
+
+

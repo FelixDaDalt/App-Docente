@@ -130,7 +130,7 @@ export class CalificacionComponent implements OnInit, OnDestroy{
    this.instrumentoRespuestaSuscripcion = this.calificacionService.suscripcionInstrumentoRespuesta().subscribe({
       next:(instrumento_respuesta)=>{
         if(instrumento_respuesta!=null)
-        this.route.navigate(['calificacion','calificacion-notas']);
+        this.route.navigate(['dashboard','calificacion','calificacion-notas']);
       }
     })
   }

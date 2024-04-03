@@ -79,11 +79,11 @@
     <div class="section full mt-1 mb-2">
         <div class="section-title">Nuevo registro</div>
         <div class="wide-block pb-1 pt-2">
-            <form  #registroTema="ngForm">
+            <form  #registroTema="ngForm" >
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label">Fecha</label>
-                        <input type="date" class="form-control" #fechaRegistro>
+                        <input type="date" class="form-control" name="fechaRegistro" id="fechaRegistro" [(ngModel)]="fechaRegistro">
                     </div>
                 </div>
 
@@ -99,26 +99,27 @@
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label">Contenido</label>
-                        <textarea rows="2"class="form-control" #contenidoRegistro placeholder="Escribe los contenidos aquí"></textarea>
+                        <textarea rows="2"class="form-control" placeholder="Escribe los contenidos aquí"  name="contenidoregistro" id="contenidoregistro" [(ngModel)]="contenidoRegistro"></textarea>
                     </div>
                 </div>
 
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label" >Actividades</label>
-                        <textarea rows="2" class="form-control" #actividadRegistro placeholder="Escribe las actividades aquí"></textarea>
+                        <textarea rows="2" class="form-control" placeholder="Escribe las actividades aquí"  name="actividadregistro" id="actividadregistro" [(ngModel)]="actividadRegistro"></textarea>
                     </div>
                 </div>
 
-
-            </form>
-            <div class="section mt-2">
-              <div class="text-center dropdown">
-                  <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="nuevoRegistro(contenidoRegistro.value,actividadRegistro.value,fechaRegistro.value, registroTema)">
-                      Registrar
-                  </button>
+                <div class="section mt-2">
+                  <div class="text-center dropdown">
+                      <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="nuevoRegistro(registroTema)" [disabled]="!fechaRegistro || !contenidoRegistro || !actividadRegistro || !tipoClaseSeleccionada">
+                          Registrar
+                      </button>
+                  </div>
               </div>
-          </div>
+
+              </form>
+
         </div>
     </div>
 

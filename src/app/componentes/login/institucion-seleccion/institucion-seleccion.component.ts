@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { Institucion, usuarioDatos } from 'src/app/modelos/usuarioDatos';
-import { AutentificacionService } from 'src/app/servicios/autentificacion.service';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 
 @Component({
@@ -16,10 +15,11 @@ export class LoginSeleccionComponent implements OnInit,OnDestroy{
   listaInstitucion:Institucion[]=[]
   institucionSeleccionada!:Institucion
 
-  private ngUnsuscribe = new Subject()
+  private obtenerDatosUsuarios?:Subscription
 
 
-  constructor(private datosUsuarioService:DatosUsuarioService)
+  constructor(private datosUsuarioService:DatosUsuarioService,
+    private router:Router)
   {
 
   }
@@ -27,13 +27,11 @@ export class LoginSeleccionComponent implements OnInit,OnDestroy{
     this.obtenerDatosUsuario()
   }
   ngOnDestroy(): void {
-    this.ngUnsuscribe.next(null)
-    this.ngUnsuscribe.complete()
+    this.obtenerDatosUsuarios?.unsubscribe()
   }
 
   private obtenerDatosUsuario(){
-    this.datosUsuarioService.obtenerDatos()
-    .pipe(takeUntil(this.ngUnsuscribe))
+   this.obtenerDatosUsuarios = this.datosUsuarioService.obtenerDatos()
     .subscribe({
       next:(usuario)=>{
         if (usuario !== null) {
@@ -51,6 +49,6 @@ export class LoginSeleccionComponent implements OnInit,OnDestroy{
     this.usuario.Institucion = this.institucionSeleccionada.Institucion
     this.usuario.Rol_selected = undefined
     this.datosUsuarioService.establecerDatos(this.usuario)
-
+    this.router.navigate(['login','seleccion-rol'])
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { notificacion } from './notificacion';
 import { NotificacionService } from './notificacion.service';
 import { Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notificaciones',
@@ -14,7 +15,8 @@ export class NotificacionesComponent implements OnInit, OnDestroy{
   private ngUnsubscribe = new Subject();
 
 
-  constructor(private notificacionService:NotificacionService){
+  constructor(private notificacionService:NotificacionService,
+    private route:Router){
 
   }
   ngOnInit(): void {
@@ -35,5 +37,9 @@ export class NotificacionesComponent implements OnInit, OnDestroy{
           this.notificaciones = notificaciones
       }
     })
+  }
+
+  navegarNotificacion(notificacion:string){
+    this.route.navigate(['dashboard','notificaciones',notificacion])
   }
 }

@@ -66,6 +66,6 @@ export class MateriasParteAsistenciaComponent implements OnInit, OnDestroy{
   }
 
   verParte(parte:parte){
-    this.router.navigate(['asistencia','ver', parte.fecha,parte.id])
+    this.router.navigate(['dashboard','asistencia','ver', parte.fecha,parte.id])
   }
 }

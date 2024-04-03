@@ -1,0 +1,27 @@
+<div id="appCapsule">
+  <app-titulo>
+    <p titulo>Libro de Temas</p>
+  </app-titulo>
+  <div class="carousel-container">
+    <div class="carousel-multiple splide">
+      <splide [options]="{ arrows: false }">
+        <ng-container>
+          <splide-slide *ngFor="let tutorial of tutoriales$ | async">
+            <div class="card-container">
+              <div class="card text-primary badge-info mb-3">
+                <div class="card-header text-primary">{{tutorial.titulo}}</div>
+                <div class="card-body">
+                  <video #videoPlayer controls class="video-player">
+                    <source [src]="tutorial.enlace" type="video/mp4">
+                    Tu navegador no soporta la reproducción de videos.
+                  </video>
+                </div>
+              </div>
+            </div>
+          </splide-slide>
+        </ng-container>
+      </splide>
+    </div>
+  </div>
+</div>
+

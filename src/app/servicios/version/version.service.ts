@@ -5,8 +5,8 @@ import { Observable, map } from 'rxjs';
 import { DatosUsuarioService } from '../datos-usuario.service';
 import { usuarioDatos } from '../../modelos/usuarioDatos';
 import { environment } from 'src/enviroments/environment';
-import { AutentificacionService } from '../autentificacion.service';
 import { VersionModalComponent } from './version-modal/version-modal.component';
+import { LoginService } from '../login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class VersionService {
 
   constructor(private http:HttpClient,
               private datosUsuarioService:DatosUsuarioService,
-              private autentificacionService:AutentificacionService,
+              private autentificacionService:LoginService,
               private modalService:NgbModal) {
                 this.obtenerDatosUsuario()
    }

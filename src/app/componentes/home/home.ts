@@ -60,7 +60,8 @@ export interface alumno{
   apellido:string,
   nombre:string,
   dni:string,
-  avatar:string
+  avatar:string,
+  inasistencias:number
 }
 
 export interface autorizacion_retiro {

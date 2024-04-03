@@ -72,10 +72,10 @@ export class CalificacionInstrumentosComponent implements OnInit,OnDestroy {
 
   continuarCalificacion(id_operacion:number){
     this.calificacionService.continuarCalificacion(id_operacion,this.materiaSel.id,this.materiaSel.tipo_materia)
-    this.router.navigate(['calificacion','calificacion-nuevo-instrumento','editar'])
+    this.router.navigate(['dashboard','calificacion','calificacion-nuevo-instrumento','editar'])
   }
 
   nuevoInstrumento(){
-    this.router.navigate(['calificacion','calificacion-nuevo-instrumento'])
+    this.router.navigate(['dashboard','calificacion','calificacion-nuevo-instrumento'])
   }
 }

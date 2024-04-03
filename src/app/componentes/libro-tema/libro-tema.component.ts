@@ -21,6 +21,10 @@ export class LibroTemaComponent implements OnInit, OnDestroy{
   materiaSeleccionada?:materias
   tipoClaseSeleccionada?:tipoClase
 
+  fechaRegistro?:string
+  contenidoRegistro?:string
+  actividadRegistro?:string
+
   materiasSuscripcion?:Subscription
 
   private ngUnsuscribe  = new Subject();
@@ -78,13 +82,14 @@ export class LibroTemaComponent implements OnInit, OnDestroy{
   }
 
 
-  nuevoRegistro(contenido:string,actividad:string,fecha:string,formulario: NgForm){
-    if(this.materiaSeleccionada && this.tipoClaseSeleccionada){
-      let nuevoRegistro = new nuevo_registro(this.materiaSeleccionada.id,this.materiaSeleccionada.tipo_materia,fecha,this.tipoClaseSeleccionada.tipo,contenido,actividad)
+  nuevoRegistro(formulario: NgForm){
+     if(this.materiaSeleccionada && this.tipoClaseSeleccionada){
+      let nuevoRegistro = new nuevo_registro(this.materiaSeleccionada.id,this.materiaSeleccionada.tipo_materia,this.fechaRegistro!,this.tipoClaseSeleccionada.tipo,this.contenidoRegistro!,this.actividadRegistro!)
       nuevoRegistro.materia = this.materiaSeleccionada
       this.libroTemaService.agregarRegistro(nuevoRegistro)
-      formulario.reset()
+      formulario.resetForm()
     }
+
 
   }
 

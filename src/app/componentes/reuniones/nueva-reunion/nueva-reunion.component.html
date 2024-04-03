@@ -39,7 +39,9 @@
                 <tr *ngFor="let alumno of grupoSeleccionado.destinatarios">
                   <td class="align-middle text-start">{{ alumno.alumno }}</td>
                   <td class="align-middle">
-                    <input class="form-check-input" type="radio" name="alumno" id="alumno" [value]="alumno" [(ngModel)]="destinatariosSeleccionado">
+                    <input class="form-check-input" type="radio" name="alumno" id="alumno"
+                    [value]="alumno" [(ngModel)]="destinatariosSeleccionado"
+                    (change)="seleccionEstudiante()">
                   </td>
                 </tr>
               </tbody>
@@ -71,7 +73,7 @@
                   <div class="form-group boxed">
                       <div class="input-wrapper">
                           <label class="form-label" for="message" ></label>
-                          <div class="form-control-mensaje" contenteditable="true" [innerHTML]="mensaje" (input)="capturarTexto($event)"></div>
+                          <div class="form-control-mensaje" contenteditable="true" [innerHTML]="mensaje" (blur)="capturarTexto($event)"></div>
                           <i class="clear-input">
                               <ion-icon name="close-circle"></ion-icon>
                           </i>
@@ -84,7 +86,7 @@
                         <div class="input-wrapper">
                             <label class="form-label">Fecha Propuesta</label>
                             <input type="date" class="form-control" id="fecha" name="fecha" placeholder=""
-                                autocomplete="off" #fecha>
+                                autocomplete="off" #fecha (change)="seleccionFecha(fecha.value)">
                         </div>
                       </div>
                     </div>
@@ -94,7 +96,7 @@
                         <div class="input-wrapper">
                             <label class="form-label">Hora propuesta</label>
                             <input type="time" class="form-control" id="hora" name="hora" placeholder=""
-                                autocomplete="off" #hora>
+                                autocomplete="off" #hora (change)="seleccionHora(hora.value)">
                         </div>
                       </div>
                     </div>
@@ -102,7 +104,9 @@
 
                   <div class="section mt-2">
                     <div class="text-center dropdown">
-                        <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="enviar(titulo.value,fecha.value,hora.value)">
+                        <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button"
+                        [disabled]="!titulo.value || !fecha.value || !hora.value || !destinatariosSeleccionado || !mensaje || mensaje.trim().length === 0"
+                        (click)="enviar(titulo.value,fecha.value,hora.value)">
                             Enviar
                         </button>
                     </div>

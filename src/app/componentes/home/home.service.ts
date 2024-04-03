@@ -1,11 +1,11 @@
-import { AutentificacionService } from './../../servicios/autentificacion.service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, catchError, forkJoin, interval, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, catchError, forkJoin, interval, map, of } from 'rxjs';
 import { alumno, home, materias, notificacionHome, resultadoBusqueda } from './home';
 import { HttpClient } from '@angular/common/http';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { NotificacionService } from '../../otros/notificacion-popup/notificacionpopup.service';
+import { LoginService } from 'src/app/servicios/login.service';
 
 
 @Injectable({
@@ -24,33 +24,44 @@ export class HomeService {
   private Alumnos$ = new Subject<alumno[]>()
   private Alumnos:alumno[]=[]
   private materias$ = new BehaviorSubject<materias[] | []>([]);
+  private intervaloSubscription?: Subscription;
+  intervalo$ = interval(10000);
+
+  datosUsuariosSuscripcion?:Subscription
+  homedatoSuscripcion?:Subscription
+  materiasSuscripcion?:Subscription
 
   constructor(private http: HttpClient,
     private datosUsuarioService:DatosUsuarioService,
     private notificacionService:NotificacionService,
-    private autentificacionService:AutentificacionService)
+    private loginService:LoginService)
     {
       this.homeDatos = new home()
       this.obtenerDatosUsuario()
     }
 
-  private obtenerDatosUsuario(){
-    this.datosUsuarioService.obtenerDatos().subscribe({
-      next:(usuario)=>{
-        if(usuario && usuario.Institucion_selected && usuario.Rol_selected){
-          this.usuarioDatos = usuario
-          this.getHomeData()
-          this.getMaterias()
+    private obtenerDatosUsuario() {
+     this.datosUsuariosSuscripcion = this.datosUsuarioService.obtenerDatos().subscribe({
+        next: (usuario) => {
+          if (usuario && usuario.Institucion_selected && usuario.Rol_selected) {
+            this.usuarioDatos = usuario;
+
+            this.intervaloSubscription = this.intervalo$.subscribe(() => {
+              this.getHomeData();
+            });
+
+            this.getHomeData();
+            this.getMaterias();
+          } else {
+            this.homedatoSuscripcion?.unsubscribe
+            this. materiasSuscripcion?.unsubscribe()
+            this.intervaloSubscription?.unsubscribe();
+          }
         }
-      }
-    })
-  }
+      });
+    }
 
   private getHomeData() {
-    const intervalo$ = interval(10000);
-
-    intervalo$.subscribe(() => {
-
       const novedadesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/novedades/${this.usuarioDatos.ID_Institucion}`, {params: { id_nivel: this.usuarioDatos.Rol_selected?.id_nivel||'' }}).pipe(
         catchError(error => {
           this.notificacionService.establecerNotificacion('error','Error en la solicitud de Novedades')
@@ -64,7 +75,8 @@ export class HomeService {
           return of({ data: {} }); // Tratar el error según tus necesidades
         })
       );
-      forkJoin([novedadesRequest, notificacionesRequest])
+
+     this.homedatoSuscripcion = forkJoin([novedadesRequest, notificacionesRequest])
       .subscribe(([novedadesResponse, notificacionesResponse]) => {
         this.homeDatos.novedades = novedadesResponse.data;
         this.homeDatos.notificaciones = notificacionesResponse.data[0];
@@ -78,12 +90,12 @@ export class HomeService {
 
 
       });
-    })
+
 
   }
 
   private getMaterias(){
-    this.http.get<{ data: any }>(`${this.apiUrl}/materias_asignadas/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol }})
+   this. materiasSuscripcion = this.http.get<{ data: any }>(`${this.apiUrl}/materias_asignadas/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol }})
     .subscribe({
       next:(respuesta)=>{
         this.materias$.next(respuesta.data)
@@ -187,7 +199,7 @@ export class HomeService {
   draseBaja(motivos?:string){
      this.http.post<{ data: any }>(`${this.apiUrl}/baja_usuario/${this.usuarioDatos.ID_Usuario_Interno}`, {motivos:motivos}).subscribe({
       next:(respuesta)=>{
-        this.autentificacionService.logout()
+        this.loginService.logout()
       }
     })
   }

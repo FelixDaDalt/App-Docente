@@ -1,0 +1,16 @@
+<div class="col-md-6 mx-auto">
+  <div class="row px-3 form-outline mb-4">
+    <input type="text" class="form-control form-control-lg" name="email" id="email" placeholder="Ingrese su email"
+      required #email />
+  </div>
+  <div class="row px-3 mb-4 form-outline">
+    <input type="password" class="form-control form-control-lg" name="password" id="password"
+      placeholder="Ingrese su contraseña" required #password />
+  </div>
+
+  <div class="row mb-4 px-3" *ngIf="!(appSpinner.spinnerCargando | async)">
+    <button id="spinner" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;"
+      (click)="login(email,password)">Ingresar</button>
+  </div>
+  <app-spinner #appSpinner></app-spinner>
+</div>

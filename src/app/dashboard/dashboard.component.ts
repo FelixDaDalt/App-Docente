@@ -1,0 +1,27 @@
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
+})
+export class DashboardComponent {
+
+
+  isMensajeriaComponent: boolean = false;
+
+
+  constructor(private router:Router){
+
+      setTimeout(() => {
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+
+            this.isMensajeriaComponent =  this.router.url.includes('mensajeria-historial')
+          }
+        });
+      }, 10);
+
+  }
+}

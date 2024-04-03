@@ -100,6 +100,7 @@ export class NotificacionService {
   marcarLeido(id_notificacion: number): void {
     this.leido(id_notificacion).subscribe({
       next: (respuesta) => {
+        console.log(respuesta)
         this.getNotificaciones()
       }
     });

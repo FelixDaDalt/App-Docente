@@ -80,6 +80,6 @@ export class MateriasCalificacionesComponent implements OnInit,OnDestroy{
 
   continuarCalificacion(id_operacion:number){
     this.calificacionService.continuarCalificacion(id_operacion,this.materia?.id!,this.materia?.tipo_materia!)
-    this.router.navigate(['calificacion','calificacion-notas'])
+    this.router.navigate(['dashboard','calificacion','calificacion-notas'])
   }
 }

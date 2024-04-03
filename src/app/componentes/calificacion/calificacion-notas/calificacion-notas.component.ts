@@ -145,6 +145,6 @@ export class CalificacionNotasComponent implements OnDestroy,OnInit {
 
   guardar(){
     this.notificacionService.establecerNotificacion('Exito','Calificaciones Guardadas')
-    this.route.navigate(['calificacion'])
+    this.route.navigate(['dashboard','calificacion'])
   }
 }

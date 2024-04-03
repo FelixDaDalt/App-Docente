@@ -1,0 +1,86 @@
+
+    <!-- App Sidebar -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarPanel">
+        <div class="offcanvas-body">
+            <!-- profile box -->
+            <div class="profileBox">
+                <div class="image-wrapper">
+                    <img [src]="'./assets/img/sample/avatar/avatar1.jpg'" alt="image" class="imaged rounded">
+                </div>
+                <div class="in">
+                    <strong>{{usuario.name}}</strong>
+                    <div class="text-muted">
+                        <ion-icon name="location"></ion-icon>
+                        {{usuario.Institucion}}
+                    </div>
+                </div>
+                <a href="#" class="close-sidebar-button" data-bs-dismiss="offcanvas">
+                    <ion-icon name="close"></ion-icon>
+                </a>
+            </div>
+            <!-- * profile box -->
+
+            <ul class="listview flush transparent no-line image-listview mt-2">
+                <li>
+                    <a (click)="navegarLogin('seleccion-institucion')" class="item" data-bs-dismiss="offcanvas">
+                        <div class="icon-box bg-primary">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </div>
+                        <div class="in">
+                            Institucion
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="navegarLogin('seleccion-rol')" class="item" data-bs-dismiss="offcanvas">
+                        <div class="icon-box bg-primary">
+                            <ion-icon name="shuffle-outline"></ion-icon>
+                        </div>
+                        <div class="in">
+                            Rol
+                        </div>
+                    </a>
+                </li>
+                <!--<li>
+                    <a href="#" class="item">
+                        <div class="icon-box bg-primary">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </div>
+                        <div class="in">
+                            <div>Parametros</div>
+                        </div>
+                    </a>
+                </li>-->
+            </ul>
+
+            <div class="listview-title mt-2 mb-1">
+                <span>Materias</span>
+            </div>
+            <app-spinner #appSpinner></app-spinner>
+            <ul class="listview image-listview flush transparent no-line" *ngIf="!(appSpinner.spinnerCargando | async)">
+                <li *ngFor="let materia of materias">
+                    <a (click)="verMateria(materia)" class="item">
+                        <img [src]="'./assets/img/sample/avatar/avatar7.jpg'" alt="image" class="image">
+                        <div class="in">
+                            <div>{{materia.materia}}</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- sidebar buttons -->
+
+        <div class="sidebar-buttons">
+            <a class="button" (click)="tutoriales()" data-bs-dismiss="offcanvas">
+              <ion-icon name="help-circle-outline"></ion-icon>
+            </a>
+            <a class="button" (click)="cerrarSesion()" data-bs-dismiss="offcanvas">
+                <ion-icon name="log-out-outline"></ion-icon>
+            </a>
+            <a class="button" (click)="nosotros()">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+            </a>
+        </div>
+        <!-- * sidebar buttons -->
+    </div>
+    <!-- * App Sidebar -->

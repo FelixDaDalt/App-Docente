@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { comunicado_destinatario, comunicado_destinatario_alumno } from '../../comunicados/comunicado';
+import { comunicado_destinatario, comunicado_destinatario_alumno } from '../../../dashboard/comunicados/comunicado';
 import { Subject, map, takeUntil } from 'rxjs';
-import { ComunicadosService } from '../../comunicados/comunicados.service';
+import { ComunicadosService } from '../../../dashboard/comunicados/comunicados.service';
 import { Router } from '@angular/router';
 import { nueva_Reunion } from '../reunion';
 import { ReunionesService } from '../reuniones.service';
@@ -88,7 +88,7 @@ export class NuevaReunionComponent implements OnInit{
         .pipe(takeUntil(this.ngUnsuscribe))
         .subscribe({
           next: (respuesta) => {
-            this.route.navigate(['reuniones']);
+            this.route.navigate(['dashboard','reuniones']);
           },
           error: (error) => {
             this.notificacionService.establecerNotificacion('Error', 'Error al enviar solicitud');
@@ -103,5 +103,20 @@ export class NuevaReunionComponent implements OnInit{
   capturarTexto(event:any): void {
     const textoEditado = event.target.innerHTML;
     this.mensaje = textoEditado
+  }
+
+  seleccionHora(hora:string){
+    const regex = /HH:MM/g; // Expresión regular para buscar 'HH:MM'
+    this.mensaje = this.mensaje?.replace(regex,hora);
+  }
+
+  seleccionFecha(fecha:string){
+    const regex = /DD\/MM\/AAAA/g; // Expresión regular para buscar 'HH:MM'
+    this.mensaje = this.mensaje?.replace(regex,fecha);
+  }
+
+  seleccionEstudiante(){
+    const regex = /ZZZ/g; // Expresión regular para buscar 'HH:MM'
+    this.mensaje = this.mensaje?.replace(regex,this.destinatariosSeleccionado!.alumno);
   }
 }
