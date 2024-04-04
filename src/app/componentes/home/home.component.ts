@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy{
     this.suscripcionUsuario?.unsubscribe()
   }
 
+  //OK
   obtenerUsuario(){
     return this.datosUsuarioService.obtenerDatos()
     .pipe(
@@ -44,6 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy{
     )
   }
 
+  //OK
   obtenerDatosHome(){
     return this.homeService.getHomeDatosObservable().pipe(
     tap(datosHome=>{
@@ -51,7 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy{
     )
   }
 
-
+  //OK
   toggleText(index: number) {
     if (this.expandedCardIndex === index) {
       this.expandedCardIndex = -1; // Si se hace clic en la tarjeta ya expandida, la contrae
