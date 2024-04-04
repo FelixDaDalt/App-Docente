@@ -1,11 +1,11 @@
 import { LibroTemaService } from './libro-tema.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { libroTema, nuevo_registro, tipoClase, AlumnoAusente } from './libro-tema';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 import { parseJSON } from 'date-fns';
 import { HomeService } from '../home/home.service';
 import { materias } from '../home/home';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AusentesComponent } from './ausentes/ausentes.component';
 
@@ -15,9 +15,11 @@ import { AusentesComponent } from './ausentes/ausentes.component';
   styleUrls: ['./libro-tema.component.css']
 })
 export class LibroTemaComponent implements OnInit, OnDestroy{
-  tiposClases:tipoClase[]=[]
-  registros:libroTema[]=[]
-  materias:materias[]=[]
+
+  registros$:Observable<libroTema[]>=of([])
+  tiposClases$:Observable<tipoClase[]>=of([])
+  materias$:Observable<materias[]>=of([])
+
   materiaSeleccionada?:materias
   tipoClaseSeleccionada?:tipoClase
 
@@ -26,77 +28,110 @@ export class LibroTemaComponent implements OnInit, OnDestroy{
   actividadRegistro?:string
 
   materiasSuscripcion?:Subscription
+  tipoClasesSuscripcion?:Subscription
+  registrosSuscripcion?:Subscription
 
-  private ngUnsuscribe  = new Subject();
+  formulario!: FormGroup;
 
   constructor(private libroTemaService:LibroTemaService,
     private homeService:HomeService,
-    private modalService:NgbModal){
+    private modalService:NgbModal,
+    private fb: FormBuilder){
 
   }
 
   ngOnInit(): void {
-    this.obtenerMaterias()
-    this.obtenerTiposClases()
+    this.formGroup()
+    this.materiasSuscripcion = this.obtenerMaterias().subscribe()
+    this.tipoClasesSuscripcion = this.obtenerTiposClases().subscribe()
+  }
+
+  ngOnDestroy(): void {
+    this.materiasSuscripcion?.unsubscribe()
+    this.tipoClasesSuscripcion?.unsubscribe()
+    this.registrosSuscripcion?.unsubscribe()
+  }
+
+  private formGroup(){
+    this.formulario = this.fb.group({
+      id_materia: ['', Validators.required],
+      tipo_materia: ['', Validators.required],
+      materia: ['', Validators.required],
+      fecha: ['', Validators.required],
+      tipo_clase: ['', Validators.required],
+      contenido: ['', Validators.required],
+      actividades: ['', Validators.required],
+    });
+  }
+
+  formControls(nombre:string) {
+    return this.formulario.controls[nombre] as FormControl
   }
 
   private obtenerMaterias(){
-    if(this.materiasSuscripcion){
-      this.materiasSuscripcion.unsubscribe()
-    }
-
-    this.materiasSuscripcion = this.homeService.suscribirseMaterias().subscribe({
-      next:(materias)=>{
-        if(materias.length>0){
-          this.materias = materias
-          this.materiaSeleccionada = this.materias[0]
-          this.obtenerRegistros()
-          this.materiasSuscripcion?.unsubscribe()
-        }
-
-      }
-    })
+    return this.homeService.suscribirseMaterias()
+    .pipe(
+      tap(materias =>{
+        this.materias$ = of(materias)
+        this.materiaSeleccionada = materias[0]
+        this.actualizarregistros()
+        this.actualizarMateriaFormulario()
+      })
+    )
   }
 
   private obtenerTiposClases(){
-    this.libroTemaService.obtenerTiposClases()
-    .pipe(takeUntil(this.ngUnsuscribe))
-    .subscribe({
-      next:(respuesta)=>{
-        this.tiposClases = respuesta
-        this.tipoClaseSeleccionada = this.tiposClases[0]
-      }
-    })
+    return this.libroTemaService.obtenerTiposClases()
+    .pipe(
+      tap(tipoClases =>{
+        this.tiposClases$ = of(tipoClases)
+        this.tipoClaseSeleccionada = tipoClases[0]
+      })
+    )
   }
 
-  obtenerRegistros(){
+  private obtenerRegistros(){
     if(this.materiaSeleccionada){
-      this.libroTemaService.obtenerRegistros(this.materiaSeleccionada)
-      .pipe(takeUntil(this.ngUnsuscribe))
-      .subscribe({
-        next:(respuesta)=>{
-          this.registros = respuesta
+      return this.libroTemaService.obtenerRegistros(this.materiaSeleccionada)
+      .pipe(
+        tap(registros => {
+          this.registros$ = of(registros.sort((a, b) => b.numero_clase - a.numero_clase))
+          this.actualizarMateriaFormulario()
+        })
+      )
+    }else{
+      return of([])
+    }
+  }
+
+  actualizarregistros(){
+    this.registrosSuscripcion = this.obtenerRegistros().subscribe()
+  }
+
+  private actualizarMateriaFormulario(){
+    if(this.materiaSeleccionada){
+      this.formControls('id_materia').setValue(this.materiaSeleccionada!.id)
+      this.formControls('tipo_materia').setValue(this.materiaSeleccionada!.tipo_materia)
+      this.formControls('materia').setValue(this.materiaSeleccionada!)
+    }
+  }
+
+
+  nuevoRegistro(){
+    if(!this.formulario.valid){
+      this.formulario.markAllAsTouched();
+    }
+    else{
+      this.libroTemaService.agregarRegistro(this.formulario.value).subscribe({
+        complete:()=>{
+          this.actualizarregistros()
+          this.formulario.reset()
         }
       })
     }
   }
 
 
-  nuevoRegistro(formulario: NgForm){
-     if(this.materiaSeleccionada && this.tipoClaseSeleccionada){
-      let nuevoRegistro = new nuevo_registro(this.materiaSeleccionada.id,this.materiaSeleccionada.tipo_materia,this.fechaRegistro!,this.tipoClaseSeleccionada.tipo,this.contenidoRegistro!,this.actividadRegistro!)
-      nuevoRegistro.materia = this.materiaSeleccionada
-      this.libroTemaService.agregarRegistro(nuevoRegistro)
-      formulario.resetForm()
-    }
-
-
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsuscribe.next(null)
-    this.ngUnsuscribe.complete()
-  }
 
   verAusentes(registro:libroTema){
     if(registro.ausentes.length > 0){

@@ -49,13 +49,13 @@ export class HomeService {
             this.intervaloSubscription = this.intervalo$.subscribe(() => {
               this.getHomeData();
             });
-
             this.getHomeData();
             this.getMaterias();
           } else {
             this.homedatoSuscripcion?.unsubscribe
-            this. materiasSuscripcion?.unsubscribe()
+            this.materiasSuscripcion?.unsubscribe()
             this.intervaloSubscription?.unsubscribe();
+
           }
         }
       });
@@ -81,17 +81,7 @@ export class HomeService {
         this.homeDatos.novedades = novedadesResponse.data;
         this.homeDatos.notificaciones = notificacionesResponse.data[0];
         this.emitirHomeDatos();
-      },
-      error => {
-        this.notificacionService.establecerNotificacion('error','Error en las solicitudes')
-        console.log(error)
-      },
-      () => {
-
-
-      });
-
-
+      })
   }
 
   private getMaterias(){
@@ -106,8 +96,6 @@ export class HomeService {
   suscribirseMaterias(){
     return this.materias$.asObservable()
   }
-
-
 
   private emitirHomeDatos() {
     this.homeSubject.next(this.homeDatos);
@@ -131,7 +119,7 @@ export class HomeService {
     }).pipe(
       catchError(error => {
         this.notificacionService.establecerNotificacion('error', 'Error en la solicitud de Notificaciones');
-        return of({ data: {} }); // Tratar el error según tus necesidades
+        return of({ data: {} });
       })
     );
 

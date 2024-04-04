@@ -3,7 +3,7 @@ import { home } from 'src/app/componentes/home/home';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { HomeService } from './home.service';
-import { Subscription} from 'rxjs';
+import { Observable, Subscription, of, tap} from 'rxjs';
 import { VersionService } from 'src/app/servicios/version/version.service';
 
 @Component({
@@ -16,8 +16,9 @@ export class HomeComponent implements OnInit, OnDestroy{
   suscripcionUsuario?:Subscription
   suscripcionDatosHome?:Subscription
 
-  usuario!:usuarioDatos
-  datosHome!:home
+  usuario$:Observable<usuarioDatos | null> = of(null)
+  datosHome$:Observable<home | null>=of(null)
+
   isTextTruncated: boolean = true;
   expandedCardIndex: number = -1
 
@@ -27,8 +28,8 @@ export class HomeComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.version.comprobarVersion()
-    this.obtenerUsuario()
-    this.obtenerDatosHome()
+    this.suscripcionUsuario = this.obtenerUsuario().subscribe()
+    this.suscripcionDatosHome = this.obtenerDatosHome().subscribe()
   }
 
   ngOnDestroy() {
@@ -37,32 +38,17 @@ export class HomeComponent implements OnInit, OnDestroy{
   }
 
   obtenerUsuario(){
-    if(this.suscripcionUsuario){
-      this.suscripcionUsuario.unsubscribe()
-    }
-
-    this.suscripcionUsuario = this.datosUsuarioService.obtenerDatos()
-    .subscribe({
-      next:(usuario)=>{
-        if(usuario){
-          this.usuario = usuario
-        }
-      }
-    })
+    return this.datosUsuarioService.obtenerDatos()
+    .pipe(
+      tap(usuario => this.usuario$ = of(usuario))
+    )
   }
 
   obtenerDatosHome(){
-    if(this.suscripcionDatosHome){
-      this.suscripcionDatosHome.unsubscribe()
-    }
-
-    this.suscripcionDatosHome = this.homeService.getHomeDatosObservable()
-    .subscribe({
-      next:(datosHome)=>{
-        if(datosHome)
-          this.datosHome = datosHome
-      }
-    })
+    return this.homeService.getHomeDatosObservable().pipe(
+    tap(datosHome=>{
+      this.datosHome$ = of(datosHome)})
+    )
   }
 
 

@@ -1,9 +1,9 @@
 
 <div id="appCapsule">
     <app-titulo>
-      <span titulo>{{usuario.Institucion}}</span>
-      <span header>{{usuario.Rol_selected?.descripcion}}</span>
-      <span titulo-cuerpo>{{usuario.name}}</span>
+      <span titulo>{{(usuario$ | async)?.Institucion}}</span>
+      <span header>{{(usuario$ | async)?.Rol_selected?.descripcion}}</span>
+      <span titulo-cuerpo>{{(usuario$ | async)?.name}}</span>
     </app-titulo>
 
     <!-- FIN selector de MATERIA -->
@@ -12,8 +12,8 @@
             <!-- carousel multiple NOVEDADES -->
             <div class="carousel-multiple splide" >
                 <splide [options]="{ arrows: false }">
-                  <ng-container *ngIf="datosHome?.novedades!=undefined?datosHome.novedades.length>0:false; else sinNovedades">
-                    <splide-slide *ngFor="let novedad of datosHome?.novedades; let i = index">
+                  <ng-container *ngIf="(datosHome$ | async)?.novedades!.length>0; else sinNovedades">
+                    <splide-slide *ngFor="let novedad of (datosHome$ | async)?.novedades; let i = index">
                       <div class="card text-primary badge-info mb-3" style="max-width: 18rem;">
                         <div class="card-header text-primary">{{novedad?.encabezado}}</div>
                         <div class="card-body">

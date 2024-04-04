@@ -10,8 +10,8 @@
       <div class="form-group boxed">
         <div class="section-title">Seleccionar Materia</div>
           <div class="input-wrapper">
-              <select class="form-control form-select" id="materias" name="materias" (change)="obtenerRegistros()" [(ngModel)]="materiaSeleccionada">
-                  <option *ngFor="let materia of materias" [ngValue]="materia">{{materia.materia}} - {{materia.curso}}</option>
+              <select class="form-control form-select" id="materias" name="materias" (change)="actualizarregistros()" [(ngModel)]="materiaSeleccionada">
+                  <option *ngFor="let materia of materias$ | async" [ngValue]="materia">{{materia.materia}} - {{materia.curso}}</option>
               </select>
           </div>
       </div>
@@ -22,7 +22,7 @@
       <div class="section-title">Registros Cargados</div>
       <app-spinner #appSpinner></app-spinner>
       <div class="accordion" id="accordionExample2" *ngIf="!(appSpinner.spinnerCargando | async)" >
-          <div *ngFor="let registro of registros; let i=index" class="accordion-item">
+          <div *ngFor="let registro of registros$ | async; let i=index" class="accordion-item">
             <div class="comment-block">
               <h2 class="accordion-header">
                       <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -57,7 +57,7 @@
               </div>
             </div>
           </div>
-          <div class="accordion-item" *ngIf="registros.length==0">
+          <div class="accordion-item" *ngIf="(registros$ | async)?.length==0">
             <h2 class="accordion-header">
                     <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
                         <div class="btn-container">
@@ -79,40 +79,47 @@
     <div class="section full mt-1 mb-2">
         <div class="section-title">Nuevo registro</div>
         <div class="wide-block pb-1 pt-2">
-            <form  #registroTema="ngForm" >
+            <form  [formGroup]="formulario" (ngSubmit)="nuevoRegistro()" >
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label">Fecha</label>
-                        <input type="date" class="form-control" name="fechaRegistro" id="fechaRegistro" [(ngModel)]="fechaRegistro">
+                        <input type="date" class="form-control" name="fechaRegistro" id="fechaRegistro" formControlName="fecha">
                     </div>
+                    <app-error-formularios [control]="formControls('fecha')" fieldName="Fecha"></app-error-formularios>
                 </div>
 
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label">Tipo de clase </label>
-                        <select class="form-control form-select" name="tipoClaseRegistro" id="tipoClaseRegistro" [(ngModel)]="tipoClaseSeleccionada">
-                            <option [ngValue]="clase" *ngFor="let clase of tiposClases">{{clase.tipo}}</option>
+                        <select class="form-control form-select" name="tipoClaseRegistro" id="tipoClaseRegistro" formControlName="tipo_clase">
+                            <option [value]="clase.tipo" *ngFor="let clase of tiposClases$ | async">{{clase.tipo}}</option>
                         </select>
                     </div>
+
                 </div>
+                <app-error-formularios [control]="formControls('tipo_clase')" fieldName="Tipo de Clase"></app-error-formularios>
 
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label">Contenido</label>
-                        <textarea rows="2"class="form-control" placeholder="Escribe los contenidos aquí"  name="contenidoregistro" id="contenidoregistro" [(ngModel)]="contenidoRegistro"></textarea>
+                        <textarea rows="2"class="form-control" placeholder="Escribe los contenidos aquí"  name="contenidoregistro" id="contenidoregistro" formControlName="contenido"></textarea>
                     </div>
+
                 </div>
+                <app-error-formularios [control]="formControls('contenido')" fieldName="Contenido"></app-error-formularios>
 
                 <div class="form-group boxed">
                     <div class="input-wrapper">
                         <label class="form-label" >Actividades</label>
-                        <textarea rows="2" class="form-control" placeholder="Escribe las actividades aquí"  name="actividadregistro" id="actividadregistro" [(ngModel)]="actividadRegistro"></textarea>
+                        <textarea rows="2" class="form-control" placeholder="Escribe las actividades aquí"  name="actividadregistro" id="actividadregistro" formControlName="actividades"></textarea>
                     </div>
+                    <app-error-formularios [control]="formControls('actividades')" fieldName="Actividades"></app-error-formularios>
                 </div>
 
                 <div class="section mt-2">
                   <div class="text-center dropdown">
-                      <button class="btn btn-primary rounded shadowed  me-1 mb-1" type="button" (click)="nuevoRegistro(registroTema)" [disabled]="!fechaRegistro || !contenidoRegistro || !actividadRegistro || !tipoClaseSeleccionada">
+                      <button type="submit" class="btn btn-primary rounded shadowed  me-1 mb-1"
+                      *ngIf="!(appSpinner.spinnerCargando | async)">
                           Registrar
                       </button>
                   </div>
