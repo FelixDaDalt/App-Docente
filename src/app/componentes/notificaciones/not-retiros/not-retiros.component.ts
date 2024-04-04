@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DetalleRetiros } from '../notificacion';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 import { NotificacionService } from '../notificacion.service';
 
 @Component({
@@ -9,12 +9,11 @@ import { NotificacionService } from '../notificacion.service';
   styleUrls: ['./not-retiros.component.css']
 })
 export class NotRetirosComponent implements OnInit,OnDestroy{
-  detalleRetiros:DetalleRetiros[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+  detallesRetiro$:Observable<DetalleRetiros[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionRetiro?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-
   }
 
   ngOnInit(): void {
@@ -22,21 +21,19 @@ export class NotRetirosComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionRetiro?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerRetiros()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-      next: (retirosInfo) => {
-        if (retirosInfo) {
-          this.cantidad = retirosInfo.avisos_retiro;
-          this.detalleRetiros = retirosInfo.detalle_avisos_retiro;
-        }
-      }
-    });
+    this.suscripcionRetiro = this.notificacionService.obtenerRetiros()
+      .pipe(
+        tap(retiroInfo=>{
+          this.cantidad$ = of(retiroInfo?.avisos_retiro || 0)
+          this.detallesRetiro$ = of(retiroInfo?.detalle_avisos_retiro || [])
+        })
+      )
+    .subscribe();
   }
 
   marcarLeido(retiro:DetalleRetiros){

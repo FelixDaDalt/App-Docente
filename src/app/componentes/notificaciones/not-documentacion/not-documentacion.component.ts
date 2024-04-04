@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DetalleDocumentacion } from '../notificacion';
 import { NotificacionService } from '../notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-not-documentacion',
@@ -9,9 +9,9 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./not-documentacion.component.css']
 })
 export class NotDocumentacionComponent implements OnInit,OnDestroy{
-  detallesDocumentacion:DetalleDocumentacion[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+  detallesDocumentacion$:Observable<DetalleDocumentacion[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionDocumentacion?:Subscription
 
   constructor(private notificacionService:NotificacionService){
   }
@@ -21,21 +21,25 @@ export class NotDocumentacionComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionDocumentacion?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerDocumentacion()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (documentacionInfo) => {
-        if (documentacionInfo) {
-          this.cantidad = documentacionInfo.documentaciones;
-          this.detallesDocumentacion = documentacionInfo.detalle_documentaciones;
-        }
-      }
-    });
+    this.suscripcionDocumentacion = this.notificacionService.obtenerDocumentacion()
+      .pipe(
+        tap(documentacionInfo=>{
+          this.cantidad$ = of(documentacionInfo?.documentaciones || 0)
+          this.detallesDocumentacion$ = of(documentacionInfo?.detalle_documentaciones || [])
+        })
+      )
+    .subscribe();
+  }
+
+  marcarLeido(documentacion:DetalleDocumentacion){
+    if(documentacion.leido===0){
+      this.notificacionService.marcarLeido(documentacion.id)
+    }
   }
 
   descargarAdjunto(url:string): void {
@@ -47,10 +51,6 @@ export class NotDocumentacionComponent implements OnInit,OnDestroy{
     return partes.pop() || ''; // Si el array está vacío, devuelve una cadena vacía
   }
 
-  marcarLeido(documentacion:DetalleDocumentacion){
-    if(documentacion.leido===0){
-      this.notificacionService.marcarLeido(documentacion.id)
-    }
-  }
+
 
 }

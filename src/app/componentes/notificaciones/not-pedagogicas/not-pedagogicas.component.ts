@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DetallePedagogico } from '../notificacion';
 import { NotificacionService } from '../notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-not-pedagogicas',
@@ -10,13 +10,11 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NotPedagogicasComponent implements OnInit,OnDestroy{
 
-  detallePedagogicas:DetallePedagogico[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+  detallesPedagogico$:Observable<DetallePedagogico[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionPedagogico?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-
-
   }
 
   ngOnInit(): void {
@@ -24,21 +22,19 @@ export class NotPedagogicasComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionPedagogico?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerPedagogico()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-      next: (pedagogicasInfo) => {
-        if (pedagogicasInfo) {
-          this.cantidad = pedagogicasInfo.pedagogicas;
-          this.detallePedagogicas = pedagogicasInfo.detalle_pedagogicos;
-        }
-      }
-    });
+    this.suscripcionPedagogico = this.notificacionService.obtenerPedagogico()
+      .pipe(
+        tap(pedagogicoInfo=>{
+          this.cantidad$ = of(pedagogicoInfo?.pedagogicas || 0)
+          this.detallesPedagogico$ = of(pedagogicoInfo?.detalle_pedagogicos || [])
+        })
+      )
+    .subscribe();
   }
 
   marcarLeido(pedagogico:DetallePedagogico){

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DetalleReunion } from '../notificacion';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 import { NotificacionService } from '../notificacion.service';
 
 @Component({
@@ -9,12 +9,11 @@ import { NotificacionService } from '../notificacion.service';
   styleUrls: ['./not-reuniones.component.css']
 })
 export class NotReunionesComponent {
-  detalleReuniones:DetalleReunion[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+  detallesReunion$:Observable<DetalleReunion[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionReunion?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-
   }
 
   ngOnInit(): void {
@@ -22,25 +21,22 @@ export class NotReunionesComponent {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionReunion?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerReuniones()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-      next: (reunionesInfo) => {
-        if (reunionesInfo) {
-          this.cantidad = reunionesInfo.rta_solicitudes_reunion;
-          this.detalleReuniones = reunionesInfo.detalle_rta_solicitudes_reunion;
-        }
-      }
-    });
+    this.suscripcionReunion = this.notificacionService.obtenerReuniones()
+      .pipe(
+        tap(reunionInfo=>{
+          this.cantidad$ = of(reunionInfo?.rta_solicitudes_reunion || 0)
+          this.detallesReunion$ = of(reunionInfo?.detalle_rta_solicitudes_reunion || [])
+        })
+      )
+    .subscribe();
   }
 
   marcarLeido(reunion:DetalleReunion){
-    console.log(reunion)
     if(reunion.leido===0){
       this.notificacionService.marcarLeido(reunion.id)
     }

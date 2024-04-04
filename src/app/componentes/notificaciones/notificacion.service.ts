@@ -43,7 +43,8 @@ export class NotificacionService {
   }
 
   private getNotificaciones(){
-    this.http.get<{ data: any }>(`${this.apiUrl}/cantidad_notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel || '' }}).subscribe({
+   const suscripcion = this.http.get<{ data: any }>(`${this.apiUrl}/cantidad_notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel || '' }})
+    .subscribe({
       next:(respuesta)=>{
         this.notificaciones = respuesta.data
         this.emitirEvento(this.notificacionesSubject, this.notificaciones);
@@ -56,6 +57,9 @@ export class NotificacionService {
         this.emitirEvento(this.faltasSubject, { faltas: this.notificaciones.faltas, detalle_faltas: this.notificaciones.detalle_faltas });
         this.emitirEvento(this.retirosSubject, { avisos_retiro: this.notificaciones.avisos_retiro, detalle_avisos_retiro: this.notificaciones.detalle_avisos_retiro });
         this.emitirEvento(this.reunionesSubject, { rta_solicitudes_reunion: this.notificaciones.rta_solicitudes_reunion, detalle_rta_solicitudes_reunion: this.notificaciones.detalle_rta_solicitudes_reunion });
+      },
+      complete:()=>{
+        suscripcion.unsubscribe()
       }
     })
   }
@@ -98,10 +102,12 @@ export class NotificacionService {
   }
 
   marcarLeido(id_notificacion: number): void {
-    this.leido(id_notificacion).subscribe({
+    const leidoSus = this.leido(id_notificacion).subscribe({
       next: (respuesta) => {
-        console.log(respuesta)
         this.getNotificaciones()
+      },
+      complete:()=>{
+        leidoSus.unsubscribe()
       }
     });
   }

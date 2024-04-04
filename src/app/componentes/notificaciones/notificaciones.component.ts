@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { notificacion } from './notificacion';
 import { NotificacionService } from './notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 })
 export class NotificacionesComponent implements OnInit, OnDestroy{
 
-  notificaciones?:notificacion
-  private ngUnsubscribe = new Subject();
+  notificaciones$:Observable<notificacion | null> = of(null)
+  notificacionesSusripcion?:Subscription
 
 
   constructor(private notificacionService:NotificacionService,
@@ -24,19 +24,15 @@ export class NotificacionesComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete();
+    this.notificacionesSusripcion?.unsubscribe()
   }
 
   obtenerNotificaciones(){
-    this.notificacionService.obtenerNotificaciones()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-      next:(notificaciones)=>{
-        if(notificaciones)
-          this.notificaciones = notificaciones
-      }
-    })
+    this.notificacionesSusripcion = this.notificacionService.obtenerNotificaciones()
+      .pipe(
+        tap(notificaciones=>this.notificaciones$= of(notificaciones))
+      )
+      .subscribe()
   }
 
   navegarNotificacion(notificacion:string){

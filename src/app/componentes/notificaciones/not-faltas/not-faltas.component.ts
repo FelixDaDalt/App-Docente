@@ -4,7 +4,7 @@ import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { FechaService } from 'src/app/servicios/fecha.service';
 import { NotificacionService } from '../notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-not-faltas',
@@ -14,10 +14,9 @@ import { Subject, takeUntil } from 'rxjs';
 export class NotFaltasComponent implements OnInit,OnDestroy{
 
 
-  detalleFaltas:DetalleFalta[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
-
+  detallesFalta$:Observable<DetalleFalta[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionFalta?:Subscription
 
   constructor(private notificacionService:NotificacionService){
   }
@@ -27,21 +26,19 @@ export class NotFaltasComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionFalta?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerFaltas()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (faltasInfo) => {
-        if (faltasInfo) {
-          this.cantidad = faltasInfo.faltas;
-          this.detalleFaltas = faltasInfo.detalle_faltas;
-        }
-      }
-    });
+    this.suscripcionFalta = this.notificacionService.obtenerFaltas()
+      .pipe(
+        tap(faltaInfo=>{
+          this.cantidad$ = of(faltaInfo?.faltas || 0)
+          this.detallesFalta$ = of(faltaInfo?.detalle_faltas || [])
+        })
+      )
+    .subscribe();
   }
 
   marcarLeido(falta:DetalleFalta){

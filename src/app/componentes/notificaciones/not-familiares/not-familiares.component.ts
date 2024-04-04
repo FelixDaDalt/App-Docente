@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { DetalleFamiliar } from '../notificacion';
 import { NotificacionService } from '../notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-not-familiares',
@@ -9,12 +9,13 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./not-familiares.component.css']
 })
 export class NotFamiliaresComponent {
-  detalleFamiliar:DetalleFamiliar[]=[]
-  cantidad:number=0
-  private ngUnsubscribe=new Subject()
+
+
+  detallesFamiliar$:Observable<DetalleFamiliar[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionFamiliar?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-
   }
 
   ngOnInit(): void {
@@ -22,21 +23,19 @@ export class NotFamiliaresComponent {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionFamiliar?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerFamiliares()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (familiarInfo) => {
-        if (familiarInfo) {
-          this.cantidad = familiarInfo.familiares;
-          this.detalleFamiliar = familiarInfo.detalle_familiares;
-        }
-      }
-    });
+    this.suscripcionFamiliar = this.notificacionService.obtenerFamiliares()
+      .pipe(
+        tap(familiarInfo=>{
+          this.cantidad$ = of(familiarInfo?.familiares || 0)
+          this.detallesFamiliar$ = of(familiarInfo?.detalle_familiares || [])
+        })
+      )
+    .subscribe();
   }
 
   marcarLeido(familiar:DetalleFamiliar){

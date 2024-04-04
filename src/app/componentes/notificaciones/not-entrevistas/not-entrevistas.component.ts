@@ -5,7 +5,7 @@ import { NotificacionService } from '../notificacion.service';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatePipe } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 
 @Component({
@@ -15,13 +15,11 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NotEntrevistasComponent implements OnInit,OnDestroy {
 
-  detallesEntrevistas:DetalleEntrevista[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+  detallesEntrevista$:Observable<DetalleEntrevista[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionEntrevista?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-
-    this.obtenerNotificciones()
   }
 
   ngOnInit(): void {
@@ -29,21 +27,19 @@ export class NotEntrevistasComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionEntrevista?.unsubscribe()
   }
 
+
   private obtenerNotificciones(){
-    this.notificacionService.obtenerEntrevistas()
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (entrevistasInfo) => {
-        if (entrevistasInfo) {
-          this.cantidad = entrevistasInfo.entrevistas;
-          this.detallesEntrevistas = entrevistasInfo.detalle_entrevistas;
-        }
-      }
-    });
+    this.suscripcionEntrevista = this.notificacionService.obtenerEntrevistas()
+      .pipe(
+        tap(entrevistaInfo=>{
+          this.cantidad$ = of(entrevistaInfo?.entrevistas || 0)
+          this.detallesEntrevista$ = of(entrevistaInfo?.detalle_entrevistas || [])
+        })
+      )
+    .subscribe();
   }
 
   marcarLeido(entrevista:DetalleEntrevista){

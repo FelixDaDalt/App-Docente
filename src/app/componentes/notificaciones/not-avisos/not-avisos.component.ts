@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DetalleAviso } from '../notificacion';
 import { NotificacionService } from '../notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-not-avisos',
@@ -10,9 +10,9 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NotAvisosComponent implements OnInit,OnDestroy{
 
-  detallesAvisos:DetalleAviso[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+  detallesAvisos$:Observable<DetalleAviso[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionAvisos?:Subscription
 
   constructor(private notificacionService:NotificacionService){
   }
@@ -22,22 +22,19 @@ export class NotAvisosComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionAvisos?.unsubscribe()
   }
 
 
   private obtenerNotificciones(){
-    this.notificacionService.obtenerAvisos()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-      next: (avisosInfo) => {
-        if (avisosInfo) {
-          this.cantidad = avisosInfo.avisos;
-          this.detallesAvisos = avisosInfo.detalle_avisos;
-        }
-      }
-    });
+    this.suscripcionAvisos = this.notificacionService.obtenerAvisos()
+      .pipe(
+        tap(avisosInfo=>{
+          this.cantidad$ = of(avisosInfo?.avisos || 0)
+          this.detallesAvisos$ = of(avisosInfo?.detalle_avisos || [])
+        })
+      )
+      .subscribe();
   }
 
   marcarLeido(aviso:DetalleAviso){

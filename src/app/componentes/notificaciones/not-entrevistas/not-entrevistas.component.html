@@ -1,13 +1,13 @@
 <div id="appCapsule">
 
   <app-titulo>
-    <p titulo>Entrevistas sin leer: {{cantidad?cantidad:0}}</p>
+    <p titulo>Entrevistas sin leer: {{cantidad$ | async}}</p>
   </app-titulo>
 
   <div class="section inset mt-2">
 
-    <div class="accordion" id="accordionExample2" *ngIf="detallesEntrevistas.length>0; else nada">
-      <div *ngFor="let entrevista of detallesEntrevistas; let i = index"
+    <div class="accordion" id="accordionExample2" *ngIf="(detallesEntrevista$ | async)!.length>0; else nada">
+      <div *ngFor="let entrevista of (detallesEntrevista$ | async); let i = index"
       [ngClass]="{'accordion-item': true, 'accordion-item-noleido': entrevista.leido === 0 }">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"

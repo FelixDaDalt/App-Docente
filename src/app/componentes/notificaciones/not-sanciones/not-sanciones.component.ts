@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DetalleSancion } from '../notificacion';
 import { NotificacionService } from '../notificacion.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, of, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-not-sanciones',
@@ -9,12 +9,11 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./not-sanciones.component.css']
 })
 export class NotSancionesComponent implements OnInit,OnDestroy{
-  detalleSanciones:DetalleSancion[]=[]
-  cantidad:number=0
-  private ngUnsubscribe = new Subject();
+   detallesSancion$:Observable<DetalleSancion[]>=of([])
+  cantidad$:Observable<number> = of(0)
+  suscripcionSancion?:Subscription
 
   constructor(private notificacionService:NotificacionService){
-
   }
 
   ngOnInit(): void {
@@ -22,26 +21,24 @@ export class NotSancionesComponent implements OnInit,OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.ngUnsubscribe.next(null)
-    this.ngUnsubscribe.complete()
+    this.suscripcionSancion?.unsubscribe()
   }
+
 
   private obtenerNotificciones(){
-    this.notificacionService.obtenerSanciones()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-      next: (sancionesInfo) => {
-        if (sancionesInfo) {
-          this.cantidad = sancionesInfo.sanciones;
-          this.detalleSanciones = sancionesInfo.detalle_sanciones;
-        }
-      }
-    });
+    this.suscripcionSancion = this.notificacionService.obtenerSanciones()
+      .pipe(
+        tap(reunionInfo=>{
+          this.cantidad$ = of(reunionInfo?.sanciones || 0)
+          this.detallesSancion$ = of(reunionInfo?.detalle_sanciones || [])
+        })
+      )
+    .subscribe();
   }
 
-  marcarLeido(sancion:DetalleSancion){
-    if(sancion.leido===0){
-      this.notificacionService.marcarLeido(sancion.id)
+  marcarLeido(reunion:DetalleSancion){
+    if(reunion.leido===0){
+      this.notificacionService.marcarLeido(reunion.id)
     }
   }
 }
