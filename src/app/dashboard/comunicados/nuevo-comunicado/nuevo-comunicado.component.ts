@@ -180,9 +180,6 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
         next: (respuesta) => {
           this.route.navigate(['dashboard','comunicados','comunicados-enviados']);
          },
-        error: (error) => {
-           console.error('Error al enviar el comunicado', error);
-        },
         complete:() => {
           envioSuscripcion.unsubscribe()
         },

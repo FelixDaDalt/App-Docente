@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { comunicado_destinatario, comunicado_destinatario_alumno } from '../../../dashboard/comunicados/comunicado';
-import { Subject, map, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, map, of, takeUntil, tap } from 'rxjs';
 import { ComunicadosService } from '../../../dashboard/comunicados/comunicados.service';
 import { Router } from '@angular/router';
 import { nueva_Reunion } from '../reunion';
 import { ReunionesService } from '../reuniones.service';
 import { NotificacionService } from 'src/app/otros/notificacion-popup/notificacionpopup.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -14,59 +15,68 @@ import { NotificacionService } from 'src/app/otros/notificacion-popup/notificaci
   styleUrls: ['./nueva-reunion.component.css']
 })
 export class NuevaReunionComponent implements OnInit{
-  listaComunicadoDestinatarios:comunicado_destinatario[]=[]
+
+  destinatarios$:Observable<comunicado_destinatario[]>=of([])
+  suscripcionDestinatarios?:Subscription
+  suscripcionTextoPredeterminado?:Subscription
+
   grupoSeleccionado!:comunicado_destinatario
-
-  destinatariosSeleccionado?:comunicado_destinatario_alumno
   acordeonAbierto = true;
-  mensaje?:string
 
-  private ngUnsuscribe=new Subject()
+  formulario!: FormGroup;
 
   constructor(private comunicadosService:ComunicadosService,
     private reunionesService:ReunionesService,
-    private notificacionService:NotificacionService,
+    private fb: FormBuilder,
     private route:Router){
 
   }
 
   ngOnInit(): void {
-    this.obtenerDestinatarios()
-    this.getTextoPrederminado()
+    this.formGroup()
+    this.suscripcionDestinatarios = this.obtenerDestinatarios().subscribe()
+    this.suscripcionTextoPredeterminado = this.obtenerTextoPrederminado().subscribe()
   }
 
   ngOnDestroy(): void {
-    this.ngUnsuscribe.next(null)
-    this.ngUnsuscribe.complete()
+   this.suscripcionDestinatarios?.unsubscribe()
+   this.suscripcionTextoPredeterminado?.unsubscribe()
   }
 
-  private getTextoPrederminado(){
-    this.reunionesService.getTextoPredeterminado().
+  private formGroup(){
+    this.formulario = this.fb.group({
+      titulo: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      fecha: ['', Validators.required],
+      hora: ['', Validators.required],
+      id_destinatario: ['', Validators.required],
+    });
+  }
+
+  formControls(nombre:string) {
+    return this.formulario.controls[nombre] as FormControl
+  }
+
+  private obtenerTextoPrederminado(){
+    return this.reunionesService.getTextoPredeterminado().
     pipe(
-      map(texto => this.decodificarHTML(texto)
+      tap(texto => this.decodificarHTML(texto)
       )
-    ).subscribe({
-      next:(texto)=>{
-        this.mensaje = texto
-      }
-    })
+    )
   }
 
   obtenerDestinatarios(){
-    this.comunicadosService.obtenerDestinatarios()
-    .pipe(takeUntil(this.ngUnsuscribe))
-    .subscribe({
-      next:(respuesta)=>{
-        this.listaComunicadoDestinatarios = respuesta
-      }
-    })
+   return this.comunicadosService.obtenerDestinatarios()
+    .pipe(
+      tap(destinatarios => this.destinatarios$ = of(destinatarios))
+    )
   }
 
 
   decodificarHTML(textoCodificado: string) {
     const textarea = document.createElement('textarea');
     textarea.innerHTML = textoCodificado;
-    return textarea.value;
+    this.formControls('descripcion').setValue(textarea.value)
   }
 
 
@@ -74,49 +84,72 @@ export class NuevaReunionComponent implements OnInit{
     this.acordeonAbierto = !this.acordeonAbierto;
   }
 
-  enviar(titulo: string, fecha:string, hora:string) {
-    const hayDestinatarios = this.destinatariosSeleccionado
-    const tituloNoVacio = titulo.trim() !== '';
-    const fechaNoVacio = fecha.trim() !== '';
-    const horaNoVacio = hora.trim() !== '';
-    const mensajeNoVacio = this.mensaje?.trim() !== '';
-
-    if (hayDestinatarios && tituloNoVacio && mensajeNoVacio && fechaNoVacio && horaNoVacio) {
-      const nuevaReunion = new nueva_Reunion(titulo,this.mensaje!,fecha,hora,this.destinatariosSeleccionado!.id_alumno)
-
-      this.reunionesService.enviarReunion(nuevaReunion)
-        .pipe(takeUntil(this.ngUnsuscribe))
+  enviar() {
+    if(!this.formulario.valid){
+      this.formulario.markAllAsTouched()
+    }else{
+     const suscripcionEnvio = this.reunionesService.enviarReunion(this.formulario.value)
         .subscribe({
-          next: (respuesta) => {
+          next: () => {
             this.route.navigate(['dashboard','reuniones']);
           },
-          error: (error) => {
-            this.notificacionService.establecerNotificacion('Error', 'Error al enviar solicitud');
+          complete:()=>{
+            suscripcionEnvio.unsubscribe()
           }
         });
-
-    } else {
-      this.notificacionService.establecerNotificacion('Error', 'Error al enviar solicitud');
     }
   }
 
   capturarTexto(event:any): void {
     const textoEditado = event.target.innerHTML;
-    this.mensaje = textoEditado
+    this.formControls('descripcion').setValue(textoEditado)
   }
 
+  private horaSeleccionada:string | null = null
   seleccionHora(hora:string){
-    const regex = /HH:MM/g; // Expresión regular para buscar 'HH:MM'
-    this.mensaje = this.mensaje?.replace(regex,hora);
+    let mensaje:string=""
+    const texto = this.formControls('descripcion').value
+    if(this.horaSeleccionada==null){
+      const regex = /HH:MM/g; // Expresión regular para buscar 'HH:MM'
+      mensaje = texto?.replace(regex,hora);
+    }else{
+      const regex = new RegExp(`\\b${this.horaSeleccionada}\\b`, 'g');
+      mensaje = texto?.replace(regex,hora);
+    }
+    this.horaSeleccionada = hora
+    this.formControls('descripcion').setValue(mensaje)
   }
 
+
+  private fechaSeleccionada:string|null = null
   seleccionFecha(fecha:string){
-    const regex = /DD\/MM\/AAAA/g; // Expresión regular para buscar 'HH:MM'
-    this.mensaje = this.mensaje?.replace(regex,fecha);
+    let mensaje:string=""
+    const texto = this.formControls('descripcion').value
+    if(this.fechaSeleccionada==null){
+      const regex = /DD\/MM\/AAAA/g; // Expresión regular para buscar 'HH:MM'
+      mensaje = texto?.replace(regex,fecha);
+    }else{
+      const regex = new RegExp(`\\b${this.fechaSeleccionada}\\b`, 'g');
+      mensaje = texto?.replace(regex,fecha);
+    }
+    this.fechaSeleccionada = fecha
+    this.formControls('descripcion').setValue(mensaje)
   }
 
-  seleccionEstudiante(){
-    const regex = /ZZZ/g; // Expresión regular para buscar 'HH:MM'
-    this.mensaje = this.mensaje?.replace(regex,this.destinatariosSeleccionado!.alumno);
+  private alumnoSeleccionado:comunicado_destinatario_alumno | null = null
+  seleccionEstudiante(alumno:comunicado_destinatario_alumno){
+    let mensaje:string=""
+    const texto = this.formControls('descripcion').value
+    if(this.alumnoSeleccionado==null)
+    {
+      const regex = /ZZZ/g;
+      mensaje = texto?.replace(regex,alumno.alumno);
+    }else{
+      const regex = new RegExp(`\\b${this.alumnoSeleccionado.alumno}\\b`, 'g');
+      mensaje = texto?.replace(regex,alumno.alumno);
+    }
+    this.alumnoSeleccionado = alumno
+    this.formControls('descripcion').setValue(mensaje)
+    this.formControls('id_destinatario').setValue(alumno.id_alumno)
   }
 }

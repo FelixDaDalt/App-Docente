@@ -4,15 +4,16 @@
       <div class="modal-icon">
         <ion-icon name="information-circle-outline" role="img" class="md hydrated" aria-label="bluetooth outline"></ion-icon>
       </div>
+      <form  [formGroup]="formulario" (ngSubmit)="reprogramar()">
       <div class="modal-body" >
-        <form  enctype="multipart/form-data">
-        <!-- inicio alumnos buscados -->
-        <div class="section inset mt-2">
-            <div class="section full">
-              Reprogramar Reunion de: {{reunion?.alumno}}
-              <div class="small text-muted">Fecha: {{reunion?.propuesta_reunion}}</div>
-            </div>
-        </div>
+
+          <!-- inicio alumnos buscados -->
+          <div class="section inset mt-2">
+              <div class="section full">
+                Reprogramar Reunion de: {{reunion.alumno}}
+                <div class="small text-muted">Fecha: {{reunion.propuesta_reunion}}</div>
+              </div>
+          </div>
 
 
 
@@ -24,19 +25,21 @@
                             <div class="input-wrapper">
                                 <label class="form-label">Titulo de la Reunion</label>
                                 <input type="texto" class="form-control" id="titulo" name="titulo" placeholder=""
-                                    autocomplete="off" [(ngModel)]="reunion!.titulo" #titulo>
+                                    autocomplete="off" formControlName="titulo">
 
                             </div>
+                            <app-error-formularios [control]="formControls('titulo')" fieldName="Titulo"></app-error-formularios>
                         </div>
 
                         <div class="form-group boxed">
                             <div class="input-wrapper">
                                 <label class="form-label" for="message" ></label>
-                                <div class="form-control-mensaje" contenteditable="true" [innerHTML]="mensaje" (input)="capturarTexto($event)"></div>
+                                <div class="form-control-mensaje" contenteditable="true" [innerHTML]="this.formControls('descripcion').value" (input)="capturarTexto($event)"></div>
                                 <i class="clear-input">
                                     <ion-icon name="close-circle"></ion-icon>
                                 </i>
                             </div>
+                            <app-error-formularios [control]="formControls('descripcion')" fieldName="Descripcion"></app-error-formularios>
                         </div>
 
                         <div class="row">
@@ -45,8 +48,9 @@
                               <div class="input-wrapper">
                                   <label class="form-label">Nueva Fecha</label>
                                   <input type="date" class="form-control" id="fecha" name="fecha" placeholder=""
-                                      autocomplete="off" #fecha>
+                                      autocomplete="off" formControlName="fecha" #fecha (change)="seleccionFecha(fecha.value)">
                               </div>
+                              <app-error-formularios [control]="formControls('fecha')" fieldName="Fecha" ></app-error-formularios>
                             </div>
                           </div>
 
@@ -55,8 +59,9 @@
                               <div class="input-wrapper">
                                   <label class="form-label">Nueva hora</label>
                                   <input type="time" class="form-control" id="hora" name="hora" placeholder=""
-                                      autocomplete="off" #hora>
+                                      autocomplete="off" formControlName="hora" #hora (change)="seleccionHora(hora.value)">
                               </div>
+                              <app-error-formularios [control]="formControls('hora')" fieldName="Hora"></app-error-formularios>
                             </div>
                           </div>
                         </div>
@@ -69,14 +74,15 @@
       <!-- inicio Boton -->
 
 
-      </form>
+
       </div>
       <div class="modal-footer">
         <div class="btn-inline">
-          <a class="btn btn-text-primary" (click)="reprogramar(titulo.value,fecha.value,hora.value)">Enviar</a>
-          <a class="btn btn-text-secondary" (click)="activeModal.close()">CERRAR</a>
+          <button class="btn btn-text-primary" type="submit">Enviar</button>
+          <button class="btn btn-text-secondary" (click)="activeModal.close()">CERRAR</button>
         </div>
       </div>
+    </form>
     </div>
   </div>
 </div>

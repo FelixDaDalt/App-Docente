@@ -1,7 +1,7 @@
 import { ReunionesService } from './reuniones.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { reunion } from './reunion';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReagendarReunionComponent } from './reagendar-reunion/reagendar-reunion.component';
 
@@ -12,7 +12,7 @@ import { ReagendarReunionComponent } from './reagendar-reunion/reagendar-reunion
 })
 export class ReunionesComponent implements OnInit, OnDestroy{
 
-  reuniones?:reunion[]
+  reuniones$:Observable<reunion[]>=of([])
   suscripcionReuniones?:Subscription
 
   constructor(private reunionesService:ReunionesService, private modalService:NgbModal){
@@ -20,23 +20,18 @@ export class ReunionesComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    if(this.suscripcionReuniones)
-      this.suscripcionReuniones.unsubscribe()
+      this.suscripcionReuniones?.unsubscribe()
   }
 
   ngOnInit(): void {
-    this.getReuniones()
+    this.suscripcionReuniones = this.obtenerReuniones().subscribe()
   }
 
-  getReuniones(){
-    if(this.suscripcionReuniones)
-      this.suscripcionReuniones.unsubscribe()
-
-    this.suscripcionReuniones = this.reunionesService.obtenerReuniones().subscribe({
-      next:(reuniones)=>{
-        this.reuniones = reuniones
-      }
-    })
+  obtenerReuniones(){
+    return this.reunionesService.obtenerReuniones()
+    .pipe(
+      tap(reuniones => this.reuniones$ = of(reuniones))
+    )
   }
 
   decodeHtml(html: string): string {
