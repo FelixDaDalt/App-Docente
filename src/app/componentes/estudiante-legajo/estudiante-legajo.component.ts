@@ -1,7 +1,8 @@
 import { EstudianteLegajoService } from './estudiante-legajo.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { academico, legajoAlumno } from './legajo';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-estudiante-legajo',
@@ -10,16 +11,16 @@ import { Subscription } from 'rxjs';
 })
 export class EstudianteLegajoComponent implements OnInit,OnDestroy{
 
-  estudianteLegajo?:legajoAlumno
+  estudianteLegajo$:Observable<legajoAlumno | null>=of(null)
   private legajoSubscription?: Subscription;
-  academicoSeleccionado?:academico
 
-  constructor(private legajoService:EstudianteLegajoService){
+  constructor(private legajoService:EstudianteLegajoService,
+    private route:Router){
 
   }
 
   ngOnInit(): void {
-    this.obtenerLegajo()
+    this.legajoSubscription = this.obtenerLegajo().subscribe()
   }
 
   ngOnDestroy(): void {
@@ -27,18 +28,11 @@ export class EstudianteLegajoComponent implements OnInit,OnDestroy{
   }
 
   private obtenerLegajo(){
-
-    if(this.legajoSubscription){
-      this.legajoSubscription.unsubscribe()
-    }
-
-    this.legajoSubscription = this.legajoService.suscripcionLegajo().subscribe({
-      next:(legajo)=>{
-        if(legajo){
-          this.estudianteLegajo = legajo
-        }
-      }
-    })
+    return this.legajoService.suscripcionLegajo().pipe(
+      tap(legajo=>{
+          this.estudianteLegajo$ = of(legajo)
+      })
+    )
   }
 
   calcularEdad(birthDateString: string): number {

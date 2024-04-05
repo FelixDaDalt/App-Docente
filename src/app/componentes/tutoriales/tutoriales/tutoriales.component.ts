@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TutorialesService } from '../tutoriales.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, of, tap } from 'rxjs';
 import { tutoriales } from '../tutoriales';
 
 @Component({
@@ -8,19 +8,29 @@ import { tutoriales } from '../tutoriales';
   templateUrl: './tutoriales.component.html',
   styleUrls: ['./tutoriales.component.css']
 })
-export class TutorialesComponent implements OnInit{
+export class TutorialesComponent implements OnInit, OnDestroy{
 
-  tutoriales$?:Observable<tutoriales[]>
+  tutoriales$:Observable<tutoriales[]> = of([])
   videoSource?:string = 'https://youtu.be/_3A_AYF0dUE?si=TLIB8C062udSXoUq'
+  tutorialesSuscripcion?:Subscription
 
   @ViewChild('videoPlayer') videoPlayerRef!: ElementRef;
 
   constructor(private tutorialesService:TutorialesService){
 
   }
+  ngOnDestroy(): void {
+    this.tutorialesSuscripcion?.unsubscribe()
+  }
 
   ngOnInit(): void {
-    this.tutoriales$ = this.tutorialesService.obtenerTutoriales()
+    this.tutorialesSuscripcion = this.obtenerTutoriales().subscribe()
+  }
+
+  private obtenerTutoriales(){
+    return this.tutorialesService.obtenerTutoriales().pipe(
+      tap(tutoriales => this.tutoriales$ = of(tutoriales))
+    )
   }
 
   verVideo(enlace:string){

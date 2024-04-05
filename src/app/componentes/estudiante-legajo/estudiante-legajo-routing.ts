@@ -8,7 +8,6 @@ const LegajoRoutes: Routes = [
     path: '',
     component: EstudianteLegajoComponent,
   },
-
 ];
 
 @NgModule({

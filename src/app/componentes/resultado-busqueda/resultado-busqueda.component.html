@@ -7,7 +7,8 @@
   </div>
 
   <ul class="listview image-listview media search-result mb-2">
-      <li *ngFor="let alumno of resultadoBusqueda">
+      <ng-container *ngIf="(resultadoBusqueda$ | async)?.length!=0; else nada">
+      <li *ngFor="let alumno of resultadoBusqueda$ | async">
           <a (click)="verEstudiante(alumno)" class="item">
               <div class="imageWrapper">
                   <img src="{{alumno.avatar_url}}" alt="image" class="imaged w64">
@@ -23,6 +24,14 @@
               </div>
           </a>
       </li>
+      </ng-container>
+      <ng-template #nada>
+        <li>
+          <div class="item">
+            No existen resultados para el termino buscado
+          </div>
+        </li>
+      </ng-template>
   </ul>
 
 </div>

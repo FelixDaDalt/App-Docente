@@ -5,11 +5,11 @@
   <div class="section mt-2">
       <div class="profile-head">
           <div class="avatar">
-              <img [src]="estudianteLegajo?.alumno?.avatar_url" alt="avatar" class="imaged w64 rounded">
+              <img [src]="(estudianteLegajo$ | async)?.alumno?.avatar_url" alt="avatar" class="imaged w64 rounded">
           </div>
           <div class="in">
-              <h3 class="name">{{estudianteLegajo?.alumno?.apellido}}, {{estudianteLegajo?.alumno?.nombre}}</h3>
-              <h5 class="subtext">{{estudianteLegajo?.alumno?.curso}}</h5>
+              <h3 class="name">{{(estudianteLegajo$ | async)?.alumno?.apellido}}, {{(estudianteLegajo$ | async)?.alumno?.nombre}}</h3>
+              <h5 class="subtext">{{(estudianteLegajo$ | async)?.alumno?.curso}}</h5>
           </div>
       </div>
   </div>
@@ -20,19 +20,19 @@
       <div class="profile-stats ps-2 pe-2">
           <a class="item">
               <h5 class="subtext">DNI</h5>
-              <strong>{{estudianteLegajo?.alumno?.dni}}</strong>
+              <strong>{{(estudianteLegajo$ | async)?.alumno?.dni}}</strong>
           </a>
           <a class="item">
               <h5 class="subtext">EDAD</h5>
-              <strong>{{calcularEdad(estudianteLegajo?.alumno?.fecha_nacimiento!)}}</strong>
+              <strong>{{calcularEdad((estudianteLegajo$ | async)?.alumno?.fecha_nacimiento!)}}</strong>
           </a>
           <a class="item">
               <h5 class="subtext">INASISTENCIAS</h5>
-              <strong>{{estudianteLegajo?.inasistencia?.total_faltas}}</strong>
+              <strong>{{(estudianteLegajo$ | async)?.inasistencia?.total_faltas}}</strong>
           </a>
           <a class="item">
               <h5 class="subtext">MATRIZ</h5>
-              <strong>{{estudianteLegajo?.alumno?.libro_folio || 'S/I'}}</strong>
+              <strong>{{(estudianteLegajo$ | async)?.alumno?.libro_folio || 'S/I'}}</strong>
           </a>
       </div>
   </div>
@@ -48,7 +48,7 @@
   <div class="section inset mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
     <strong class="pb-2">AUTORIZACION DE RETIRO</strong>
     <div class="wide-block pt-2 pb-2" style="max-height: 200px; overflow-y: auto;">
-        <div *ngFor="let autorizado of estudianteLegajo?.alumno?.autorizaciones_retiro">
+        <div *ngFor="let autorizado of (estudianteLegajo$ | async)?.alumno?.autorizaciones_retiro">
             <h4 class="subtext">{{autorizado.apellido}}, {{autorizado.nombre}} - Dni: {{autorizado.dni}} - <i>"{{autorizado.vinculo}}"    </i> <span class="badge bg-warning" *ngIf="autorizado.temporal == 1">TEMPORAL</span></h4>
 
         </div>
@@ -94,26 +94,26 @@
 
           <!-- Inasistencias -->
           <div class="tab-pane fade show active table-responsive" id="inasistencia" role="tabpanel">
-              <app-estudiante-legajo-inasistencia [inasistencia]="estudianteLegajo?.inasistencia"></app-estudiante-legajo-inasistencia>
+              <app-estudiante-legajo-inasistencia [inasistencia]="(estudianteLegajo$ | async)?.inasistencia"></app-estudiante-legajo-inasistencia>
           </div>
           <!-- * fin de inasistencia -->
 
           <!--  Academico -->
           <!-- formato 1 de academico -->
           <div class="tab-pane fade table-responsive" id="academico" role="tabpanel">
-              <app-estudiante-legajo-academico [academicos]="estudianteLegajo?.academico"></app-estudiante-legajo-academico>
+              <app-estudiante-legajo-academico [academicos]="(estudianteLegajo$ | async)?.academico"></app-estudiante-legajo-academico>
           </div>
           <!-- * Fin Academico -->
 
           <!-- Legajo -->
           <div class="tab-pane fade table-responsive" id="legajo" role="tabpanel">
-              <app-estudiante-legajo-legajo [legajo]="estudianteLegajo?.legajo"></app-estudiante-legajo-legajo>
+              <app-estudiante-legajo-legajo [legajo]="(estudianteLegajo$ | async)?.legajo"></app-estudiante-legajo-legajo>
           </div>
           <!-- * Fin de legajo -->
 
           <!-- Informacion -->
           <div class="tab-pane fade table-responsive" id="informacion" role="tabpanel">
-              <app-estudiante-legajo-informacion [alumno]="estudianteLegajo?.alumno"></app-estudiante-legajo-informacion>
+              <app-estudiante-legajo-informacion [alumno]="(estudianteLegajo$ | async)?.alumno"></app-estudiante-legajo-informacion>
           </div>
           <!-- * Fin de informacion -->
 

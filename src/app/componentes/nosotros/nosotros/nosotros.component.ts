@@ -4,6 +4,7 @@ import { HomeService } from '../../home/home.service';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { Observable } from 'rxjs';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
+import { LoginService } from 'src/app/servicios/login.service';
 
 @Component({
   selector: 'app-nosotros',
@@ -20,7 +21,8 @@ export class NosotrosComponent {
   motivos?:string
 
   constructor(private DatosUsuarioService:DatosUsuarioService,
-    private homeService:HomeService){
+    private homeService:HomeService,
+    private loginService:LoginService){
     this.obtenerDatos()
     this.version = environment.version
     this.copyrigth = environment.copyrigth
@@ -31,7 +33,6 @@ export class NosotrosComponent {
 
   obtenerDatos(){
     this.usuarioDatos = this.DatosUsuarioService.obtenerDatos()
-    this.usuarioDatos.subscribe(data => console.log(data));
   }
 
   darseBaja(){
@@ -43,6 +44,10 @@ export class NosotrosComponent {
   }
 
   aceptarBaja(){
-    this.homeService.draseBaja(this.motivos)
+    this.homeService.draseBaja(this.motivos).subscribe({
+      next:()=>{
+        this.loginService.logout()
+      }
+    })
   }
 }

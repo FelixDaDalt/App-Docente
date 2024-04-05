@@ -1,7 +1,6 @@
-import { Component,HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component,HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { resultadoBusqueda } from 'src/app/componentes/home/home';
 import { HomeService } from 'src/app/componentes/home/home.service';
 
 @Component({
@@ -9,22 +8,12 @@ import { HomeService } from 'src/app/componentes/home/home.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnDestroy{
+export class HeaderComponent{
   isSearchVisible = false;
   isHeaderActive: boolean = true;
-
-
-  private busquedaSubscription?: Subscription;
   terminoBusqueda:string=""
 
-  constructor(private homeService:HomeService, private route:Router){
-
-  }
-
-
-  ngOnDestroy(): void {
-    this.busquedaSubscription?.unsubscribe()
-  }
+  constructor(private homeService:HomeService, private route:Router){}
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event): void {
@@ -33,35 +22,23 @@ export class HeaderComponent implements OnDestroy{
   }
 
   toggleSearch() {
-    this.isSearchVisible = !this.isSearchVisible;
-    if (this.isSearchVisible) {
-      this.suscripcionBusqueda();
+    if (!this.isSearchVisible) {
+
+      this.isSearchVisible = true;
+
     } else {
-      this.desuscribirBusqueda();
+
+      this.isSearchVisible = false;
+
     }
   }
 
-
-  private suscripcionBusqueda(){
-    this.busquedaSubscription = this.homeService.suscripcionBusqueda().subscribe({
-      next:(resultado)=>{
-        if(resultado.length>0){
-          this.toggleSearch()
-          this.route.navigate(['dashboard','resultado', this.terminoBusqueda]);
-        }
-
-      }
-    })
-  }
-
-  private desuscribirBusqueda() {
-    if (this.busquedaSubscription) {
-      this.busquedaSubscription.unsubscribe();
-    }
-  }
 
   buscar(){
     this.homeService.buscarAlumno(this.terminoBusqueda)
+    this.terminoBusqueda=""
+    this.toggleSearch()
+    this.route.navigate(['dashboard','resultado', this.terminoBusqueda]);
   }
 
 }

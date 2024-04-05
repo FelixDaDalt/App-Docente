@@ -70,7 +70,7 @@ export class EstudianteLegajoService {
         );
     }
 
-    public getDatos(): void {
+    private getDatos(): void {
       forkJoin({
         inasistencias: this.getInasistencias(),
         registros: this.getRegistros(),

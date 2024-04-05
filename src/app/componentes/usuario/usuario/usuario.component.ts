@@ -3,6 +3,7 @@ import { usuarioDatos } from './../../../modelos/usuarioDatos';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HomeService } from '../../home/home.service';
+import { LoginService } from 'src/app/servicios/login.service';
 
 @Component({
   selector: 'app-usuario',
@@ -17,14 +18,13 @@ export class UsuarioComponent {
   motivos?:string
 
   constructor(private DatosUsuarioService:DatosUsuarioService,
-    private homeService:HomeService){
+    private homeService:HomeService,
+    private loginService:LoginService){
     this.obtenerDatos()
-
   }
 
   obtenerDatos(){
     this.usuarioDatos = this.DatosUsuarioService.obtenerDatos()
-    this.usuarioDatos.subscribe(data => console.log(data));
   }
 
   darseBaja(){
@@ -36,6 +36,10 @@ export class UsuarioComponent {
   }
 
   aceptarBaja(){
-    this.homeService.draseBaja(this.motivos)
+    this.homeService.draseBaja(this.motivos).subscribe({
+      next:()=>{
+        this.loginService.logout()
+      }
+    })
   }
 }

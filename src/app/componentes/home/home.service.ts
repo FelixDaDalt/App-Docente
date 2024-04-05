@@ -19,8 +19,8 @@ export class HomeService {
   private homeSubject = new BehaviorSubject<home | null>(null);
   private notificacionHomeSubject = new BehaviorSubject<notificacionHome | null>(null);
   private homeDatos:home
-  private searchAlumno$ = new Subject<resultadoBusqueda[]>()
-  private resultadoBusqueda:resultadoBusqueda[]=[]
+
+  private resultadoBusqueda$= new BehaviorSubject<resultadoBusqueda[]>([]);
   private Alumnos$ = new Subject<alumno[]>()
   private Alumnos:alumno[]=[]
   private materias$ = new BehaviorSubject<materias[] | []>([]);
@@ -33,8 +33,7 @@ export class HomeService {
 
   constructor(private http: HttpClient,
     private datosUsuarioService:DatosUsuarioService,
-    private notificacionService:NotificacionService,
-    private loginService:LoginService)
+    private notificacionService:NotificacionService)
     {
       this.homeDatos = new home()
       this.obtenerDatosUsuario()
@@ -136,31 +135,27 @@ export class HomeService {
   }
 
 
-
+  //Ok
   private searchAlumno(termino:string){
     this.http.get<{ data: any }>(`${this.apiUrl}/search_alumno/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, busqueda:termino }}).subscribe({
       next:(respuesta)=>{
-        this.resultadoBusqueda = respuesta.data
-        this.emitirResultado(this.resultadoBusqueda)
+        this.resultadoBusqueda$.next(respuesta.data)
       }
     })
   }
 
-  private emitirResultado(resultado:resultadoBusqueda[]) {
-    this.searchAlumno$.next(resultado)
-  }
 
+  //Ok
   suscripcionBusqueda(){
-    return this.searchAlumno$.asObservable()
+    return this.resultadoBusqueda$.asObservable()
   }
 
+  //Ok
   buscarAlumno(termino:string){
     this.searchAlumno(termino)
   }
 
-  obtenerBusqueda(){
-    this.emitirResultado(this.resultadoBusqueda)
-  }
+
 
   private getAlumnos(idMateria:number, tipo_materia:string){
     this.http.get<{ data: any }>(`${this.alumnoUrl}/lista_alumnos/${this.usuarioDatos.ID_Institucion}`, {params: { id_materia: idMateria, tipo_materia:tipo_materia, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol, id_usuario:this.usuarioDatos.ID_Usuario_Interno }}).subscribe({
@@ -183,12 +178,9 @@ export class HomeService {
     this.getAlumnos(idMateria, tipo_materia)
   }
 
+  //OK
   draseBaja(motivos?:string){
-     this.http.post<{ data: any }>(`${this.apiUrl}/baja_usuario/${this.usuarioDatos.ID_Usuario_Interno}`, {motivos:motivos}).subscribe({
-      next:(respuesta)=>{
-        this.loginService.logout()
-      }
-    })
+     return this.http.post<{ data: any }>(`${this.apiUrl}/baja_usuario/${this.usuarioDatos.ID_Usuario_Interno}`, {motivos:motivos})
   }
 
 }

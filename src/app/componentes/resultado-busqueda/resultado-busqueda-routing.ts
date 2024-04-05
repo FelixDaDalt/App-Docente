@@ -8,8 +8,7 @@ const BusquedaRoutes: Routes = [
     path: ':termino',
     component: ResultadoBusquedaComponent,
     loadChildren: () => import('../estudiante-legajo/estudiante-legajo.module').then(m => m.EstudianteLegajoModule)
-  },
-
+  }
 ];
 
 @NgModule({
