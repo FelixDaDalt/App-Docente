@@ -38,8 +38,8 @@
 
                 </h2>
                 <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(comunicado)">
-                    <div class="accordion-body">
-                        <div class="row">
+                     <div class="accordion-body" style="text-align: left;">
+                        <div class="row"  style="text-align: left;">
                             <div class="col-md-12" [innerHTML]="decodeHtml(comunicado.descripcion)"></div>
                             <div class="col-md-12" *ngIf="comunicado.adjunto_url">
                               <hr>

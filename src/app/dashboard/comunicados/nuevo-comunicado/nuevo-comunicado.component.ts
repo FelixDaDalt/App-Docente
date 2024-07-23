@@ -137,54 +137,47 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
 
 
   seleccionarTodo() {
-    const arrDestinatariosControl = this.formControls('arr_destinatarios');
-    // Verificar si el grupo seleccionado ya está en DestinatariosSeleccionados
-    const grupoEnDestinatarios = this.destinatariosSeleccionados.find(
-      (grupo) => grupo.nombre_grupo === this.grupoSeleccionado.nombre_grupo
+    const grupoSeleccionado = this.grupoSeleccionado;
+    const destinatariosSeleccionados = this.destinatariosSeleccionados;
+
+    const grupoEnDestinatarios = destinatariosSeleccionados.find(
+      (grupo) => grupo.nombre_grupo === grupoSeleccionado.nombre_grupo
     );
 
-    // Si el grupo no está en DestinatariosSeleccionados, agrégalo
     if (!grupoEnDestinatarios) {
-      const nuevoGrupo = { ...this.grupoSeleccionado };
-      nuevoGrupo.destinatarios = [...this.grupoSeleccionado.destinatarios]; // Clonar la lista de destinatarios
-      this.destinatariosSeleccionados.push(nuevoGrupo);
+      const nuevoGrupo = Object.assign({}, grupoSeleccionado);
+      nuevoGrupo.destinatarios = [...grupoSeleccionado.destinatarios];
+      destinatariosSeleccionados.push(nuevoGrupo);
 
+      const arrDestinatariosControl = this.formControls('arr_destinatarios');
+      const nuevosDestinatarios = nuevoGrupo.destinatarios.filter((nuevoDestinatario) => {
+        return !arrDestinatariosControl.value.some((destinatarioExistente:any) => destinatarioExistente.id_alumno === nuevoDestinatario.id_alumno);
+      });
+
+      const nuevosDestinatariosFormateados = nuevosDestinatarios.map((alumno) => {
+        return { id_destinatario: alumno.id_alumno, tipo_destinatario: 1 };
+      });
+
+      arrDestinatariosControl.patchValue([...arrDestinatariosControl.value, ...nuevosDestinatariosFormateados]);
     }
 
-    // Obtener la lista de alumnos seleccionados en el grupo actual
-    const alumnosSeleccionados = this.grupoSeleccionado.destinatarios;
+    const alumnosSeleccionados = grupoSeleccionado.destinatarios;
 
-    // Verificar si los alumnos ya existen en el grupo actual
-    const grupoActual = this.destinatariosSeleccionados.find((grupo) => grupo.nombre_grupo === this.grupoSeleccionado.nombre_grupo);
+    const grupoActual = destinatariosSeleccionados.find((grupo) => grupo.nombre_grupo === grupoSeleccionado.nombre_grupo);
 
     if (grupoActual) {
       alumnosSeleccionados.forEach((alumno) => {
-        // Verificar si el alumno ya está en el grupo
         if (!grupoActual.destinatarios.includes(alumno)) {
           grupoActual.destinatarios.push(alumno);
-          arrDestinatariosControl.patchValue([...arrDestinatariosControl.value, {id_destinatario:alumno.id_alumno,tipo_destinatario: 1}]);
         }
       });
 
-      // Limpiar la lista de alumnos seleccionados en el grupo actual
-      this.grupoSeleccionado.destinatarios.length = 0;
+      grupoSeleccionado.destinatarios.length = 0;
     }
-  }
+}
 
   enviar() {
-    if(!this.formulario.valid){
-      this.formulario.markAllAsTouched();
-    }else{
-    const envioSuscripcion = this.comunicadosService.enviarComunicado(this.formulario.value)
-      .subscribe({
-        next: (respuesta) => {
-          this.route.navigate(['dashboard','comunicados','comunicados-enviados']);
-         },
-        complete:() => {
-          envioSuscripcion.unsubscribe()
-        },
-     });
-    }
+   console.log(this.formulario.value)
   }
 
   toggleRow(destinatario: any): void {
@@ -203,6 +196,8 @@ export class NuevoComunicadoComponent implements OnInit,OnDestroy{
             // Verificar si el archivo ya existe en la lista this.archivos
             if (!this.archivos.some(archivo => archivo.name === files[i].name)) {
                 this.archivos.push(files[i]);
+
+
                 arrAdjuntos.patchValue([...arrAdjuntos.value,files[i]])
             } else {
                 // Aquí puedes mostrar un mensaje de error o realizar alguna acción

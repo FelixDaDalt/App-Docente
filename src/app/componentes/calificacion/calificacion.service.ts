@@ -1,15 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map } from 'rxjs';
 import { tipo_calificacion } from './modelos/tipo_calificacion';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { escala } from './modelos/escala';
 import { calificacion } from './modelos/calificacion';
 import { instrumento } from './modelos/instrumento';
-import { instrumento_respuesta } from './modelos/instrumento_respuesta';
 import { CalificarAlumno } from './modelos/calificar_alumno';
-import { calificacion_instrumento } from './calificacion-instrumentos/calificacion-instrumento';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +20,10 @@ export class CalificacionService {
   private tipoCalificacion$ = new BehaviorSubject<tipo_calificacion[]>([])
   private escala$ = new BehaviorSubject<escala[]>([])
   private calificacion$ = new BehaviorSubject<calificacion[]>([])
-  private instrumentoRespuesta$ = new BehaviorSubject<instrumento_respuesta | null>(null);
-  private instrumentoRespuesta!:instrumento_respuesta | null
+
 
   private alumnoCalificado$ = new BehaviorSubject<CalificarAlumno | null>(null);
-  private instrumentos$ = new BehaviorSubject<calificacion_instrumento[]>([])
+
 
   constructor(private http: HttpClient,usuarioDatosService:DatosUsuarioService) {
     usuarioDatosService.obtenerDatos().subscribe({
@@ -62,19 +59,6 @@ export class CalificacionService {
     })
   }
 
-
-  private postInstrumento(instrumento:instrumento){
-    this.http.post<{ data: any }>(`${this.apiUrl}/agregar_nuevo_instrumento/${this.usuarioDatos.ID_Institucion}`,instrumento).subscribe({
-      next:(respuesta)=>{
-        this.instrumentoRespuesta = respuesta.data
-        this.emitirInstrumentoRespuesta()
-      }
-    })
-  }
-
-  private emitirInstrumentoRespuesta(){
-    this.instrumentoRespuesta$.next(this.instrumentoRespuesta)
-  }
 
   private emitirListaEscalas(listaEscalas:escala[]){
     this.escala$.next(listaEscalas)
@@ -114,30 +98,22 @@ export class CalificacionService {
     return this.calificacion$.asObservable()
   }
 
-  enviarInstrumento(instrumento:instrumento){
+  enviarInstrumento(instrumento:instrumento):Observable<any>{
     instrumento.id_usuario = this.usuarioDatos.ID_Usuario_Interno
-    this.postInstrumento(instrumento)
+    return this.http.post<{ data: any }>(`${this.apiUrl}/agregar_nuevo_instrumento/${this.usuarioDatos.ID_Institucion}`,instrumento)
+    .pipe(
+      map(respuesta=>respuesta.data)
+    )
   }
 
-  suscripcionInstrumentoRespuesta(){
-    return this.instrumentoRespuesta$.asObservable()
-  }
 
-  continuarCalificacion(id_operacion:number, id_materia:number, tipo_materia:string){
-    this.editInstrumento(id_operacion,id_materia,tipo_materia)
-  }
 
-  limpiarInstrumentoRespuesta(){
-    this.instrumentoRespuesta$.next(null)
-  }
 
-  private editInstrumento(id_operacion:number, id_materia:number, tipo_materia:string){
-    this.http.get<{ data: any }>(`${this.apiUrl}/lista_calificados/${this.usuarioDatos.ID_Institucion}`, {params: {id_operacion:id_operacion, id_materia: id_materia, tipo_materia:tipo_materia }}).subscribe({
-      next:(respuesta)=>{
-        this.instrumentoRespuesta = respuesta.data
-        this.emitirInstrumentoRespuesta()
-      }
-    })
+  editInstrumento(id_operacion:number, id_materia:number, tipo_materia:string){
+    return this.http.get<{ data: any }>(`${this.apiUrl}/lista_calificados/${this.usuarioDatos.ID_Institucion}`, {params: {id_operacion:id_operacion, id_materia: id_materia, tipo_materia:tipo_materia }})
+    .pipe(
+      map(respuesta=>respuesta.data)
+    )
   }
 
 
@@ -170,24 +146,11 @@ export class CalificacionService {
   }
 
 
-  private emitirInstrumentos(instrumentos:calificacion_instrumento[]){
-    this.instrumentos$.next(instrumentos)
-  }
-
-  private getInstrumentos(idMateria:number, tipo_materia:string){
-    this.http.get<{ data: any }>(`${this.apiUrl}/lista_instrumentos_materia/${this.usuarioDatos.ID_Institucion}`, {params: { id_materia: idMateria, tipo_materia:tipo_materia }}).subscribe({
-      next:(respuesta)=>{
-        this.emitirInstrumentos(respuesta.data)
-      }
-    })
-  }
-
   obtenerInstrumentos(idMateria:number, tipo_materia:string){
-    this.getInstrumentos(idMateria, tipo_materia)
-  }
-
-  suscripcionInstrumentos(){
-    return this.instrumentos$.asObservable()
+    return this.http.get<{ data: any }>(`${this.apiUrl}/lista_instrumentos_materia/${this.usuarioDatos.ID_Institucion}`, {params: { id_materia: idMateria, tipo_materia:tipo_materia }}).
+    pipe(
+      map(respuesta => respuesta.data)
+    )
   }
 
 }

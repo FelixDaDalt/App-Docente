@@ -2,7 +2,7 @@
 
 
 
-  <app-materias-informacion [Informacion]="materia" [rol]="(usuario$ | async)?.Rol_selected?.rol"></app-materias-informacion>
+  <app-materias-informacion [Informacion$]="materia$" [rol]="(usuario$ | async)?.Rol_selected?.rol"></app-materias-informacion>
 
   <div style="background-color: white;" [ngStyle]="{'height': (appSpinner.spinnerCargando | async) ? '100vh' : 'auto'}">
   <app-spinner #appSpinner></app-spinner>
@@ -10,7 +10,7 @@
  <div class="section">
     <div class="wide-block transparent p-0">
         <ul class="nav nav-tabs lined iconed table-responsive" role="tablist">
-            <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z') || (usuario$ | async)?.Rol_selected?.rol =='PF'">
+            <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && (materia$ | async)?.tipo_materia !='Z') || (usuario$ | async)?.Rol_selected?.rol =='PF'">
                 <a class="nav-link" data-bs-toggle="tab" href="#libro" role="tab">
                     <ion-icon name="book-outline"></ion-icon>
                     <h4 class="subtext">LIBRO DE TEMAS</h4>
@@ -22,7 +22,7 @@
                     <h4 class="subtext">PARTES ASISTENCIA</h4>
                 </a>
             </li>
-            <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z' )|| (usuario$ | async)?.Rol_selected?.rol =='PF'">
+            <li class="nav-item" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && (materia$ | async)?.tipo_materia !='Z' )|| (usuario$ | async)?.Rol_selected?.rol =='PF'">
                 <a class="nav-link" data-bs-toggle="tab" href="#calificacion" role="tab">
                     <ion-icon name="logo-react"></ion-icon>
                     <h4 class="subtext">CALIFICACIONES</h4>
@@ -45,24 +45,24 @@
       <div class="tab-content">
 
           <!-- Libro de temas -->
-          <div class="tab-pane fade table-responsive" id="libro" role="tabpanel" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z')||(usuario$ | async)?.Rol_selected?.rol =='PF'">
-            <app-materias-libro-temas></app-materias-libro-temas>
+          <div class="tab-pane fade table-responsive" id="libro" role="tabpanel" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && (materia$ | async)?.tipo_materia !='Z')||(usuario$ | async)?.Rol_selected?.rol =='PF'">
+            <app-materias-libro-temas [materia]="materia$"></app-materias-libro-temas>
           </div>
           <!-- * fin de libro de temas -->
 
           <!--  Partes de asistencias -->
           <div class="tab-pane fade table-responsive" id="parte" role="tabpanel">
-              <app-materias-parte-asistencia></app-materias-parte-asistencia>
+              <app-materias-parte-asistencia [materia]="materia$"></app-materias-parte-asistencia>
           </div>
           <!-- * Fin Partes de asistencias -->
           <!-- Calificaciones -->
-          <div class="tab-pane fade table-responsive" id="calificacion" role="tabpanel" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && materia?.tipo_materia !='Z' ) || (usuario$ | async)?.Rol_selected?.rol =='PF'">
-              <app-materias-calificaciones></app-materias-calificaciones>
+          <div class="tab-pane fade table-responsive" id="calificacion" role="tabpanel" *ngIf="((usuario$ | async)?.Rol_selected?.rol =='MG' && (materia$ | async)?.tipo_materia !='Z' ) || (usuario$ | async)?.Rol_selected?.rol =='PF'">
+              <app-materias-calificaciones [materia]="materia$"></app-materias-calificaciones>
           </div>
           <!-- * Fin de Calificaciones -->
           <!-- Alumnos -->
           <div class="tab-pane fade active table-responsive show" id="alumno" role="tabpanel">
-            <app-materias-alumnos></app-materias-alumnos>
+            <app-materias-alumnos [materia]="materia$"></app-materias-alumnos>
           </div>
           <!-- * Fin de Alumnos -->
       </div>

@@ -1,26 +1,38 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CalificacionComponent } from './calificacion-nuevo-instrumento/calificacion.component';
+import { CalificacionNuevoComponent } from './calificacion-nuevo-instrumento/calificacionNuevo.component';
 import { CalificacionInstrumentosComponent } from './calificacion-instrumentos/calificacion-instrumentos.component';
 import { CalificacionNotasComponent } from './calificacion-notas/calificacion-notas.component';
+import { CalificacionComponent } from './calificacion.component';
 
 
 const CalificacionesRoutes: Routes = [
   {
     path: '',
-    component: CalificacionInstrumentosComponent,
+    component: CalificacionComponent,
+    children:[
+      {
+        path:'calificacion-nuevo-instrumento',
+        component: CalificacionNuevoComponent
+      },
+      {
+        path: 'calificacion-nuevo-instrumento/:id',
+        component: CalificacionNuevoComponent
+       },
+       { path: 'calificacion-notas/:idMateria/:tipoMateria/:idOperacion',
+        component: CalificacionNotasComponent
+      },
+      {
+        path: ':id',
+        component: CalificacionInstrumentosComponent
+       },
+       {
+        path: '',
+        component: CalificacionInstrumentosComponent
+       },
+    ]
   },
-  {
-    path: 'calificacion-nuevo-instrumento',
-    component: CalificacionComponent
-   },
-   {
-    path:'calificacion-nuevo-instrumento/:edit?',
-    component: CalificacionComponent
-   },
-   { path: 'calificacion-notas',
-    component: CalificacionNotasComponent
-  },
+
 ];
 
 @NgModule({

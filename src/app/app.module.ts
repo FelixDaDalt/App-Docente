@@ -13,19 +13,17 @@ import { DatePipe } from '@angular/common';
 import { RequestInterceptorInterceptor } from './Interceptor/request-interceptor.interceptor';
 import { CompartidoModule } from './compartido/compartido.module';
 import { VersionModalComponent } from './servicios/version/version-modal/version-modal.component';
-
-
-
+import { VersionModule } from './servicios/version/version.module';
+import { UserParamsInterceptor } from './Interceptor/UserParamsInterceptor';
 
 registerLocaleData(localeEs);
 
 @NgModule({
   declarations: [
     AppComponent,
-    VersionModalComponent,
   ],
   imports: [
-    CompartidoModule,
+    VersionModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
@@ -33,7 +31,13 @@ registerLocaleData(localeEs);
   ],
   providers: [DatePipe,
   { provide: LOCALE_ID, useValue: 'es' },
-  { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorInterceptor, multi: true }],
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: UserParamsInterceptor,
+    multi: true
+  },
+  { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptorInterceptor, multi: true },
+ ],
 
   bootstrap: [AppComponent]
 })

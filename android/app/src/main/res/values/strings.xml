@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">App-Docente</string>
-    <string name="title_activity_main">App-Docente</string>
+    <string name="app_name">Geo-Docente</string>
+    <string name="title_activity_main">Geo-Docente</string>
     <string name="package_name">com.docente.app</string>
     <string name="custom_url_scheme">com.docente.app</string>
 </resources>

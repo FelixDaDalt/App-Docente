@@ -16,7 +16,7 @@ declare var offlineMode: any;
 @Injectable()
 export class RequestInterceptorInterceptor implements HttpInterceptor {
 
-  private exclusionPatterns: string[] = ['lectura_mensajeria/', 'lectura_notificacion/','lectura_comunicado/','enviar_chat/','notificaciones/','agregar_editar_calificacion_alumno/','novedades/'];
+  private exclusionPatterns: string[] = ['lectura_mensajeria/', 'lectura_notificacion/','lectura_comunicado/','enviar_chat/','notificaciones/','agregar_editar_calificacion_alumno/','novedades/','conexiones/'];
   private isConnectedSubject: BehaviorSubject<boolean>;
   private isConnected=false
 

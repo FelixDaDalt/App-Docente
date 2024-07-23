@@ -21,7 +21,7 @@
             </button>
           </h2>
           <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(documentacion)">
-            <div class="accordion-body">
+             <div class="accordion-body" style="text-align: left;">
               <h4 class="subtitle">Titulo: {{documentacion?.titulo}}</h4>
               <h4 class="subtitle">Descripción: {{documentacion?.descripcion}}</h4>
               <button  type="button" class="btn btn-outline-secondary btn-sm rounded me-1"

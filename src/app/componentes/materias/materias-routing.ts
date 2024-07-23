@@ -5,9 +5,14 @@ import { MateriasComponent } from './materias.component';
 
 const MateriasRoutes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: MateriasComponent,
   },
+  {
+    path: '',
+    component: MateriasComponent,
+  }
+
 ];
 
 @NgModule({

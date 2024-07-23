@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { materias } from '../../home/home';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-materias-informacion',
@@ -8,6 +9,6 @@ import { materias } from '../../home/home';
 })
 export class MateriasInformacionComponent {
 
-  @Input() Informacion?:materias | null
+  @Input() Informacion$?:Observable<materias | null>=of(null)
   @Input() rol?:string | null
 }

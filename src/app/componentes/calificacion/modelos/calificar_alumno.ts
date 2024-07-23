@@ -3,10 +3,12 @@ export interface CalificarAlumno {
   tipo_materia: string;
   id_materia: number;
   id_alumno: number;
-  id_calificacion: number | null ;
+  id_calificacion: number | string | null ;
   id_operacion: number;
   observacion: string;
   alumno: string;
-  nuevaNota?:number | null
+  nuevaNota?:number | string |null
   nuevaObservacion?:string
+  id_conceptual?:number
+
 }

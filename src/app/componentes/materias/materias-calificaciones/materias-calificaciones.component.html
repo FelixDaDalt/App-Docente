@@ -11,7 +11,7 @@
   </thead>
   <app-spinner #appSpinner></app-spinner>
   <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
-      <tr *ngFor="let instrumento of instrumentos">
+      <tr *ngFor="let instrumento of instrumentos$ | async">
           <td class="align-middle">{{instrumento.fecha}}</td>
           <td class="align-middle">{{instrumento.descripcion}}</td>
           <td class="align-middle">{{instrumento.cantidad_alumnos_calificados}}</td>

@@ -43,7 +43,7 @@ export class NotificacionService {
   }
 
   private getNotificaciones(){
-   const suscripcion = this.http.get<{ data: any }>(`${this.apiUrl}/cantidad_notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel || '' }})
+   const suscripcion = this.http.get<{ data: any }>(`${this.apiUrl}/cantidad_notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno }})
     .subscribe({
       next:(respuesta)=>{
         this.notificaciones = respuesta.data

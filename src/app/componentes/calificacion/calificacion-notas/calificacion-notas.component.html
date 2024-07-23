@@ -34,7 +34,7 @@
                                       <div class="input-wrapper" *ngIf="instrumentoRespuesta?.id_escala!=1">
                                       <select class="form-control form-select" id="escala" name="escala" [(ngModel)]="alumno.nuevaNota" (change)="seleccionNota(i)">
                                           <option [value]="null" disabled selected>Seleccionar una calificación</option>
-                                          <option *ngFor="let calificacion of calificaciones" [value]="calificacion.id">{{calificacion.indice}} - {{calificacion.estado}}</option>
+                                          <option *ngFor="let calificacion of calificaciones" [value]="calificacion.id">{{calificacion.estado}}</option>
                                       </select>
                                     </div>
                                   </div>

@@ -4,8 +4,7 @@ import { libroTema } from '../../libro-tema/libro-tema';
 import { materias } from '../../home/home';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AusentesComponent } from '../../libro-tema/ausentes/ausentes.component';
-import { MateriasService } from '../materias.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-materias-libro-temas',
@@ -16,48 +15,33 @@ export class MateriasLibroTemasComponent implements OnInit,OnDestroy{
 
   private suscriberLibroTema?:Subscription
   private suscriberMateria?:Subscription
-  suscripcionesActivas=0
+  libroTemas$:Observable<libroTema[]>=of([])
 
-  libroTemas:libroTema[]=[]
-  private materia?:materias | null
+  @Input() materia:Observable<materias | null> = of(null)
 
   constructor(private libroTemaService:LibroTemaService,
-    private modalService:NgbModal,
-    private materiasService:MateriasService){
+    private modalService:NgbModal){
 
   }
   ngOnDestroy(): void {
-    this.suscriberMateria?.unsubscribe()
     this.suscriberLibroTema?.unsubscribe()
+    this.suscriberMateria?.unsubscribe()
   }
 
   ngOnInit(): void {
-    this.suscripcionMateria()
-  }
-
-  suscripcionMateria(){
-    if (this.suscriberMateria) {
-      this.suscriberMateria.unsubscribe();
-    }
-
-   this.suscriberMateria = this.materiasService.suscripcionMateria().subscribe({
+    this.suscriberMateria = this.materia.subscribe({
       next:(materia)=>{
-        this.materia = materia
-        this.obtenerLibroTemas()
+        if(materia)
+          this.suscriberLibroTema = this.obtenerLibroTemas(materia).subscribe()
       }
     })
   }
 
-  private obtenerLibroTemas(){
-      if (this.suscriberLibroTema) {
-        this.suscriberLibroTema.unsubscribe();
-      }
-
-      this.suscriberLibroTema = this.libroTemaService.obtenerRegistros(this.materia!).subscribe({
-        next:(libroTemas)=> {
-          this.libroTemas = libroTemas
-        }
-      })
+  private obtenerLibroTemas(materia:materias){
+      return this.libroTemaService.obtenerRegistros(materia)
+        .pipe(
+          tap(libroTemas => this.libroTemas$ = of(libroTemas))
+        )
   }
 
   verAusentes(registro:libroTema){
@@ -68,6 +52,4 @@ export class MateriasLibroTemasComponent implements OnInit,OnDestroy{
       modalRef.componentInstance.librotema = registro
     }
   }
-
-
 }

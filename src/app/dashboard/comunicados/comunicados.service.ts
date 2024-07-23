@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { comunicado, comunicado_destinatario, comunicado_nuevo } from './comunicado';
-import { BehaviorSubject, Observable, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { comunicado_enviado } from './comunicados-enviados/comunicado-enviado';
 import { HomeService } from '../../componentes/home/home.service';
@@ -77,8 +77,6 @@ export class ComunicadosService {
     obtenerDestinatarios():Observable<comunicado_destinatario[]>{
       const params = {
         id_usuario: this.usuarioDatos.ID_Usuario_Interno || 0,
-        id_nivel: this.usuarioDatos.Rol_selected?.id_nivel || 0,
-        rol: this.usuarioDatos.Rol_selected?.rol || "",
         id_curso:0,
         id_materia:0
       };
@@ -90,38 +88,41 @@ export class ComunicadosService {
 
 
     //OK
-    enviarComunicado(nuevoComunicado: any):Observable<any>{
-      nuevoComunicado.id_nivel = this.usuarioDatos.Rol_selected?.id_nivel.toString()
-      nuevoComunicado.id_usuario = this.usuarioDatos.ID_Usuario_Interno.toString()
-      nuevoComunicado.rol = this.usuarioDatos.Rol_selected?.rol
+    enviarComunicado(nuevoComunicado: any): Observable<any> {
+      nuevoComunicado.id_nivel = this.usuarioDatos.Rol_selected?.id_nivel.toString();
+      nuevoComunicado.id_usuario = this.usuarioDatos.ID_Usuario_Interno.toString();
+      nuevoComunicado.rol = this.usuarioDatos.Rol_selected?.rol;
 
-      return this.postComunicado(nuevoComunicado)
-    }
-
-    //OK
-    private postComunicado(nuevoComunicado: any): Observable<number> {
-      const apiUrl = this.usuarioDatos.ID_Institucion < 10 ? 'https://pesge.com.ar/conexiones/adjuntar_documentos.php' : 'https://geoeducacion.com.ar/conexiones/adjuntar_documentos.php';
+      let adjuntos = nuevoComunicado.arr_adjuntos
+      nuevoComunicado.arr_adjuntos = []
 
       return this.http.post<{ data: any }>(`${this.apiDetalleteUrl}/nuevo_comunicado/${this.usuarioDatos.ID_Institucion}`, nuevoComunicado).pipe(
-        tap((respuesta: any) => Number(respuesta.data.split(' - ')[0])),
-        tap((idComunicado: number) => {
-          if (nuevoComunicado.arr_adjuntos.length > 0) {
-            const adjuntos = {
-              id_institucion: this.usuarioDatos.ID_Institucion,
-              id_comunicado: idComunicado,
-              adjunto: nuevoComunicado.arr_adjuntos
-            };
-            return this.adjuntarDocumentos(apiUrl, adjuntos);
+        switchMap((respuesta) => {
+          const idComunicado = Number(respuesta.data.split(' - ')[0]);
+          if (adjuntos && adjuntos.length > 0) {
+            const apiUrl = this.usuarioDatos.ID_Institucion < 10 ? 'https://pesge.com.ar/conexiones/adjuntar_documentos.php' : 'https://geoeducacion.com.ar/conexiones/adjuntar_documentos.php';
+            const formDataAdjuntos = new FormData();
+            formDataAdjuntos.append('id_institucion', this.usuarioDatos.ID_Institucion.toString());
+            formDataAdjuntos.append('id_comunicado', idComunicado.toString());
+            adjuntos.forEach((adjunto:any) => {
+              formDataAdjuntos.append('adjunto[]', adjunto);
+            });
+
+            return this.adjuntarDocumentos(apiUrl, formDataAdjuntos);
           } else {
-            return of(null);
+            return of(null); // Si no hay adjuntos, retornar un observable vacío
           }
         })
       );
     }
 
-    //OK
+    // Adjuntar documentos
     private adjuntarDocumentos(apiUrl: string, adjuntos: any): Observable<any> {
-      return this.http.post<{ data: any }>(apiUrl, adjuntos);
+      return this.http.post<{ data: any }>(apiUrl, adjuntos).pipe(
+        map((respuesta) => {
+          return respuesta; // Devolver la respuesta del adjuntar documentos
+        })
+      );
     }
 
     //OK

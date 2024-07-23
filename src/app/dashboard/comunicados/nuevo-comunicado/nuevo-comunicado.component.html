@@ -14,7 +14,7 @@
             <div class="input-wrapper">
                 <select class="form-control form-select" id="materia" name="materia" [(ngModel)]="grupoSeleccionado" [ngModelOptions]="{standalone: true}">
                     <option [ngValue]="undefined" selected disabled>Seleccionar grupo</option>
-                    <option [ngValue]="grupo" *ngFor="let grupo of destinatarios$|async">{{grupo.nombre_grupo}}</option>
+                    <option [ngValue]="grupo" *ngFor="let grupo of destinatarios$ | async">{{grupo.nombre_grupo}}</option>
                 </select>
             </div>
         </div>

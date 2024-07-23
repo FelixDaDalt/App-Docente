@@ -10,7 +10,7 @@
   </thead>
   <app-spinner #appSpinner></app-spinner>
   <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
-      <tr *ngFor="let alumno of alumnos">
+      <tr *ngFor="let alumno of alumnos$ | async">
           <td class="align-middle">
             <img class="avatar-image" [src]="alumno.avatar" alt="avatar">
           </td>

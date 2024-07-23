@@ -1,3 +1,4 @@
+import { NotificacionService } from './../../../otros/notificacion-popup/notificacionpopup.service';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -18,6 +19,7 @@ export class LoginComponent implements AfterViewInit, OnInit,OnDestroy{
   seleccionInstitucion = false
   seleccionRol = false
   loading: boolean = false;
+  error:string|null = null
 
   suscripcionDatosUsuarios?:Subscription
 
@@ -61,8 +63,12 @@ export class LoginComponent implements AfterViewInit, OnInit,OnDestroy{
       next:(respuesta)=>{
         if(respuesta){
           this.router.navigate(['login','seleccion-institucion'])
+        }else{
+          this.error = "Error en la autetificacion"
         }
-
+      },
+      error:(e)=>{
+        this.error = "Error en la autetificacion"
       }
     })
   }

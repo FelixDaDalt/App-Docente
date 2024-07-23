@@ -22,7 +22,7 @@
               </button>
             </h2>
             <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(aviso)">
-              <div class="accordion-body">
+               <div class="accordion-body" style="text-align: left;">
                 <h4 class="subtitle">Alumno: {{aviso?.alumno}}</h4>
                 <h4 class="subtitle">Descripción: {{aviso?.descripcion}}</h4>
                 <h4 class="subtitle">Constancia: {{aviso?.constancia}}</h4>

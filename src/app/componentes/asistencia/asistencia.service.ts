@@ -17,7 +17,6 @@ export class AsistenciaService {
 
   constructor(private http: HttpClient,
     usuarioDatosService:DatosUsuarioService) {
-
       usuarioDatosService.obtenerDatos().subscribe({
         next:(usuario)=>{
           if(usuario && usuario.Institucion_selected && usuario.Rol_selected){
@@ -29,7 +28,7 @@ export class AsistenciaService {
 
   // OK
   obtenerAsistencias(fecha:string):Observable<Asistencia[]>{
-    return this.http.get<{ data: any }>(`${this.apiUrl}/alumnos_materias/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, rol:this.usuarioDatos.Rol_selected!.rol, fecha:fecha, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel}})
+    return this.http.get<{ data: any }>(`${this.apiUrl}/alumnos_materias/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, fecha:fecha}})
     .pipe(
       map(respuesta => respuesta.data)
     )
@@ -43,7 +42,7 @@ export class AsistenciaService {
 
   // Ok
   obtenerPartesPorMateria(materia:materias):Observable<parte[]>{
-    return this.http.get<{ data: any }>(`${this.apiUrl}/lista_partes/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, rol:this.usuarioDatos.Rol_selected!.rol, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, id_materia:materia.id, tipo_materia:materia.tipo_materia}})
+    return this.http.get<{ data: any }>(`${this.apiUrl}/lista_partes/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_materia:materia.id, tipo_materia:materia.tipo_materia}})
     .pipe(
       map(respuesta => respuesta.data)
     )

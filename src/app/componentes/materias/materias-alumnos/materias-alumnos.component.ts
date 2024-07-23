@@ -1,8 +1,7 @@
 import { HomeService } from 'src/app/componentes/home/home.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MateriasService } from '../materias.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { alumno, materias } from '../../home/home';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, map, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-materias-alumnos',
@@ -10,20 +9,27 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./materias-alumnos.component.css']
 })
 export class MateriasAlumnosComponent implements OnInit,OnDestroy{
-  alumnos:alumno[]=[]
-  materia?:materias | null
+  alumnos$:Observable<alumno[]>=of([])
+  @Input() materia:Observable<materias | null> = of(null)
   suscriberMateria?:Subscription
   suscriberAlumnos?:Subscription
-  suscripcionesActivas=0
 
-  constructor(private homeService:HomeService,
-    private materiasService:MateriasService){
+
+  constructor(private homeService:HomeService){
 
   }
 
   ngOnInit(): void {
-    this.suscripcionMateria()
-    this.suscripcionAlumnos()
+    this.suscriberMateria = this.materia.subscribe({
+      next:(materia)=>{
+        if(materia)
+        {
+          this.suscriberAlumnos = this.suscricionAlumnos().subscribe()
+          this.obtenerAlumnos(materia.id,materia.tipo_materia)
+        }
+
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -32,31 +38,17 @@ export class MateriasAlumnosComponent implements OnInit,OnDestroy{
   }
 
 
-  private suscripcionAlumnos(){
-    if (this.suscriberAlumnos) {
-      this.suscriberAlumnos.unsubscribe();
-    }
-
-    this.suscriberAlumnos = this.homeService.suscripcionAlumnos().subscribe({
-      next:(alumnos)=>{
-        this.alumnos = alumnos.sort((a, b) => {
-          return a.apellido.localeCompare(b.apellido);
-        })
-      }
-    })
+  private suscricionAlumnos(){
+    return this.homeService.suscripcionAlumnos().pipe(
+      map(alumnos => alumnos.sort((a, b) => {
+        return a.apellido.localeCompare(b.apellido);
+      })),
+      tap(alumnos => this.alumnos$ = of(alumnos))
+    )
   }
 
-  private suscripcionMateria(){
-    if (this.suscriberMateria) {
-      this.suscriberMateria.unsubscribe();
-    }
-
-    this.suscriberMateria = this.materiasService.suscripcionMateria().subscribe({
-      next:(materia)=>{
-        this.materia = materia
-        if(this.materia)
-          this.homeService.obtenerAlumnos(this.materia?.id,this.materia?.tipo_materia)
-      }
-    })
+  private obtenerAlumnos(materiaId:number,materiaTipo:string){
+    this.homeService.obtenerAlumnos(materiaId,materiaTipo)
   }
+
 }

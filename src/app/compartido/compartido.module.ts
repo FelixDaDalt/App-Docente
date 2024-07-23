@@ -7,9 +7,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FechaYhoraComponent } from '../otros/fecha-yhora/fecha-yhora.component';
 import { IonicModule } from '@ionic/angular';
 import { NgxSplideModule } from 'ngx-splide';
-import { HeaderComponent } from '../dashboard/estructura/header/header.component';
-import { SidebarComponent } from '../dashboard/estructura/sidebar/sidebar.component';
-import { BottomComponent } from '../dashboard/estructura/bottom/bottom.component';
 import { ErrorFormulariosComponent } from './error-formularios/error-formularios.component';
 import { ErrorFormulariosPipe } from './error-formularios.pipe';
 

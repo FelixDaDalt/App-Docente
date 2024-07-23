@@ -4,7 +4,7 @@ import { CalificarAlumno } from '../modelos/calificar_alumno';
 import { instrumento_respuesta } from '../modelos/instrumento_respuesta';
 import { CalificacionService } from './../calificacion.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/otros/notificacion-popup/notificacionpopup.service';
 
 @Component({
@@ -20,12 +20,21 @@ export class CalificacionNotasComponent implements OnDestroy,OnInit {
   instrumentoRespuesta?:instrumento_respuesta
   calificaciones:calificacion[]=[]
   calificarAlumnos:CalificarAlumno[]=[]
-
+  id_materia?:number
+  tipoMateria?:string
+  idOperacion?:number
 
   constructor(private calificacionService:CalificacionService,
-    private route:Router,
-    private notificacionService:NotificacionService)
+    private router:Router,
+    private route: ActivatedRoute)
   {
+    this.route.params.subscribe(params => {
+      if(params)
+      this.id_materia = this.route.snapshot.params['idMateria'];
+      this.tipoMateria = this.route.snapshot.params['tipoMateria'];
+      this.idOperacion = this.route.snapshot.params['idOperacion'];
+      this.suscripcionInstrumentoRespuesta()
+    });
 
   }
 
@@ -34,17 +43,13 @@ export class CalificacionNotasComponent implements OnDestroy,OnInit {
   }
 
   ngOnDestroy(): void {
-    this.calificacionService.limpiarInstrumentoRespuesta()
     this.instrumentoRespuestaSuscripcion?.unsubscribe()
     this.calificacionesSuscripcion?.unsubscribe()
   }
 
   private suscripcionInstrumentoRespuesta(){
-    if(this.instrumentoRespuestaSuscripcion){
-      this.instrumentoRespuestaSuscripcion.unsubscribe()
-    }
-
-    this.instrumentoRespuestaSuscripcion = this.calificacionService.suscripcionInstrumentoRespuesta().subscribe({
+    if(this.id_materia && this.tipoMateria && this.idOperacion)
+    this.instrumentoRespuestaSuscripcion = this.calificacionService.editInstrumento(this.idOperacion,this.id_materia,this.tipoMateria).subscribe({
       next:(respuesta)=>{
         if(respuesta!=null){
           this.instrumentoRespuesta = respuesta
@@ -67,7 +72,7 @@ export class CalificacionNotasComponent implements OnDestroy,OnInit {
       id_operacion: this.instrumentoRespuesta?.id,
       observacion: "",
       alumno: alumno.apellido + ', ' + alumno.nombre,
-      nuevaNota: alumno.id_calificacion || null,
+      nuevaNota: alumno.id_conceptual!=0?alumno.id_conceptual:alumno.id_calificacion || null,
       nuevaObservacion:alumno.observacion || "",
     } as CalificarAlumno)); // <-- Utilizando la interfaz
     this.ordenarCalificarAlumnos();
@@ -144,7 +149,6 @@ export class CalificacionNotasComponent implements OnDestroy,OnInit {
   }
 
   guardar(){
-    this.notificacionService.establecerNotificacion('Exito','Calificaciones Guardadas')
-    this.route.navigate(['dashboard','calificacion'])
+    this.router.navigate(['dashboard','calificacion',this.instrumentoRespuesta?.id_materia])
   }
 }

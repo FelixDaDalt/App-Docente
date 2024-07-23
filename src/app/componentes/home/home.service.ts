@@ -61,14 +61,14 @@ export class HomeService {
     }
 
   private getHomeData() {
-      const novedadesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/novedades/${this.usuarioDatos.ID_Institucion}`, {params: { id_nivel: this.usuarioDatos.Rol_selected?.id_nivel||'' }}).pipe(
+      const novedadesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/novedades/${this.usuarioDatos.ID_Institucion}`).pipe(
         catchError(error => {
           this.notificacionService.establecerNotificacion('error','Error en la solicitud de Novedades')
           return of({ data: [] }); // Tratar el error según tus necesidades
         })
       );
 
-      const notificacionesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_nivel: this.usuarioDatos.Rol_selected?.id_nivel||'', id_usuario: this.usuarioDatos.ID_Usuario_Interno }}).pipe(
+      const notificacionesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/notificaciones/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno }}).pipe(
         catchError(error => {
           this.notificacionService.establecerNotificacion('error','Error en la solicitud de Notificaciones')
           return of({ data: {} }); // Tratar el error según tus necesidades
@@ -84,7 +84,7 @@ export class HomeService {
   }
 
   private getMaterias(){
-   this. materiasSuscripcion = this.http.get<{ data: any }>(`${this.apiUrl}/materias_asignadas/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol }})
+   this. materiasSuscripcion = this.http.get<{ data: any }>(`${this.apiUrl}/materias_asignadas/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno}})
     .subscribe({
       next:(respuesta)=>{
         this.materias$.next(respuesta.data)
@@ -112,7 +112,6 @@ export class HomeService {
   actualizarNotificaciones() {
     const notificacionesRequest = this.http.get<{ data: any }>(`${this.apiUrl}/notificaciones/${this.usuarioDatos.ID_Institucion}`, {
       params: {
-        id_nivel: this.usuarioDatos.Rol_selected?.id_nivel || '',
         id_usuario: this.usuarioDatos.ID_Usuario_Interno
       }
     }).pipe(
@@ -158,7 +157,7 @@ export class HomeService {
 
 
   private getAlumnos(idMateria:number, tipo_materia:string){
-    this.http.get<{ data: any }>(`${this.alumnoUrl}/lista_alumnos/${this.usuarioDatos.ID_Institucion}`, {params: { id_materia: idMateria, tipo_materia:tipo_materia, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel, rol:this.usuarioDatos.Rol_selected!.rol, id_usuario:this.usuarioDatos.ID_Usuario_Interno }}).subscribe({
+    this.http.get<{ data: any }>(`${this.alumnoUrl}/lista_alumnos/${this.usuarioDatos.ID_Institucion}`, {params: { id_materia: idMateria, tipo_materia:tipo_materia, id_usuario:this.usuarioDatos.ID_Usuario_Interno }}).subscribe({
       next:(respuesta)=>{
         this.Alumnos = respuesta.data
         this.emitirAlumnos(respuesta.data)

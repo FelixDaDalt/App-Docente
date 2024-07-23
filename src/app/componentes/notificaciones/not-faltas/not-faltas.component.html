@@ -21,7 +21,7 @@
           </button>
         </h2>
         <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(falta)">
-          <div class="accordion-body">
+           <div class="accordion-body" style="text-align: left;">
             <h4 class="subtitle">Tipo: {{falta?.gravedad_falta}}</h4>
             <h4 class="subtitle">Categoría: <em>"{{falta?.descripcion_falta}}"</em></h4>
             <h4 class="subtitle">Profesor: {{falta?.profesor}}</h4>

@@ -22,51 +22,58 @@
     <app-root></app-root>
     <!-- App Capsule  -->
 
-    <div class="offcanvas offcanvas-top action-sheet inset android-add-to-home" tabindex="-1"
-            id="android-add-to-home-screen">
-      <div class="offcanvas-header">
-          <h5 class="offcanvas-title">Instalar en el Inicio</h5>
-          <a href="#" class="close-button" data-bs-dismiss="offcanvas">
-              <ion-icon name="close" role="img" class="md hydrated" aria-label="close"></ion-icon>
-          </a>
-      </div>
-      <div class="offcanvas-body">
-          <div class="action-sheet-content text-center">
-              <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w48">
-              </div>
-              <h4>Geo Docente</h4>
-              <div>
-                "Instala la <strong>APP Geo Docente</strong> en la pantalla de inicio de tu Android".
-              </div>
-              <div>
-                  Toca <ion-icon name="ellipsis-vertical" role="img" class="md hydrated" aria-label="ellipsis vertical"></ion-icon> y agrega a la pantalla de inicio.
-              </div>
-          </div>
-      </div>
-  </div>
 
-  <div class="offcanvas offcanvas-bottom action-sheet inset ios-add-to-home" tabindex="-1"
-  id="ios-add-to-home-screen">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Instalar en el Inicio</h5>
-        <a href="#" class="close-button" data-bs-dismiss="offcanvas">
-            <ion-icon name="close" role="img" class="md hydrated" aria-label="close"></ion-icon>
-        </a>
-    </div>
-    <div class="offcanvas-body">
-        <div class="action-sheet-content text-center">
-            <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w48">
-            </div>
-            <h4>Geo Docente</h4>
-            <div>
-              "Instala la <strong>APP Geo Docente</strong> en la pantalla de inicio de tu IPhone".
-            </div>
-            <div>
-              Toca <ion-icon name="share-outline" role="img" class="md hydrated" aria-label="share outline"></ion-icon> y agrega a la pantalla de inicio.
-            </div>
+<!-- iOS Add to Home Action Sheet -->
+<div class="offcanvas offcanvas-bottom action-sheet inset ios-add-to-home" tabindex="-1"
+id="ios-add-to-home-screen">
+<div class="offcanvas-header">
+    <h5 class="offcanvas-title">Agregar a la pantalla principal</h5>
+    <a href="#" class="close-button" data-bs-dismiss="offcanvas">
+        <ion-icon name="close"></ion-icon>
+    </a>
+</div>
+<div class="offcanvas-body">
+    <div class="action-sheet-content text-center">
+        <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w48">
+        </div>
+        <h4>GEO Docentes APP</h4>
+        <div>
+            Agrega nuestra aplicación a tu pantalla principal.
+        </div>
+        <div>
+            Toca <ion-icon name="share-outline"></ion-icon> y agregar a pantalla principal.
         </div>
     </div>
 </div>
+</div>
+<!-- * iOS Add to Home Action Sheet -->
+
+
+<!-- Android Add to Home Action Sheet -->
+<div class="offcanvas offcanvas-top action-sheet inset android-add-to-home" tabindex="-1"
+id="android-add-to-home-screen">
+<div class="offcanvas-header">
+    <h5 class="offcanvas-title">Agregar a la pantalla principal</h5>
+    <a href="#" class="close-button" data-bs-dismiss="offcanvas">
+        <ion-icon name="close"></ion-icon>
+    </a>
+</div>
+<div class="offcanvas-body">
+    <div class="action-sheet-content text-center">
+        <div class="mb-1"><img src="assets/img/icon/192x192.png" alt="image" class="imaged w48">
+        </div>
+        <h4>GEO Docentes APP</h4>
+        <div>
+          Agrega nuestra aplicación a tu pantalla principal.
+        </div>
+        <div>
+          Toca <ion-icon name="ellipsis-vertical"></ion-icon> y agregar a pantalla principal.
+        </div>
+    </div>
+</div>
+</div>
+<!-- * Android Add to Home Action Sheet -->
+
 
 
     <!-- ============== Js Files ==============  -->
@@ -81,9 +88,11 @@
     <script src="assets/js/base.js"></script>
 
     <script>
-        // Trigger welcome notification after 5 seconds
-            AddtoHome(3000,"once");
-    </script>
+
+
+        AddtoHome(2000, "once");
+
+  </script>
 
 </body>
 

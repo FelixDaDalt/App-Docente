@@ -30,7 +30,7 @@ export class ReunionesService {
 
   //OK
   obtenerReuniones():Observable<reunion[]>{
-    return this.httpClient.get<{ data: any }>(`${this.apiUrl}/lista_solicitudes_reunion/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel || '' }})
+    return this.httpClient.get<{ data: any }>(`${this.apiUrl}/lista_solicitudes_reunion/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno}})
     .pipe(
       map(respuesta => respuesta.data)
     )
@@ -47,7 +47,7 @@ export class ReunionesService {
 
   //OK
   getTextoPredeterminado(){
-    return this.httpClient.get<{ data: any }>(`${this.apiUrl}/texto_predeterminado/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno, id_nivel:this.usuarioDatos.Rol_selected!.id_nivel}})
+    return this.httpClient.get<{ data: any }>(`${this.apiUrl}/texto_predeterminado/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno}})
     .pipe(map(respuesta => respuesta.data))
   }
 

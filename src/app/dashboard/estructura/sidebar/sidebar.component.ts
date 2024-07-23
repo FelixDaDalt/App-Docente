@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { materias } from 'src/app/componentes/home/home';
 import { HomeService } from 'src/app/componentes/home/home.service';
-import { MateriasService } from 'src/app/componentes/materias/materias.service';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { LoginService } from 'src/app/servicios/login.service';
@@ -23,7 +22,6 @@ export class SidebarComponent implements OnInit,OnDestroy{
   constructor(private datosUsuarioService:DatosUsuarioService,
     private loginService:LoginService,
     private homeService:HomeService,
-    private materiaService:MateriasService,
     private router:Router){
 
 
@@ -59,8 +57,7 @@ export class SidebarComponent implements OnInit,OnDestroy{
   }
 
   verMateria(materia:materias){
-    this.materiaService.setMateria(materia)
-    this.router.navigate(['dashboard','materia'])
+    this.router.navigate(['dashboard','materia',materia.id])
   }
 
   verUsuario(){

@@ -1,6 +1,6 @@
 {
-  "name": "GEO - APP Docente",
-  "short_name": "GEO App",
+  "name": "GEO - APP Docentes",
+  "short_name": "GEO Docentes",
   "start_url": "./",
   "display": "standalone",
   "scope": "/appdocentes/",

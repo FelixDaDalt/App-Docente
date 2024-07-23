@@ -26,7 +26,7 @@ export class TutorialesService {
   }
 
   obtenerTutoriales() : Observable<tutoriales[]>{
-    return this.httpClient.get<any>(`${this.apiUrl}tutoriales/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno,rol:this.usuarioDatos.Rol_selected?.rol||'', id_nivel:this.usuarioDatos.Rol_selected?.id_nivel || '' }})
+    return this.httpClient.get<any>(`${this.apiUrl}tutoriales/${this.usuarioDatos.ID_Institucion}`, {params: { id_usuario: this.usuarioDatos.ID_Usuario_Interno}})
     .pipe(
       map(respuesta => respuesta.data)
     );

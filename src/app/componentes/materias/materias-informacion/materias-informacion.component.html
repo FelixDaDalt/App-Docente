@@ -1,8 +1,8 @@
 <div class="section mt-2">
   <div class="card text-center">
     <div class="card-header">
-      <h5 class="card-title">{{Informacion?.materia}}</h5>
-      <div class="card-subtitle">Curso: {{Informacion?.curso}} - Rol: ({{rol}})</div>
+      <h5 class="card-title">{{(Informacion$ | async)?.materia}}</h5>
+      <div class="card-subtitle">Curso: {{(Informacion$ | async)?.curso}} - Rol: ({{rol}})</div>
     </div>
     <div class="card-body">
         <h5 class="card-title"><ng-content select="[titulo-cuerpo]"></ng-content></h5>
@@ -17,12 +17,12 @@
     <a class="item">
     </a>
       <a  class="item">
-          <h5 class="subtext">{{(rol == "PR" || rol == "MI" || rol == "MG" && Informacion?.tipo_materia=='Z')?'Dias Habiles':'Cantidad de clases'}}</h5>
-          <strong>{{Informacion?.cantidad_clases}}</strong>
+          <h5 class="subtext">{{(rol == "PR" || rol == "MI" || rol == "MG" && (Informacion$ | async)?.tipo_materia=='Z')?'Dias Habiles':'Cantidad de clases'}}</h5>
+          <strong>{{(Informacion$ | async)?.cantidad_clases}}</strong>
       </a>
       <a class="item">
         <h5 class="subtext">Cantidad de Alumnos</h5>
-        <strong>{{Informacion?.cantidad_alumnos}}</strong>
+        <strong>{{(Informacion$ | async)?.cantidad_alumnos}}</strong>
       </a>
       <a class="item">
       </a>

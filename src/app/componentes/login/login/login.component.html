@@ -7,7 +7,9 @@
     <input type="password" class="form-control form-control-lg" name="password" id="password"
       placeholder="Ingrese su contraseña" required #password />
   </div>
-
+  <div class="text-danger" *ngIf="error">
+    <div style="color: red;">{{error}}</div>
+  </div>
   <div class="row mb-4 px-3" *ngIf="!(appSpinner.spinnerCargando | async)">
     <button id="spinner" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;"
       (click)="login(email,password)">Ingresar</button>

@@ -21,7 +21,7 @@
           </button>
         </h2>
         <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(sancion)">
-          <div class="accordion-body">
+           <div class="accordion-body" style="text-align: left;">
             <h4 class="subtitle">Detalle: {{sancion?.tipo_detalle}}</h4>
             <h4 class="subtitle">Descripción: {{sancion?.descripcion}}</h4>
             <h4 class="subtitle">Autor: {{sancion?.autor}}</h4>

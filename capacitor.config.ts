@@ -2,9 +2,10 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.docente.app',
-  appName: 'App-Docente',
+  appName: 'Geo Docentes',
   webDir: 'dist/app-docente',
   server: {
+    hostname: "geoeducacion.com.ar/appdocentes/",
     androidScheme: 'https'
   }
 };

@@ -21,7 +21,7 @@
           </button>
         </h2>
         <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(retiro)">
-          <div class="accordion-body">
+           <div class="accordion-body" style="text-align: left;">
             <h4 class="subtitle">Autorizado: {{retiro?.persona_autorizada}}</h4>
             <h4 class="subtitle">DNI: {{retiro?.dni_persona_autorizada}}</h4>
             <h4 class="subtitle">Vinculo: {{retiro?.vinculo_persona_autorizada}}</h4>

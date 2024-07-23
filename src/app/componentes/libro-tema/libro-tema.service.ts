@@ -35,7 +35,7 @@ export class LibroTemaService {
 
     //Ok
     obtenerTiposClases():Observable<tipoClase[]>{
-      return this.http.get<{ data: any }>(`${this.apiUrl}/lista_tipo_clases/${this.usuarioDatos.ID_Institucion}`, {params: { id_nivel: this.usuarioDatos.Rol_selected?.id_nivel || -1 }})
+      return this.http.get<{ data: any }>(`${this.apiUrl}/lista_tipo_clases/${this.usuarioDatos.ID_Institucion}`)
       .pipe(
         map(respuesta=>respuesta.data)
       )

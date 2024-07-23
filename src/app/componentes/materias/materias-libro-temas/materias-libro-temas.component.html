@@ -11,14 +11,14 @@
   </thead>
   <app-spinner #appSpinner></app-spinner>
   <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
-      <tr *ngFor="let libroTema of libroTemas">
+      <tr *ngFor="let libroTema of libroTemas$ | async">
           <td class="align-middle">{{libroTema.numero_clase}}</td>
           <td class="align-middle">{{libroTema.fecha}}</td>
           <td class="align-middle">{{libroTema.tipo_clase}}</td>
           <td class="align-middle">{{libroTema.contenidos}}</td>
           <td class="align-middle">{{libroTema.actividades}}</td>
           <td class="align-middle">
-              <button type="button" class="btn btn-icon btn-sm btn-primary" (click)="verAusentes(libroTema)"  [disabled]="libroTema.ausentes.length<=0">
+              <button *ngIf="libroTema.ausentes.length>0" type="button" class="btn btn-icon btn-sm btn-primary" (click)="verAusentes(libroTema)"  >
                   <ion-icon name="people-outline"></ion-icon>
               </button>
           </td>

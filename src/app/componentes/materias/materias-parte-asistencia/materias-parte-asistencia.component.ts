@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AsistenciaService } from '../../asistencia/asistencia.service';
 import { parte } from '../../asistencia/asistencia';
-import { MateriasService } from '../materias.service';
 import { Observable, Subscription, of, tap } from 'rxjs';
 import { materias } from '../../home/home';
 import { Router } from '@angular/router';
@@ -15,11 +14,10 @@ export class MateriasParteAsistenciaComponent implements OnInit, OnDestroy{
 
   private suscriberParte?:Subscription
   private suscriberMateria?:Subscription
-  materia$?:Observable<materias | null> = of(null)
+  @Input() materia:Observable<materias | null> = of(null)
   partes$:Observable<parte[]>=of([])
 
   constructor(private asistenciaService:AsistenciaService,
-    private materiasService:MateriasService,
     private router:Router){
 
   }
@@ -30,27 +28,20 @@ export class MateriasParteAsistenciaComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.suscripcionMateria()
+    this.suscriberMateria = this.materia.subscribe({
+      next:(materia)=>{
+        if(materia)
+        this.suscriberParte = this.obtenerPartes(materia).subscribe()
+      }
+    })
   }
 
   private obtenerPartes(materia:materias){
-    this.suscriberParte = this.asistenciaService.obtenerPartesPorMateria(materia)
+    return this.asistenciaService.obtenerPartesPorMateria(materia)
     .pipe(
       tap(partes => this.partes$ = of(partes))
-    ).subscribe()
-  }
-
-  private suscripcionMateria() {
-  this.suscriberMateria = this.materiasService.suscripcionMateria()
-    .pipe(
-      tap(materia => {
-        this.materia$ = of(materia)
-        if(materia)
-          this.obtenerPartes(materia)
-      })
     )
-    .subscribe();
-}
+  }
 
   verParte(parte:parte){
     this.router.navigate(['dashboard','asistencia','ver', parte.fecha,parte.id])

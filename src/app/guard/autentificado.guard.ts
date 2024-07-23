@@ -38,12 +38,10 @@ export const autentificado: CanActivateFn = (route, state) => {
 
 
   if(datos && !datos.Institucion_selected){
-    console.log(state.url)
     return router.createUrlTree(['/login/seleccion-institucion'])
   }
 
   if(datos && datos.Institucion_selected && !datos.Rol_selected){
-    console.log("Mundo")
     return router.createUrlTree(['/login/seleccion-rol'])
   }
 
