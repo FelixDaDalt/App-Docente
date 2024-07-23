@@ -58,7 +58,10 @@ const ComunicadosRoutes: Routes = [
 
       loadChildren: () => import('../componentes/tutoriales/tutoriales.module').then(m => m.TutorialesModule)
       },
+      { path: 'incidencias',
 
+        loadChildren: () => import('../componentes/incidencia/incidencia.module').then(m => m.IncidenciaModule)
+        },
     ]
   }
 ];
