@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map} from 'rxjs';
+import { Observable, map, tap} from 'rxjs';
 import { usuarioDatos } from 'src/app/modelos/usuarioDatos';
 import { DatosUsuarioService } from 'src/app/servicios/datos-usuario.service';
 import { Asistencia, Parte_Asistencia, parte } from './asistencia';

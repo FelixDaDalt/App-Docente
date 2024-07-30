@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,15 +9,23 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CrearComponent {
 
-  formulario:string = "Hola Mundo"
+  formulario!: FormGroup;
 
-  constructor(private active:NgbActiveModal){
-
+  constructor(private active:NgbActiveModal, private fb: FormBuilder){
+    this.formulario = this.fb.group({
+      alumno: ['', Validators.required],
+      motivo: ['', Validators.required],
+    });
   }
 
-  cerrarModal(){
-    this.active.close(this.formulario)
+
+
+  nuevoRegistro(){
+    this.active.close(this.formulario.value)
   }
 
+  formControls(nombre:string) {
+    return this.formulario.controls[nombre] as FormControl
+  }
 
 }

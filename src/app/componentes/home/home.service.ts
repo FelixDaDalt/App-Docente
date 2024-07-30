@@ -128,7 +128,6 @@ export class HomeService {
       },
       (error) => {
         this.notificacionService.establecerNotificacion('error', 'Error al actualizar notificaciones');
-        console.log(error);
       }
     );
   }

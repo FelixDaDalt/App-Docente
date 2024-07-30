@@ -1,1 +1,19 @@
-<p (click)="cerrarModal()">crear works!</p>
+<form  [formGroup]="formulario" (ngSubmit)="nuevoRegistro()">
+  <div class="form-group boxed">
+      <div class="input-wrapper">
+          <label class="form-label">ALumno</label>
+          <input type="text" class="form-control" name="fechaRegistro" id="fechaRegistro" formControlName="alumno">
+      </div>
+      <app-error-formularios [control]="formControls('alumno')" fieldName="Alumno"></app-error-formularios>
+  </div>
+
+  <div class="form-group boxed">
+    <div class="input-wrapper">
+        <label class="form-label">Motivo</label>
+        <textarea class="form-control" name="fechaRegistro" id="fechaRegistro" formControlName="motivo"></textarea>
+    </div>
+    <app-error-formularios [control]="formControls('motivo')" fieldName="Motivo"></app-error-formularios>
+  </div>
+
+  <button type="submit" [disabled]="formulario.invalid">Enviar</button>
+</form>
