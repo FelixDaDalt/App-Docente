@@ -1,3 +1,4 @@
+import { DifusionesModule } from './../componentes/difusiones/difusiones.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
@@ -28,7 +29,7 @@ const ComunicadosRoutes: Routes = [
         loadChildren: () => import('../componentes/reuniones/reuniones.module').then(m => m.ReunionesModule)
       },
       { path: 'comunicados',
-        loadChildren: () => import('./comunicados/comunicados.module').then(m => m.ComunicadosModule)
+        loadChildren: () => import('../componentes/comunicados/comunicados.module').then(m => m.ComunicadosModule)
       },
       { path: 'notificaciones',
 
@@ -55,13 +56,11 @@ const ComunicadosRoutes: Routes = [
       loadChildren: () => import('../componentes/nosotros/nosotros.module').then(m => m.NosotrosModule)
       },
       { path: 'tutoriales',
-
       loadChildren: () => import('../componentes/tutoriales/tutoriales.module').then(m => m.TutorialesModule)
       },
-      { path: 'incidencias',
-
-        loadChildren: () => import('../componentes/incidencia/incidencia.module').then(m => m.IncidenciaModule)
-        },
+      { path: 'difusiones',
+        loadChildren: () => import('../componentes/difusiones/difusiones.module').then(m => m.DifusionesModule)
+        }
     ]
   }
 ];

@@ -1,0 +1,88 @@
+
+
+<app-titulo>
+  <p titulo>Comunicados</p>
+</app-titulo>
+
+<!-- INICIO lista de COMUNICADOS -->
+    <div class="section inset mt-2">
+        <div class="pb-2">
+          <div class="form-group boxed">
+              <div class="input-wrapper">
+                <select class="form-control form-select" id="city5" (change)="filtro($event)">
+                  <option value="todos">Todos</option>
+                  <option value="noLeidos">No Leidos</option>
+                  <option value="leidos">Leidos</option>
+                </select>
+              </div>
+          </div>
+        </div>
+        <app-spinner #appSpinner></app-spinner>
+        <ng-container *ngIf="(comunicados$|async) as comunicados;else sinComunicados">
+          <div class="accordion" id="accordionExample2" *ngIf="comunicados.length>0;else sinComunicados">
+              <div *ngFor="let comunicado of comunicados; let i=index"
+              [ngClass]="{'accordion-item': true, 'accordion-item-noleido': comunicado.leido === 0 }">
+                  <h2 class="accordion-header">
+                          <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                              [attr.data-bs-target]="'#accordion' + i" >
+                              <div class="btn-container">
+                                              <span class="fecha">
+                                                  {{comunicado.fecha}}
+                                              </span>
+                                              <span class="titulo">
+                                                  {{comunicado.titulo}}
+                                              </span>
+                                              <i class="bi bi-paperclip" *ngIf="comunicado.adjunto_url"></i>
+
+                                  </div>
+                          </a>
+
+                  </h2>
+                  <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (hidden.bs.collapse)="marcarLeido(comunicado)">
+                      <div class="accordion-body" style="text-align: left;">
+                          <div class="row"  style="text-align: left;">
+                              <div class="col-md-12" [innerHTML]="decodeHtml(comunicado.descripcion)"></div>
+                              <div class="col-md-12" *ngIf="comunicado.adjunto_url">
+                                <hr>
+                                <div class="text-muted"><strong>Archivos Adjuntos:</strong></div>
+                                <img *ngIf="esImagen(comunicado.adjunto_url)" [src]="comunicado.adjunto_url" class="img-fluid" style="height: auto; margin: 0 auto;">
+                                <div *ngIf="!esImagen(comunicado.adjunto_url)">
+                                  <button  type="button" class="btn btn-outline-secondary btn-sm rounded me-1"
+                                  (click)="descargarAdjunto(comunicado.adjunto_url)">
+                                    <ion-icon name="cloud-download"></ion-icon>
+                                    {{obtenerNombreArchivo(comunicado.adjunto_url)}}
+                                  </button>
+                                </div>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="accordion-item" *ngIf="(comunicados$ | async)?.length==0">
+                <h2 class="accordion-header">
+                        <a class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                            <div class="btn-container">
+                                            <span class="titulo">
+                                                "Nada para mostrar"
+                                            </span>
+                                </div>
+                        </a>
+
+                </h2>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #sinComunicados>
+          <ul class="listview image-listview radius">
+            <li>
+              No existen Comunicados.
+            </li>
+          </ul>
+        </ng-template>
+
+<!-- FIN lista de notificaciones -->
+
+
+

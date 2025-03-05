@@ -1,0 +1,91 @@
+<app-titulo>
+  <p titulo>Difusiones Pedagogicas</p>
+</app-titulo>
+
+<div class="section inset mt-2" >
+  <button type="button" class="btn btn-primary btn-sm rounded me-1 mb-1 w-100" [routerLink]="'nueva-difusion'">
+    <ion-icon name="paper-plane-outline" role="img" class="md hydrated"></ion-icon>
+    Nueva difusion
+  </button>
+
+  <div class="accordion" id="accordionExample2" *ngIf="(difusiones | async)!.length > 0; else sinDifusiones">
+    <!-- Mostrar items si hay difusiones -->
+
+      <div *ngFor="let difusion of difusiones | async; let i = index" class="accordion-item">
+        <div class="comment-block">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#accordion' + i">
+              <div class="item">
+                <div class="in">
+                  <div class="comment-header">
+                    <span class="time">{{difusion.fecha | date: 'dd-MM-yyyy'}}</span>
+                    <h4 class="title mx-2">{{difusion.titulo}}</h4>
+                    <span *ngIf="difusion.codigo_estado=='P'" class="badge badge-success text-dark">{{difusion.estado}}</span>
+                    <span *ngIf="difusion.codigo_estado=='C'" class="badge badge-primary">{{difusion.estado}}</span>
+                    <span *ngIf="difusion.codigo_estado=='E'" class="badge badge-warning">{{difusion.estado}}</span>
+                    <span *ngIf="difusion.codigo_estado=='V'" class="badge badge-danger">{{difusion.estado}}</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+          </h2>
+          <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2" (show.bs.collapse)="obtenerDetalle(difusion)">
+            <div class="accordion-body" style="text-align: left;">
+              <div class="item">
+                <app-spinner #appSpinner style="display: block; margin: 0 auto;"></app-spinner>
+                <ng-container *ngIf="!(appSpinner.spinnerCargando | async)">
+                  <div class="in" *ngIf="(difusionDetalle | async) as difusionDetalle">
+                    <div class="text mb-2"><ion-icon name="calendar-number-outline"></ion-icon>
+                      <span class="ms-1"><strong>{{difusion.vigencia}}</strong></span>
+                    </div>
+                    <div class="text" [innerHTML]="decodeHtml(difusionDetalle.descripcion)"></div>
+                    <div class="rate-block mb-1 mt-05">
+                      <div class="barra" [style]="obtenerEstilosBarra(difusion)">
+                        <span class="leyenda">{{difusion.coeficiente_lectura * 100}}% Leído</span>
+                      </div>
+                    </div>
+                    <div class="comment-footer">
+                      <div class="comment-button" style="cursor: pointer;" (click)="verDestinatarios(difusionDetalle.destinatarios)">
+                        <ion-icon name="arrow-redo-outline"></ion-icon> Destinatarios:({{difusion.total_destinatarios}})
+                      </div>
+                      <div class="comment-button" style="cursor: pointer;">
+                        <ion-icon name="attach-outline"></ion-icon> Adjuntos:({{difusion.imagenes}})
+                      </div>
+                      <div class="comment-button" style="cursor: pointer;" *ngIf="difusion.codigo_estado=='E'" (click)="editar(difusion)">
+                        <ion-icon name="create-outline"></ion-icon> Editar
+                      </div>
+                      <div class="comment-button" style="cursor: pointer;" *ngIf="difusion.borrable" (click)="eliminar(difusion)">
+                        <ion-icon name="trash-outline"></ion-icon> Eliminar
+                      </div>
+
+                    </div>
+
+                    <!-- Archivos Adjuntos -->
+                    <ng-container *ngIf="difusion.imagenes > 0">
+                      <hr>
+                      <div class="text-muted"><strong>Archivos Adjuntos:</strong></div>
+                      <ng-container *ngFor="let adjunto of difusionDetalle.imagenes">
+                        <img *ngIf="esImagen(adjunto.url)" [src]="adjunto.url" class="img-fluid" style="height: auto; margin: 0 auto;">
+                        <video *ngIf="esVideo(adjunto.url)" [src]="adjunto.url" class="video-fluid" controls>
+                          <a [href]="adjunto.url" target="_blank">Video no soportado, descargar</a>
+                        </video>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+  <ng-template #sinDifusiones>
+    <ul class="listview image-listview radius">
+      <li>
+        No existen difusiones.
+      </li>
+    </ul>
+  </ng-template>

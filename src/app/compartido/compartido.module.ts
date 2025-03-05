@@ -9,7 +9,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgxSplideModule } from 'ngx-splide';
 import { ErrorFormulariosComponent } from './error-formularios/error-formularios.component';
 import { ErrorFormulariosPipe } from './error-formularios.pipe';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -28,6 +28,7 @@ import { ErrorFormulariosPipe } from './error-formularios.pipe';
     IonicModule.forRoot(),
     NgxSplideModule,
     ReactiveFormsModule,
+    NgSelectModule
   ],
   exports:[
     SpinnerComponent,
@@ -39,7 +40,8 @@ import { ErrorFormulariosPipe } from './error-formularios.pipe';
     NgxSplideModule,
     ReactiveFormsModule,
     ErrorFormulariosComponent,
-    ErrorFormulariosPipe
+    ErrorFormulariosPipe,
+    NgSelectModule
   ]
 })
 export class CompartidoModule { }

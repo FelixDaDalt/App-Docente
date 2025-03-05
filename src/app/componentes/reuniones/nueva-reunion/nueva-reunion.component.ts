@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { comunicado_destinatario, comunicado_destinatario_alumno } from '../../../dashboard/comunicados/comunicado';
+import { comunicado_destinatario, comunicado_destinatario_alumno } from '../../comunicados/comunicado';
 import { Observable, Subject, Subscription, map, of, takeUntil, tap } from 'rxjs';
-import { ComunicadosService } from '../../../dashboard/comunicados/comunicados.service';
+import { ComunicadosService } from '../../comunicados/comunicados.service';
 import { Router } from '@angular/router';
 import { nueva_Reunion } from '../reunion';
 import { ReunionesService } from '../reuniones.service';

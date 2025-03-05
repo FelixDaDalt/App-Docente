@@ -12,92 +12,100 @@
     Nueva Reunion
   </button>
           <app-spinner #appSpinner></app-spinner>
-          <div class="accordion" id="accordionExample2" *ngIf="!(appSpinner.spinnerCargando | async)">
-            <div *ngFor="let reunion of reuniones$ | async; let i = index" class="accordion-item">
-              <div class="comment-block">
-                <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    [attr.data-bs-target]="'#accordion' + i">
-                    <div class="item">
-                      <div class="in">
-                        <div class="comment-header">
-                          <span class="time">{{reunion.fecha}}</span>
-                          <h4 class="title mx-2">{{reunion.alumno}} - {{reunion.titulo}}</h4>
+          <ng-container *ngIf="(reuniones$ | async)!.length>0;else nada">
+            <div class="accordion" id="accordionExample2" *ngIf="!(appSpinner.spinnerCargando | async)">
+              <div *ngFor="let reunion of reuniones$ | async; let i = index" class="accordion-item">
+                <div class="comment-block">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      [attr.data-bs-target]="'#accordion' + i">
+                      <div class="item">
+                        <div class="in">
+                          <div class="comment-header">
+                            <span class="time">{{reunion.fecha}}</span>
+                            <h4 class="title mx-2">{{reunion.alumno}} - {{reunion.titulo}}</h4>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </button>
-                </h2>
-                <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2">
-                   <div class="accordion-body" style="text-align: left;">
-                    <div class="item">
-                      <div class="in">
-                        <div class="text mb-2" [innerHTML]="decodeHtml(reunion.descripcion)"></div>
-                        <div class="mt-2">
-                          <strong><span style="color: #000000;">
-                            <ion-icon name="calendar-outline" role="img" class="md hydrated" aria-label="arrow redo outline"></ion-icon>
-                            Fecha propuesta:</span>
-                            {{reunion.propuesta_reunion}}</strong>
-                        </div>
-                          <hr>
-                        <div class="comment-footer">
-                          <!--<p>Datos de la reunion</p>-->
-
-                          <div class="comment-button">
-                            <span [ngClass]="{'view': reunion.leido == 1}">Leido: </span><ion-icon
-                            [ngClass]="{'view': reunion.leido == 1}"
-                            [name]="reunion.leido == 0?'checkmark-outline':
-                            'checkmark-done-outline'"
-                             role="img" class="md hydrated ml-2"
-                             [ngbTooltip]="reunion.leido != 0?'Leído:' + reunion.datos_lectura:''"></ion-icon>
+                    </button>
+                  </h2>
+                  <div [id]="'accordion' + i" class="accordion-collapse collapse" data-bs-parent="#accordionExample2">
+                    <div class="accordion-body" style="text-align: left;">
+                      <div class="item">
+                        <div class="in">
+                          <div class="text mb-2" [innerHTML]="decodeHtml(reunion.descripcion)"></div>
+                          <div class="mt-2">
+                            <strong><span style="color: #000000;">
+                              <ion-icon name="calendar-outline" role="img" class="md hydrated" aria-label="arrow redo outline"></ion-icon>
+                              Fecha propuesta:</span>
+                              {{reunion.propuesta_reunion}}</strong>
                           </div>
-                          <div class="comment-button">
-                            <span  [ngClass]="{
-                              'accepted': reunion.respuesta == 1,
-                              'denegated': reunion.respuesta == 2
-                          }">Respuesta: </span><ion-icon
-                            [name]="reunion.respuesta == 1 ? 'checkmark-circle-outline' : reunion.respuesta == 2 ? 'close-circle-outline' : 'help-circle-outline'"
-                            role="img" class="md hydrated ml-2"
-                            [ngClass]="{
+                            <hr>
+                          <div class="comment-footer">
+                            <!--<p>Datos de la reunion</p>-->
+
+                            <div class="comment-button">
+                              <span [ngClass]="{'view': reunion.leido == 1}">Leido: </span><ion-icon
+                              [ngClass]="{'view': reunion.leido == 1}"
+                              [name]="reunion.leido == 0?'checkmark-outline':
+                              'checkmark-done-outline'"
+                              role="img" class="md hydrated ml-2"
+                              [ngbTooltip]="reunion.leido != 0?'Leído:' + reunion.datos_lectura:''"></ion-icon>
+                            </div>
+                            <div class="comment-button">
+                              <span  [ngClass]="{
                                 'accepted': reunion.respuesta == 1,
                                 'denegated': reunion.respuesta == 2
-                            }"
-                            [ngbTooltip]="reunion.respuesta == 1 ? 'Aceptada por: ' + reunion.respuesta_remitente + ' el: ' + reunion.respuesta_date :
-                                            reunion.respuesta == 2 ? 'Rechazada por: ' + reunion.respuesta_remitente + ' el: ' + reunion.respuesta_date :
-                                            'Sin respuesta'">
-                        </ion-icon>
-                          </div>
-                          <div class="comment-button" *ngIf="reunion?.borrable">
-                            <ion-icon name="trash-outline" role="img" class="md hydrated" ></ion-icon>
-                            Eliminar
-                          </div>
-                        </div>
-                        <ng-container *ngIf="reunion.respuesta == 2">
-                          <hr>
-                          <div class="comment-footer" style="background-color: #80808050; border-radius: 10px; padding: 10px">
-                            <div class="ml-2">
-                              <strong style="padding-left: 2px;">FUNDAMENTO:</strong><br>
-                              <div style="padding-left: 6px;"><i>{{reunion.respuesta_fundamento}}</i></div>
+                            }">Respuesta: </span><ion-icon
+                              [name]="reunion.respuesta == 1 ? 'checkmark-circle-outline' : reunion.respuesta == 2 ? 'close-circle-outline' : 'help-circle-outline'"
+                              role="img" class="md hydrated ml-2"
+                              [ngClass]="{
+                                  'accepted': reunion.respuesta == 1,
+                                  'denegated': reunion.respuesta == 2
+                              }"
+                              [ngbTooltip]="reunion.respuesta == 1 ? 'Aceptada por: ' + reunion.respuesta_remitente + ' el: ' + reunion.respuesta_date :
+                                              reunion.respuesta == 2 ? 'Rechazada por: ' + reunion.respuesta_remitente + ' el: ' + reunion.respuesta_date :
+                                              'Sin respuesta'">
+                          </ion-icon>
+                            </div>
+                            <div class="comment-button" *ngIf="reunion?.borrable">
+                              <ion-icon name="trash-outline" role="img" class="md hydrated" ></ion-icon>
+                              Eliminar
                             </div>
                           </div>
+                          <ng-container *ngIf="reunion.respuesta == 2">
+                            <hr>
+                            <div class="comment-footer" style="background-color: #80808050; border-radius: 10px; padding: 10px">
+                              <div class="ml-2">
+                                <strong style="padding-left: 2px;">FUNDAMENTO:</strong><br>
+                                <div style="padding-left: 6px;"><i>{{reunion.respuesta_fundamento}}</i></div>
+                              </div>
+                            </div>
 
-                            <button type="button" class="btn btn-primary btn-sm mt-2 me-1 mb-1 w-100" *ngIf="reunion.reprogramacion==1" (click)="reprogramar(reunion)">
-                              <ion-icon name="paper-plane-outline" role="img" class="md hydrated" ></ion-icon>
-                              Reprogramar
-                            </button>
+                              <button type="button" class="btn btn-primary btn-sm mt-2 me-1 mb-1 w-100" *ngIf="reunion.reprogramacion==1" (click)="reprogramar(reunion)">
+                                <ion-icon name="paper-plane-outline" role="img" class="md hydrated" ></ion-icon>
+                                Reprogramar
+                              </button>
 
-                       </ng-container>
+                        </ng-container>
+                        </div>
                       </div>
                     </div>
+
+
                   </div>
 
-
                 </div>
-
               </div>
             </div>
-          </div>
-
+          </ng-container>
+          <ng-template #nada>
+            <ul class="listview image-listview radius">
+              <li>
+                No existen reuniones.
+              </li>
+            </ul>
+          </ng-template>
 
 
   </div>

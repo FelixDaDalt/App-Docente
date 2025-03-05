@@ -38,7 +38,7 @@ export class NotRetirosComponent implements OnInit,OnDestroy{
 
   marcarLeido(retiro:DetalleRetiros){
     if(retiro.leido===0){
-      this.notificacionService.marcarLeido(retiro.id)
+      this.notificacionService.marcarLeidoRetiro(retiro.id)
     }
   }
 }

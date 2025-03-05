@@ -7,12 +7,14 @@ import { BottomComponent } from './estructura/bottom/bottom.component';
 import { HeaderComponent } from './estructura/header/header.component';
 import { SidebarComponent } from './estructura/sidebar/sidebar.component';
 import { NotificacionPopupComponent } from '../otros/notificacion-popup/notificacion-popup.component';
+import { RoleDirective } from '../directiva/role.directiva';
 
 
 
 
 @NgModule({
-  declarations: [DashboardComponent,
+  declarations: [
+    DashboardComponent,
     HeaderComponent,
     SidebarComponent,
     BottomComponent,
@@ -20,7 +22,8 @@ import { NotificacionPopupComponent } from '../otros/notificacion-popup/notifica
   imports: [
     CommonModule,
     CompartidoModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    RoleDirective
   ]
 })
 export class DashboardModule { }

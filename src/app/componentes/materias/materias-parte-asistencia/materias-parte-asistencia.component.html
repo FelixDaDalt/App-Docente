@@ -11,7 +11,7 @@
       </tr>
   </thead>
   <app-spinner #appSpinner></app-spinner>
-  <tbody *ngIf="!(appSpinner.spinnerCargando | async)">
+  <tbody *ngIf="(partes$ | async)!.length>0; else nada">
       <tr *ngFor="let parte of partes$ | async">
           <td class="align-middle">{{parte.id}}</td>
           <td class="align-middle">{{parte.fecha}}</td>
@@ -25,4 +25,15 @@
           </button>
       </tr>
   </tbody>
+
 </table>
+
+<ng-template #nada>
+  <tr>
+    <ul class="listview image-listview radius pt-2 pb-2 ps-4">
+      <li>
+        No existen datos.
+      </li>
+    </ul>
+  </tr>
+</ng-template>

@@ -2,7 +2,8 @@ import { EstudianteLegajoService } from './estudiante-legajo.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { academico, legajoAlumno } from './legajo';
 import { Observable, Subscription, of, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { resultadoBusqueda } from '../home/home';
 
 @Component({
   selector: 'app-estudiante-legajo',
@@ -15,7 +16,8 @@ export class EstudianteLegajoComponent implements OnInit,OnDestroy{
   private legajoSubscription?: Subscription;
 
   constructor(private legajoService:EstudianteLegajoService,
-    private route:Router){
+    private route:Router,
+    private activeRoute:ActivatedRoute){
 
   }
 
@@ -46,5 +48,12 @@ export class EstudianteLegajoComponent implements OnInit,OnDestroy{
     }
 
     return age;
+  }
+
+  generarIncidencia(alumno:resultadoBusqueda){
+    this.route.navigate(['incidencia'],{
+      relativeTo:this.activeRoute,
+      state: { ...alumno}
+    })
   }
 }

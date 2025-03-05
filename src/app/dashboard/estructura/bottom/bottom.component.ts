@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-bottom',
   templateUrl: './bottom.component.html',
-  styleUrls: ['./bottom.component.css']
+  styleUrls: ['./bottom.component.css'],
 })
 export class BottomComponent implements OnInit,OnDestroy{
 

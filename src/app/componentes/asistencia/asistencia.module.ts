@@ -4,6 +4,7 @@ import { AsistenciaComponent } from './asistencia.component';
 import { CompartidoModule } from 'src/app/compartido/compartido.module';
 import { AsistenciaInformacionComponent } from './asistencia-informacion/asistencia-informacion.component';
 import { AsistenciaRoutingModule } from './asistencia-routing';
+import { RoleDirective } from 'src/app/directiva/role.directiva';
 
 
 
@@ -15,7 +16,8 @@ import { AsistenciaRoutingModule } from './asistencia-routing';
   imports: [
     CommonModule,
     CompartidoModule,
-    AsistenciaRoutingModule
+    AsistenciaRoutingModule,
+    RoleDirective
   ]
 })
 export class AsistenciaModule { }

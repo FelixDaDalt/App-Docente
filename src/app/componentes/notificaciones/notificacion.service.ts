@@ -112,9 +112,38 @@ export class NotificacionService {
     });
   }
 
+  marcarLeidoReunion(id_notificacion: number): void {
+    const leidoSus = this.leidoReunion(id_notificacion).subscribe({
+      next: (respuesta) => {
+        this.getNotificaciones()
+      },
+      complete:()=>{
+        leidoSus.unsubscribe()
+      }
+    });
+  }
+
+  marcarLeidoRetiro(idRetiro: number): void {
+    const leidoSus = this.leidoRetiro(idRetiro).subscribe({
+      next: (respuesta) => {
+        this.getNotificaciones()
+      },
+      complete:()=>{
+        leidoSus.unsubscribe()
+      }
+    });
+  }
+
   private leido(id_notificacion: number): Observable<{ data: any }> {
     return this.http.put<{ data: any }>(`${this.apiUrl}/lectura_notificacion/${this.usuarioDatos.ID_Institucion}`, {id_usuario:this.usuarioDatos.ID_Usuario_Interno, id_notificacion:id_notificacion, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel});
   }
 
 
+  private leidoRetiro(idRetiro: number): Observable<{ data: any }> {
+    return this.http.put<{ data: any }>(`${this.apiUrl}/lectura_retiro/${this.usuarioDatos.ID_Institucion}`, {id_usuario:this.usuarioDatos.ID_Usuario_Interno, id_autorizacion:idRetiro, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel});
+  }
+
+  private leidoReunion(id_notificacion: number): Observable<{ data: any }> {
+    return this.http.put<{ data: any }>(`${this.apiUrl}/lectura_solicitudes_reunion/${this.usuarioDatos.ID_Institucion}`, {id_usuario:this.usuarioDatos.ID_Usuario_Interno, id_respuesta:id_notificacion, id_nivel:this.usuarioDatos.Rol_selected?.id_nivel});
+  }
 }

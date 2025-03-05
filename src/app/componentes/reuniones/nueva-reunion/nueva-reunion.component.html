@@ -5,9 +5,18 @@
     <p titulo>Solicitud de Nueva Reunion</p>
   </app-titulo>
     <app-spinner #appSpinner></app-spinner>
+
+    <div class="section inset mt-2" >
+      <button type="button" class="btn btn-primary btn-sm rounded me-1 mb-1 w-100" [routerLink]="'../'">
+        <ion-icon name="arrow-undo-outline"></ion-icon>
+        Volver
+      </button>
+    </div>
+
+
   <!-- INICIO selector de MATERIA -->
   <form  [formGroup]="formulario" (ngSubmit)="enviar()">
-    <div class="section inset mt-2" *ngIf="!(appSpinner.spinnerCargando | async)">
+    <div class="section inset" *ngIf="!(appSpinner.spinnerCargando | async)">
       <div class="section full">
         <div class="form-group boxed">
           <div class="section-title">Seleccionar grupo</div>
@@ -122,6 +131,6 @@
 <!-- inicio Boton -->
 
 
-</form>
+  </form>
 
 </div>

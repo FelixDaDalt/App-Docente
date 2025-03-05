@@ -1,0 +1,39 @@
+.accordion-item {
+  border: none;
+  margin-bottom: 0px !important;
+}
+
+.accordion-button {
+  border-radius: 0; /* Quitar esquinas redondeadas */
+  border: none; /* Eliminar bordes de los botones */
+  background: var(--rgba-primary-1); /* Fondo claro para el botón */
+  background-color: var(--rgba-primary-1);
+  color: var(--primary);
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #e9ecef; /* Fondo diferente para el botón abierto */
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1); /* Línea separadora */
+}
+
+.accordion-body {
+  border-top: 1px solid #dee2e6; /* Línea separadora superior */
+}
+
+.accordion {
+  border-radius: 4px; /* Bordes redondeados en el conjunto */
+  overflow: hidden; /* Para evitar que sobresalgan bordes */
+}
+
+.accordion-header{
+    padding: 0px !important;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    color: var(--primary);
+    font-weight: 400;
+    border-radius: 0.625rem;
+    -webkit-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    transition: all 0.5s;
+}

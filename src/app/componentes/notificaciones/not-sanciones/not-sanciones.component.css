@@ -1,3 +1,6 @@
 .accordion .accordion-body {
   text-align: left;
 }
+.radius{
+  border-radius: 20px;
+}

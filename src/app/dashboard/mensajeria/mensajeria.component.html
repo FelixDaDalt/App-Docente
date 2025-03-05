@@ -10,46 +10,54 @@
   <div class="section inset mt-2">
     <app-spinner #appSpinner></app-spinner>
     <ul class="listview image-listview radius" *ngIf="!(appSpinner.spinnerCargando | async)">
-      <li *ngFor="let mensajeria of listaMensajeria">
-          <a [routerLink]="['./mensajeria-historial']" [queryParams]="{ id_chat: mensajeria.id_chat }">
-          <div class="item">
-            <div class="avatar-circle">
-              {{mensajeria.familia.substring(0, 2).toUpperCase()}}
-            </div>
-              <div class="in text-dark">
-                <div style="height: 100%; width: 100%; display: flex; flex-direction: column; text-align: left;">
-                  <!-- Primera fila -->
-                  <div style="display: flex;">
-                    <!-- Primera columna -->
-                    <div style="flex: 1;">
-                      <strong>{{ mensajeria.familia }}</strong>
-                      <p class="small text-muted">{{ mensajeria.alumno }}</p>
+      <ng-container *ngIf="listaMensajeria.length>0;else nada">
+        <li *ngFor="let mensajeria of listaMensajeria">
+            <a [routerLink]="['./mensajeria-historial']" [queryParams]="{ id_chat: mensajeria.id_chat }">
+            <div class="item">
+              <div class="avatar-circle">
+                {{mensajeria.familia.substring(0, 2).toUpperCase()}}
+              </div>
+                <div class="in text-dark">
+                  <div style="height: 100%; width: 100%; display: flex; flex-direction: column; text-align: left;">
+                    <!-- Primera fila -->
+                    <div style="display: flex;">
+                      <!-- Primera columna -->
+                      <div style="flex: 1;">
+                        <strong>{{ mensajeria.familia }}</strong>
+                        <p class="small text-muted">{{ mensajeria.alumno }}</p>
+                      </div>
+                      <!-- Segunda columna -->
+                      <div style="flex: 1; padding-right: 10px; text-align: right;">
+                        <p class="small text-muted">{{ calcularTiempoTranscurrido(mensajeria.fecha,mensajeria.hora) }}</p>
+                      </div>
                     </div>
-                    <!-- Segunda columna -->
-                    <div style="flex: 1; padding-right: 10px; text-align: right;">
-                      <p class="small text-muted">{{ calcularTiempoTranscurrido(mensajeria.fecha,mensajeria.hora) }}</p>
-                    </div>
-                  </div>
 
-                  <!-- Segunda fila -->
-                  <div style="display: flex;">
-                    <!-- Primera columna -->
-                    <div style="flex: 1;">
-                      <span style="cursor: pointer;" *ngIf="mensajeria.ultimo_mensaje.length > 35; else shortMessage">
-                        <i>"{{ mensajeria.ultimo_mensaje.slice(0, 35) + '...'}}"</i>
-                      </span>
-                      <ng-template #shortMessage>
-                        <i>"{{ mensajeria.ultimo_mensaje }}"</i>
-                      </ng-template>
+                    <!-- Segunda fila -->
+                    <div style="display: flex;">
+                      <!-- Primera columna -->
+                      <div style="flex: 1;">
+                        <span style="cursor: pointer;" *ngIf="mensajeria.ultimo_mensaje.length > 35; else shortMessage">
+                          <i>"{{ mensajeria.ultimo_mensaje.slice(0, 35) + '...'}}"</i>
+                        </span>
+                        <ng-template #shortMessage>
+                          <i>"{{ mensajeria.ultimo_mensaje }}"</i>
+                        </ng-template>
+                      </div>
+                      <span class="badge badge-danger" *ngIf="mensajeria.sin_leer>0">{{mensajeria.sin_leer}}</span>
+                      <!-- Segunda columna -->
                     </div>
-                    <span class="badge badge-danger" *ngIf="mensajeria.sin_leer>0">{{mensajeria.sin_leer}}</span>
-                    <!-- Segunda columna -->
                   </div>
                 </div>
-              </div>
-          </div>
-      </a>
-      </li>
+            </div>
+        </a>
+        </li>
+      </ng-container>
+        <li>
+          No hay chats iniciados
+        </li>
+      <ng-template #nada>
+
+      </ng-template>
     </ul>
   </div>
 

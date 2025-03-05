@@ -82,7 +82,7 @@ export class RequestInterceptorInterceptor implements HttpInterceptor {
             finalize(() => {
               setTimeout(() => {
                 this.spinnerService.ocultarSpinner();
-              }, 2000);
+              }, 0);
 
             })
           )

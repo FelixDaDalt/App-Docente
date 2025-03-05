@@ -8,6 +8,7 @@ import { EstudianteLegajoLegajoComponent } from './estudiante-legajo-legajo/estu
 import { LegajoRoutingModule } from './estudiante-legajo-routing';
 import { CompartidoModule } from 'src/app/compartido/compartido.module';
 import { EstudianteLegajoModalComponent } from './estudiante-legajo-legajo/estudiante-legajo-modal/estudiante-legajo-modal.component';
+import { IncidenciaComponent } from './incidencia/incidencia.component';
 
 
 
@@ -18,7 +19,8 @@ import { EstudianteLegajoModalComponent } from './estudiante-legajo-legajo/estud
     EstudianteLegajoInasistenciaComponent,
     EstudianteLegajoInformacionComponent,
     EstudianteLegajoLegajoComponent,
-    EstudianteLegajoModalComponent
+    EstudianteLegajoModalComponent,
+    IncidenciaComponent
   ],
   imports: [
     CommonModule,

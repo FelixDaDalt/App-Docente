@@ -30,26 +30,30 @@
                                 <ion-icon name="id-card-outline"></ion-icon>
                                 <p>Parte de asistencia</p>
                             </a>
-                            <a class="dropdown-item" (click)="navegarRuta('libro-temas')" *ngIf="usuarioDatos?.Rol_selected?.rol == 'PF'">
+                            <a class="dropdown-item" (click)="navegarRuta('libro-temas')" *appRoleAllowed="['PF']">
                                 <ion-icon name="book-outline"></ion-icon>
                                 <p>Libro de temas</p>
                             </a>
-                            <a class="dropdown-item" (click)="navegarRuta('calificacion')" *ngIf="usuarioDatos?.Rol_selected?.rol == 'PF'">
+                            <a class="dropdown-item" (click)="navegarRuta('calificacion')" *appRoleAllowed="['PF']">
                                 <ion-icon name="logo-react"></ion-icon>
                                 <p>Calificación</p>
                             </a>
-                            <a class="dropdown-item" (click)="navegarRuta('comunicados','comunicados-enviados')">
+                            <a class="dropdown-item" (click)="navegarRuta('comunicados','comunicados-enviados')" *appRole="['AU','AD']">
                                 <ion-icon name="paper-plane-outline"></ion-icon>
                                 <p>Comunicados</p>
                             </a>
-                            <a class="dropdown-item" (click)="navegarRuta('reuniones')">
+                            <a class="dropdown-item" (click)="navegarRuta('reuniones')" *appRole="['AU','AD']">
                               <ion-icon name="people-circle-outline"></ion-icon>
                               <p>Reuniones</p>
                             </a>
-                            <a class="dropdown-item" (click)="navegarRuta('incidencias')">
-                              <ion-icon name="people-circle-outline"></ion-icon>
-                              <p>Registro de Incidencias</p>
-                          </a>
+                            <a class="dropdown-item" (click)="navegarRuta('difusiones')" *appRoleAllowed="['MI', 'MG']">
+                              <ion-icon name="megaphone-outline"></ion-icon>
+                              <p>Difusiones</p>
+                            </a>
+                            <a class="dropdown-item" (click)="navegarRuta('legajo-alumno','incidencia')">
+                              <ion-icon name="information-circle-outline"></ion-icon>
+                              <p>Incidencias</p>
+                            </a>
                         </div>
                     </div>
                     <!-- * top center -->

@@ -38,7 +38,7 @@ export class NotReunionesComponent {
 
   marcarLeido(reunion:DetalleReunion){
     if(reunion.leido===0){
-      this.notificacionService.marcarLeido(reunion.id)
+      this.notificacionService.marcarLeidoReunion(reunion.id)
     }
   }
 

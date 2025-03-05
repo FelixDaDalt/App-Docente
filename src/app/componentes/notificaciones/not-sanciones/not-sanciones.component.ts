@@ -36,9 +36,9 @@ export class NotSancionesComponent implements OnInit,OnDestroy{
     .subscribe();
   }
 
-  marcarLeido(reunion:DetalleSancion){
-    if(reunion.leido===0){
-      this.notificacionService.marcarLeido(reunion.id)
+  marcarLeido(detalleSancion:DetalleSancion){
+    if(detalleSancion.leido===0){
+      this.notificacionService.marcarLeido(detalleSancion.id)
     }
   }
 }

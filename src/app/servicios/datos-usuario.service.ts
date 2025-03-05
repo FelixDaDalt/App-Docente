@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { usuarioDatos } from '../modelos/usuarioDatos';
 import { LocalStorageService } from './local-storage.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,7 @@ export class DatosUsuarioService {
   }
 
   obtenerDatos(): Observable<usuarioDatos | null> {
-    return this.usuarioDatosSubject.asObservable();
+    return this.usuarioDatosSubject.asObservable()
   }
 
   elminarDatos(): void {

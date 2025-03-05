@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NotificacionService } from 'src/app/otros/notificacion-popup/notificacionpopup.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { comunicado_destinatario_alumno } from 'src/app/dashboard/comunicados/comunicado';
+import { comunicado_destinatario_alumno } from 'src/app/componentes/comunicados/comunicado';
 
 export interface reprogramar{
   id_usuario?:number

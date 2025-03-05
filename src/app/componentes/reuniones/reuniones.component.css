@@ -13,3 +13,7 @@
 .delete{
   color:#800020;
 }
+
+.radius{
+  border-radius: 20px;
+}

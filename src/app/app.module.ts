@@ -15,6 +15,8 @@ import { CompartidoModule } from './compartido/compartido.module';
 import { VersionModalComponent } from './servicios/version/version-modal/version-modal.component';
 import { VersionModule } from './servicios/version/version.module';
 import { UserParamsInterceptor } from './Interceptor/UserParamsInterceptor';
+import { DifusionesComponent } from './componentes/difusiones/difusiones.component';
+import { ComunicadosComponent } from './componentes/comunicados/comunicados.component';
 
 registerLocaleData(localeEs);
 

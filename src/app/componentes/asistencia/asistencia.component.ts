@@ -20,7 +20,7 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
   private suscripcionSeleccionAsistencia?:Subscription
 
   asistencia$:Observable<Asistencia[]> = of([])
-
+  puedeTomarAsistencia = true
 
   asistenciaSeleccionada!:Asistencia
   fecha!:string
@@ -36,7 +36,6 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
    this.usuarioService.obtenerDatos().subscribe({
     next:(usuario)=>{
       this.usuario = usuario
-
     }
    })
   }
@@ -57,6 +56,12 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
   ngOnDestroy(): void {
       this.suscripcionAsistencia?.unsubscribe();
       this.suscripcionSeleccionAsistencia?.unsubscribe()
+  }
+
+  actualizarAsistenciaSeleccionada() {
+    if (['PF', 'PR', 'DI'].includes(this.usuario?.Rol_selected?.rol!) && this.usuario?.Rol_selected?.id_nivel === 2) {
+      this.puedeTomarAsistencia = this.asistenciaSeleccionada?.tipo === 'C' || this.asistenciaSeleccionada?.tipo === 'G';
+    }
   }
 
   //ok
@@ -111,6 +116,7 @@ export class AsistenciaComponent implements OnInit,OnDestroy{
           this.asistenciaSeleccionada = asistencias[0];
         }
       }
+      this.actualizarAsistenciaSeleccionada()
     })
   }
 
@@ -151,6 +157,7 @@ private inicializarComedor(asistencias: Asistencia[]): Asistencia[] {
       let parteAlumno = new Parte_Alumno(alumno.id,alumno.estado,alumno.observacion,alumno.estado_comedor)
       parteAsistencia.arr_alumnos.push(parteAlumno)
     })
+
    const suscripcionEnvio = this.asistenciaService.agregarAsistencias(parteAsistencia).subscribe({
       next:()=>{
         this.actualizarAsistencia()
